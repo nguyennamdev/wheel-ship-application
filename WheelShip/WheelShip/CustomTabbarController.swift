@@ -18,22 +18,18 @@ class CustomTabbarController: UITabBarController {
                             setupLibaryController()]
         
         // if user is not logged in
-        if !isLoggedIn() {
+        /*
+        if isLoggedIn() {
             perform(#selector(showLoginController), with: nil, afterDelay: 0.01)
-        }
-        
-        
+        }*/
     }
     
     // MARK : - private functions
     private func setupHomeController() -> UINavigationController{
-        let homeController = UIViewController()
-        homeController.view.backgroundColor = UIColor.red
-        homeController.tabBarItem.title = "Home"
-        homeController.tabBarItem.image = #imageLiteral(resourceName: "wheel")
-        homeController.title = "Home"
-        let navigationHome = UINavigationController(rootViewController: homeController)
-        
+        let homeOrdererController = HomeOrdererController()
+        homeOrdererController.tabBarItem.title = "Trang chủ"
+        homeOrdererController.tabBarItem.image = #imageLiteral(resourceName: "wheel")
+        let navigationHome = UINavigationController(rootViewController: homeOrdererController)
         return navigationHome
     }
     

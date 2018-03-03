@@ -26,6 +26,5 @@ class GradientView:UIView {
         let layer = self.layer as? CAGradientLayer
         layer?.colors = self.colors
     }
-    
-    
+ 
 }

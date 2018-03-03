@@ -9,8 +9,7 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-    
-    
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -22,8 +21,7 @@ class LoginViewController: UIViewController {
         setupLogginButton()
         setupLabel()
         setupRegisterButton()
-        
-
+        setupQuestionLabel()
         
     }
     
@@ -64,25 +62,30 @@ class LoginViewController: UIViewController {
     }
     
     private func setupLabel(){
-        
         view.addSubview(dummyLabel)
         dummyLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20).isActive = true
         dummyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
-    
+   
     private func setupRegisterButton(){
         view.addSubview(registerButton)
-        registerButton.anchorWithWidthHeightConstant(top: dummyLabel.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 20, leftConstant: 24, bottomConstant: 0, rightConstant: 24, widthConstant: 0, heightConstant: 55)
+        registerButton.anchorWithConstants(top: nil, left: nil, bottom: view.bottomAnchor, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: 20, rightConstant: 0)
+        registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        registerButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
     
-    
+    private func setupQuestionLabel(){
+        view.addSubview(questionLabel)
+        questionLabel.bottomAnchor.constraint(equalTo: registerButton.topAnchor).isActive = true
+        questionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    }
+
     // MARK : Views
     let logoLabel:UILabel = {
         let label = UILabel()
         label.text = "Wheel Ship"
         label.textColor = UIColor.white
         label.font = UIFont(name: "Noteworthy", size:52)
-        //        label.font = UIFont.boldSystemFont(ofSize: 42)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -99,35 +102,21 @@ class LoginViewController: UIViewController {
     
     let emailTextField:UITextField = {
         let textField = UITextField()
-        textField.backgroundColor = UIColor(white: 1, alpha: 0.3)
+        textField.setupDefault()
         textField.placeholder = "Email Address"
-        textField.textColor = UIColor.white
-        textField.borderStyle = .roundedRect
         // custom left view
-        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: 29, height: 24))
-        let imageView = UIImageView(image:#imageLiteral(resourceName: "mail"))
-        imageView.frame = CGRect(x: 5, y: 0, width: 25, height: 24) // image margin left 5 value
-        leftView.addSubview(imageView)
-        textField.leftView = leftView
-        textField.leftViewMode = .always
+        textField.setupImageForLeftView(image:#imageLiteral(resourceName: "mail"))
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
     
     let passwordTextField:UITextField = {
         let textField = UITextField()
-        textField.backgroundColor = UIColor(white: 1, alpha: 0.3)
-        textField.placeholder = "Password"
+        textField.setupDefault()
         textField.isSecureTextEntry = true
-        textField.textColor = UIColor.white
-        textField.borderStyle = .roundedRect
+        textField.placeholder = "Password"
         // custom left view
-        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: 29, height: 24))
-        let imageView = UIImageView(image:#imageLiteral(resourceName: "lock"))
-        imageView.frame = CGRect(x: 5, y: 0, width: 25, height: 24) // image margin left 5 value
-        leftView.addSubview(imageView)
-        textField.leftView = leftView
-        textField.leftViewMode = .always
+        textField.setupImageForLeftView(image: #imageLiteral(resourceName: "lock"))
         return textField
     }()
     
@@ -144,7 +133,7 @@ class LoginViewController: UIViewController {
     
     let dummyLabel:UILabel = {
         let label = UILabel()
-        label.text = "- Hoặc bạn có thể -"
+        label.text = "- Hoặc -"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textColor = UIColor.white
@@ -152,18 +141,40 @@ class LoginViewController: UIViewController {
         return label
     }()
     
-    let registerButton:UIButton = {
+    let questionLabel:UILabel = {
+        let label = UILabel()
+        label.text = "Không có tài khoản?"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = UIColor.lightGray
+        label.textAlignment = .center
+        return label
+    }()
+    
+    lazy var registerButton:UIButton = {
         let button = UIButton(type: UIButtonType.system)
-        button.backgroundColor = UIColor.clear
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.white.cgColor
-        button.layer.cornerRadius = 5
+        button.setTitle("Đăng ký", for: .normal)
         button.tintColor = UIColor.white
-        button.setTitle("ĐĂNG KÝ", for: .normal)
+        button.addTarget(self, action: #selector(showRegisterController), for: .touchUpInside)
         return button
     }()
     
 }
+
+// actions
+extension LoginViewController {
+    
+    @objc fileprivate func showRegisterController(){
+        let registerController = RegisterController()
+        present(registerController, animated: true, completion: nil)
+    }
+    
+}
+
+
+
+
+
 
 
 

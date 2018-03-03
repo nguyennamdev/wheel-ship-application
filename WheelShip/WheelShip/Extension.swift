@@ -74,3 +74,43 @@ extension UIView{
     }
     
 }
+
+extension UIColor {
+    public static func rgb(r:CGFloat , g:CGFloat, b:CGFloat) -> UIColor{
+        return UIColor.init(red: r/255, green: g/255, blue: b/255, alpha: 1)
+    }
+}
+
+extension UITextField {
+    
+    func setupImageForLeftView(image:UIImage){
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 29, height: 24))
+        let imageView = UIImageView(image: image)
+        imageView.frame = CGRect(x: 5, y: 0, width: 24, height: 24)
+        view.addSubview(imageView)
+        leftView = view
+        leftViewMode = .always
+    }
+    
+    func setupDefault(){
+        self.backgroundColor = UIColor(white: 1, alpha: 0.3)
+        self.textColor = UIColor.white
+        self.borderStyle = .roundedRect
+    }
+}
+
+extension String{
+    func randomString() -> String{
+        let letters:NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let len = UInt32(letters.length)
+        var randomString = ""
+        for _ in 0..<8
+        {
+            let rand = arc4random_uniform(len)
+            var nextChar = letters.character(at: Int(rand))
+            randomString += NSString(characters: &nextChar, length: 1) as String
+        }
+        return randomString
+    }
+}
+
