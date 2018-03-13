@@ -8,20 +8,27 @@
 
 import UIKit
 import CoreData
+import GoogleMaps
+import GooglePlaces
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        // setup google maps api
+        GMSServices.provideAPIKey("AIzaSyB262YPUMrNR6JSfZKUOMzKBW_klHUslsc")
+        GMSPlacesClient.provideAPIKey("AIzaSyB262YPUMrNR6JSfZKUOMzKBW_klHUslsc")
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         
         let customTabbarController = CustomTabbarController()
         window?.rootViewController = customTabbarController
+        
+        
         
         return true
     }

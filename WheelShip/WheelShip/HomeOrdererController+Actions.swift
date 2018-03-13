@@ -10,17 +10,24 @@ import UIKit
 
 extension HomeOrdererController {
     
-    @objc func makeNewOrder(){
+    @objc func showOrdererEnterInfo(){
         guard let fromAddress = fromAddressTextField.text,
-              let toAddress = toAddressTextField.text,
-              let phoneReceiver = phoneReceiverTextField.text,
-              let prepayment = prepaymentTextField.text,
-              let price = priceTextField.text else { return }
-        print(fromAddress, toAddress, phoneReceiver, prepayment, price)
+            let toAddress = toAddressTextField.text else { return }
+        // pushes ordererEnterInfoController
+        let orderEnterInfoController = OrdererEnterInfoController()
+        self.navigationController?.pushViewController(orderEnterInfoController, animated: false)
     }
     
     @objc func endingEntryText(){
         view.endEditing(true)
     }
+    
 }
+
+
+
+
+
+
+
 

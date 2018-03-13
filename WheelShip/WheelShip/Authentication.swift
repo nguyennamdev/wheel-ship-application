@@ -10,12 +10,12 @@ import UIKit
 
 class Auth{
     
-    private init(){
-    }
-    
+    private init(){}
     static let instance:Auth = Auth()
     
-    // private functions
+    // MARK : private functions
+    
+    // get request
     private func makeRequest(method:String, value:[String:Any], path:String) -> URLRequest?{
         let url = URL(string: "https://wheel-ship.herokuapp.com/users/\(path)")
         var request = URLRequest(url: url!)

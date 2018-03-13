@@ -1,0 +1,6 @@
+framework module Pods_WheelShip {
+  umbrella header "Pods-WheelShip-umbrella.h"
+
+  export *
+  module * { export * }
+}

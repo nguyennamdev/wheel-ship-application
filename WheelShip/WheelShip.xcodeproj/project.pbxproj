@@ -7,13 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		655E3B1510584F966D1A9744 /* Pods_WheelShip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AA450C7C210B53CE0FF3431 /* Pods_WheelShip.framework */; };
+		8416057020565AD1006B6E1B /* OrdererEnterInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8416056F20565AD1006B6E1B /* OrdererEnterInfoController.swift */; };
+		8416057220565E47006B6E1B /* OdererEnterInfoController+setupViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8416057120565E47006B6E1B /* OdererEnterInfoController+setupViews.swift */; };
 		84222919204A41C6005058FD /* HomeOrdererController+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84222918204A41C6005058FD /* HomeOrdererController+Actions.swift */; };
+		843B7834204D304000A5514F /* HomeOrdererComtroller+setupViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843B7833204D304000A5514F /* HomeOrdererComtroller+setupViews.swift */; };
 		8440FBDC2028950300B256EE /* Enumerations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8440FBDB2028950300B256EE /* Enumerations.swift */; };
+		844EE914204D32F700176512 /* RegisterController+setupViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844EE913204D32F700176512 /* RegisterController+setupViews.swift */; };
+		844EE917204D335200176512 /* LoginController+setupViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844EE916204D335200176512 /* LoginController+setupViews.swift */; };
+		844EE919204D583900176512 /* PopupEntryPhongNumber+setupViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844EE918204D583900176512 /* PopupEntryPhongNumber+setupViews.swift */; };
 		84580C13201B1ECE00961A63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84580C12201B1ECE00961A63 /* AppDelegate.swift */; };
 		84580C15201B1ECE00961A63 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84580C14201B1ECE00961A63 /* LoginViewController.swift */; };
-		84580C18201B1ECE00961A63 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84580C16201B1ECE00961A63 /* Main.storyboard */; };
 		84580C1B201B1ECE00961A63 /* WheelShip.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 84580C19201B1ECE00961A63 /* WheelShip.xcdatamodeld */; };
-		84580C1D201B1ECE00961A63 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84580C1C201B1ECE00961A63 /* Assets.xcassets */; };
 		84580C20201B1ECE00961A63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84580C1E201B1ECE00961A63 /* LaunchScreen.storyboard */; };
 		84580C2D201B268600961A63 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84580C2C201B268600961A63 /* GradientView.swift */; };
 		845D1A3E204A919600F6358D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845D1A3D204A919500F6358D /* CoreLocation.framework */; };
@@ -31,20 +36,28 @@
 		84950360202723C100EE539C /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84950356202723C100EE539C /* User+CoreDataClass.swift */; };
 		84950361202723C100EE539C /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84950357202723C100EE539C /* User+CoreDataProperties.swift */; };
 		84BA53DC2022084200A18BAF /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BA53DB2022084200A18BAF /* Authentication.swift */; };
+		84C1C0DE2057EBA900E9ACB2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84C1C0DD2057EBA900E9ACB2 /* Assets.xcassets */; };
 		84D7641A2020522800195B9A /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D764192020522800195B9A /* RegisterController.swift */; };
 		84D9DA432027F29E00EA23C9 /* PopupEntryPhoneNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9DA422027F29E00EA23C9 /* PopupEntryPhoneNumber.swift */; };
 		84D9DA4620280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9DA4520280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1AA450C7C210B53CE0FF3431 /* Pods_WheelShip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WheelShip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		45DBCC8374C4D29F7260A529 /* Pods-WheelShip.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WheelShip.release.xcconfig"; path = "Pods/Target Support Files/Pods-WheelShip/Pods-WheelShip.release.xcconfig"; sourceTree = "<group>"; };
+		7797BD8FED7BA60AA27649E0 /* Pods-WheelShip.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WheelShip.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WheelShip/Pods-WheelShip.debug.xcconfig"; sourceTree = "<group>"; };
+		8416056F20565AD1006B6E1B /* OrdererEnterInfoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdererEnterInfoController.swift; sourceTree = "<group>"; };
+		8416057120565E47006B6E1B /* OdererEnterInfoController+setupViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OdererEnterInfoController+setupViews.swift"; sourceTree = "<group>"; };
 		84222918204A41C6005058FD /* HomeOrdererController+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeOrdererController+Actions.swift"; sourceTree = "<group>"; };
+		843B7833204D304000A5514F /* HomeOrdererComtroller+setupViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeOrdererComtroller+setupViews.swift"; sourceTree = "<group>"; };
 		8440FBDB2028950300B256EE /* Enumerations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enumerations.swift; sourceTree = "<group>"; };
+		844EE913204D32F700176512 /* RegisterController+setupViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RegisterController+setupViews.swift"; sourceTree = "<group>"; };
+		844EE916204D335200176512 /* LoginController+setupViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginController+setupViews.swift"; sourceTree = "<group>"; };
+		844EE918204D583900176512 /* PopupEntryPhongNumber+setupViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopupEntryPhongNumber+setupViews.swift"; sourceTree = "<group>"; };
 		84580C0F201B1ECE00961A63 /* WheelShip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WheelShip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84580C12201B1ECE00961A63 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84580C14201B1ECE00961A63 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		84580C17201B1ECE00961A63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		84580C1A201B1ECE00961A63 /* WheelShip.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WheelShip.xcdatamodel; sourceTree = "<group>"; };
-		84580C1C201B1ECE00961A63 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84580C1F201B1ECE00961A63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84580C21201B1ECE00961A63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84580C2C201B268600961A63 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
@@ -63,6 +76,7 @@
 		84950356202723C100EE539C /* User+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+CoreDataClass.swift"; sourceTree = "<group>"; };
 		84950357202723C100EE539C /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		84BA53DB2022084200A18BAF /* Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
+		84C1C0DD2057EBA900E9ACB2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84D764192020522800195B9A /* RegisterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 		84D9DA422027F29E00EA23C9 /* PopupEntryPhoneNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupEntryPhoneNumber.swift; sourceTree = "<group>"; };
 		84D9DA4520280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopupEntryPhoneNumber+Actions.swift"; sourceTree = "<group>"; };
@@ -74,19 +88,57 @@
 			buildActionMask = 2147483647;
 			files = (
 				845D1A3E204A919600F6358D /* CoreLocation.framework in Frameworks */,
+				655E3B1510584F966D1A9744 /* Pods_WheelShip.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5B5B3E16C9549F4E94BB08F3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7797BD8FED7BA60AA27649E0 /* Pods-WheelShip.debug.xcconfig */,
+				45DBCC8374C4D29F7260A529 /* Pods-WheelShip.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		8416056E20565AA3006B6E1B /* OrdererEnterInfoController */ = {
+			isa = PBXGroup;
+			children = (
+				8416056F20565AD1006B6E1B /* OrdererEnterInfoController.swift */,
+				8416057120565E47006B6E1B /* OdererEnterInfoController+setupViews.swift */,
+			);
+			name = OrdererEnterInfoController;
+			sourceTree = "<group>";
+		};
 		84222917204A41A3005058FD /* HomeOrdererController */ = {
 			isa = PBXGroup;
 			children = (
 				846C4E66204A2E0100451EEC /* HomeOrdererController.swift */,
 				84222918204A41C6005058FD /* HomeOrdererController+Actions.swift */,
+				843B7833204D304000A5514F /* HomeOrdererComtroller+setupViews.swift */,
 			);
 			name = HomeOrdererController;
+			sourceTree = "<group>";
+		};
+		844EE912204D32DE00176512 /* RegisterController */ = {
+			isa = PBXGroup;
+			children = (
+				84D764192020522800195B9A /* RegisterController.swift */,
+				844EE913204D32F700176512 /* RegisterController+setupViews.swift */,
+			);
+			name = RegisterController;
+			sourceTree = "<group>";
+		};
+		844EE915204D333D00176512 /* LoginController */ = {
+			isa = PBXGroup;
+			children = (
+				84580C14201B1ECE00961A63 /* LoginViewController.swift */,
+				844EE916204D335200176512 /* LoginController+setupViews.swift */,
+			);
+			name = LoginController;
 			sourceTree = "<group>";
 		};
 		84580C06201B1ECE00961A63 = {
@@ -95,6 +147,7 @@
 				84580C11201B1ECE00961A63 /* WheelShip */,
 				84580C10201B1ECE00961A63 /* Products */,
 				845D1A3C204A919500F6358D /* Frameworks */,
+				5B5B3E16C9549F4E94BB08F3 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -115,9 +168,8 @@
 				847FDA3B201ED232003AF85E /* Extensions */,
 				84580C28201B22CE00961A63 /* Helper */,
 				84580C12201B1ECE00961A63 /* AppDelegate.swift */,
+				84C1C0DD2057EBA900E9ACB2 /* Assets.xcassets */,
 				847FDA37201ECC00003AF85E /* CustomTabbarController.swift */,
-				84580C16201B1ECE00961A63 /* Main.storyboard */,
-				84580C1C201B1ECE00961A63 /* Assets.xcassets */,
 				84580C1E201B1ECE00961A63 /* LaunchScreen.storyboard */,
 				84580C21201B1ECE00961A63 /* Info.plist */,
 				84580C19201B1ECE00961A63 /* WheelShip.xcdatamodeld */,
@@ -128,11 +180,11 @@
 		84580C27201B200500961A63 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				844EE915204D333D00176512 /* LoginController */,
+				844EE912204D32DE00176512 /* RegisterController */,
 				84D9DA4420280CB900EA23C9 /* PopupEntryPhoneNumber */,
 				846C4E65204A2D8300451EEC /* Shipper */,
 				846C4E63204A2D6D00451EEC /* Orderer */,
-				84D764192020522800195B9A /* RegisterController.swift */,
-				84580C14201B1ECE00961A63 /* LoginViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -158,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				845D1A3D204A919500F6358D /* CoreLocation.framework */,
+				1AA450C7C210B53CE0FF3431 /* Pods_WheelShip.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -165,6 +218,7 @@
 		846C4E63204A2D6D00451EEC /* Orderer */ = {
 			isa = PBXGroup;
 			children = (
+				8416056E20565AA3006B6E1B /* OrdererEnterInfoController */,
 				84222917204A41A3005058FD /* HomeOrdererController */,
 			);
 			name = Orderer;
@@ -207,6 +261,7 @@
 			children = (
 				84D9DA422027F29E00EA23C9 /* PopupEntryPhoneNumber.swift */,
 				84D9DA4520280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift */,
+				844EE918204D583900176512 /* PopupEntryPhongNumber+setupViews.swift */,
 			);
 			name = PopupEntryPhoneNumber;
 			sourceTree = "<group>";
@@ -218,9 +273,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 84580C24201B1ECE00961A63 /* Build configuration list for PBXNativeTarget "WheelShip" */;
 			buildPhases = (
+				19AF885FC5790B0C8DC625B9 /* [CP] Check Pods Manifest.lock */,
 				84580C0B201B1ECE00961A63 /* Sources */,
 				84580C0C201B1ECE00961A63 /* Frameworks */,
 				84580C0D201B1ECE00961A63 /* Resources */,
+				AA0C6F6BB87ABBFB490E23A0 /* [CP] Embed Pods Frameworks */,
+				C1C60014421C4F5C6BC93B5E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -276,13 +334,67 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84C1C0DE2057EBA900E9ACB2 /* Assets.xcassets in Resources */,
 				84580C20201B1ECE00961A63 /* LaunchScreen.storyboard in Resources */,
-				84580C1D201B1ECE00961A63 /* Assets.xcassets in Resources */,
-				84580C18201B1ECE00961A63 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		19AF885FC5790B0C8DC625B9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WheelShip-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AA0C6F6BB87ABBFB490E23A0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WheelShip/Pods-WheelShip-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C1C60014421C4F5C6BC93B5E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-WheelShip/Pods-WheelShip-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WheelShip/Pods-WheelShip-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		84580C0B201B1ECE00961A63 /* Sources */ = {
@@ -290,6 +402,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84580C15201B1ECE00961A63 /* LoginViewController.swift in Sources */,
+				8416057020565AD1006B6E1B /* OrdererEnterInfoController.swift in Sources */,
 				8495035D202723C100EE539C /* Orderer+CoreDataProperties.swift in Sources */,
 				846C4E67204A2E0100451EEC /* HomeOrdererController.swift in Sources */,
 				84580C13201B1ECE00961A63 /* AppDelegate.swift in Sources */,
@@ -300,9 +413,13 @@
 				8495035E202723C100EE539C /* Order+CoreDataClass.swift in Sources */,
 				847FDA3D201ED252003AF85E /* Extension.swift in Sources */,
 				84580C2D201B268600961A63 /* GradientView.swift in Sources */,
+				8416057220565E47006B6E1B /* OdererEnterInfoController+setupViews.swift in Sources */,
 				84D9DA4620280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift in Sources */,
+				844EE917204D335200176512 /* LoginController+setupViews.swift in Sources */,
 				8495035C202723C100EE539C /* Orderer+CoreDataClass.swift in Sources */,
+				843B7834204D304000A5514F /* HomeOrdererComtroller+setupViews.swift in Sources */,
 				8495035A202723C100EE539C /* Shipper+CoreDataClass.swift in Sources */,
+				844EE919204D583900176512 /* PopupEntryPhongNumber+setupViews.swift in Sources */,
 				84950361202723C100EE539C /* User+CoreDataProperties.swift in Sources */,
 				84D7641A2020522800195B9A /* RegisterController.swift in Sources */,
 				84580C1B201B1ECE00961A63 /* WheelShip.xcdatamodeld in Sources */,
@@ -310,6 +427,7 @@
 				8495035B202723C100EE539C /* Shipper+CoreDataProperties.swift in Sources */,
 				8440FBDC2028950300B256EE /* Enumerations.swift in Sources */,
 				84950360202723C100EE539C /* User+CoreDataClass.swift in Sources */,
+				844EE914204D32F700176512 /* RegisterController+setupViews.swift in Sources */,
 				84950358202723C100EE539C /* Location+CoreDataClass.swift in Sources */,
 				84BA53DC2022084200A18BAF /* Authentication.swift in Sources */,
 			);
@@ -318,14 +436,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		84580C16201B1ECE00961A63 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				84580C17201B1ECE00961A63 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		84580C1E201B1ECE00961A63 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -446,8 +556,8 @@
 		};
 		84580C25201B1ECE00961A63 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7797BD8FED7BA60AA27649E0 /* Pods-WheelShip.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = PT7KFKB77Y;
 				INFOPLIST_FILE = WheelShip/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -459,8 +569,8 @@
 		};
 		84580C26201B1ECE00961A63 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 45DBCC8374C4D29F7260A529 /* Pods-WheelShip.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = PT7KFKB77Y;
 				INFOPLIST_FILE = WheelShip/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

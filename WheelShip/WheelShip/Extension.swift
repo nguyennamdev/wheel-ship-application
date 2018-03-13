@@ -84,9 +84,9 @@ extension UIColor {
 extension UITextField {
     
     func setupImageForLeftView(image:UIImage){
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: 29, height: 24))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 38, height: 30))
         let imageView = UIImageView(image: image)
-        imageView.frame = CGRect(x: 5, y: 0, width: 24, height: 24)
+        imageView.frame = CGRect(x: 8, y: 0, width: 30, height: 30)
         view.addSubview(imageView)
         leftView = view
         leftViewMode = .always
@@ -94,8 +94,10 @@ extension UITextField {
     
     func setupDefault(){
         self.backgroundColor = UIColor(white: 1, alpha: 0.3)
-        self.textColor = UIColor.white
+        self.textColor = UIColor.black
         self.borderStyle = .roundedRect
+        self.backgroundColor = UIColor.white
+        
     }
 }
 
