@@ -24,13 +24,15 @@ class HomeOrdererController:UIViewController {
             }
         }
     }
-    var toLocation:CLLocation?{
+    var mapChangedFromUserInteraction:Bool?{
         didSet{
-            print("\(toLocation)")
+            if mapChangedFromUserInteraction!{
+                self.locationManager?.stopUpdatingLocation()
+            }
         }
     }
+    var toLocation:CLLocation?
     var bottomConstantOfDescriptionTextField:NSLayoutConstraint?
-    var mapChangedFromUserInteraction = false
     var autocompleteViewController:GMSAutocompleteViewController?
     var numberOfTextFieldDidBeginEditing:Int?
     var userChangedFromAddress = false
@@ -193,19 +195,6 @@ extension HomeOrdererController : UITextFieldDelegate {
 // MARK: implement functions of CLLocationManagerDelegate
 extension HomeOrdererController : CLLocationManagerDelegate{
     
-    func mapViewCameraDidChangeFromUserInteraction() -> Bool {
-        let view:UIView = self.mapsView.subviews[0] as UIView
-        //  Look through gesture recognizers to determine whether this region change is from user interaction
-        if let gestureRecognizers = view.gestureRecognizers {
-            for recognizer in gestureRecognizers{
-                if (recognizer.state == UIGestureRecognizerState.began || recognizer.state == UIGestureRecognizerState.ended || recognizer.state == UIGestureRecognizerState.recognized){
-                    return true
-                }
-            }
-        }
-        return false
-    }
-    
     func loadMyLocation(location:CLLocation){
         let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude, longitude: location.coordinate.longitude, zoom: 15)
         DispatchQueue.main.async {
@@ -217,10 +206,8 @@ extension HomeOrdererController : CLLocationManagerDelegate{
         guard let location = locations.last else { return }
         // Use Control Flow: if the user has moved the map, then don't re-center.
         // NOTE: this is using 'mapChangedFromUserInteraction' from above.
-        if mapChangedFromUserInteraction == false{
-            self.loadMyLocation(location: location)
-            self.fromLocation = location
-        }
+        self.loadMyLocation(location: location)
+        self.fromLocation = location
     }
     
     // Handle authorization for the location manager.
@@ -292,7 +279,7 @@ extension HomeOrdererController : CLLocationManagerDelegate{
 extension HomeOrdererController : GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
         // set mapChangedFromUserInteraction when user will move
-        mapChangedFromUserInteraction = mapViewCameraDidChangeFromUserInteraction()
+        mapChangedFromUserInteraction = true
     }
 }
 // MARK: implement functions of GMSAutocompleteViewControllerDelegate
