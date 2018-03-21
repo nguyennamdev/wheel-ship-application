@@ -11,8 +11,18 @@ import UIKit
 extension HomeOrdererController {
     
     @objc func showOrdererEnterInfo(){
-        guard let fromAddress = fromAddressTextField.text,
-            let toAddress = toAddressTextField.text else { return }
+//        guard let fromAddress = fromAddressTextField.text,
+//            let toAddress = toAddressTextField.text else { return }
+        // init order
+        /*
+        guard let appdelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let context = appdelegate.persistentContainer.viewContext
+        self.order = Order(context: context)
+        // set some value for order property
+        self.order?.fromAddress = fromAddress
+        self.order?.toAddress = toAddress
+        self.order?.setFromLocation(value: (self.fromLocation?.coordinate)!)
+        self.order?.setToLocation(value: (self.toLocation?.coordinate)!)*/
         // pushes ordererEnterInfoController
         let orderEnterInfoController = OrdererEnterInfoController()
         self.navigationController?.pushViewController(orderEnterInfoController, animated: false)

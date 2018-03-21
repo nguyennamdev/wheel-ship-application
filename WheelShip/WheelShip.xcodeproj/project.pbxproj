@@ -22,6 +22,8 @@
 		84580C20201B1ECE00961A63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84580C1E201B1ECE00961A63 /* LaunchScreen.storyboard */; };
 		84580C2D201B268600961A63 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84580C2C201B268600961A63 /* GradientView.swift */; };
 		845D1A3E204A919600F6358D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845D1A3D204A919500F6358D /* CoreLocation.framework */; };
+		8467F26C2060EC930023D5F1 /* ConfirmationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467F26B2060EC930023D5F1 /* ConfirmationItem.swift */; };
+		8467F26E2060F3CC0023D5F1 /* OrderComfirmationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467F26D2060F3CC0023D5F1 /* OrderComfirmationCell.swift */; };
 		846C4E67204A2E0100451EEC /* HomeOrdererController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846C4E66204A2E0100451EEC /* HomeOrdererController.swift */; };
 		847FDA38201ECC00003AF85E /* CustomTabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847FDA37201ECC00003AF85E /* CustomTabbarController.swift */; };
 		847FDA3D201ED252003AF85E /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847FDA3C201ED252003AF85E /* Extension.swift */; };
@@ -35,11 +37,14 @@
 		8495035F202723C100EE539C /* Order+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84950355202723C100EE539C /* Order+CoreDataProperties.swift */; };
 		84950360202723C100EE539C /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84950356202723C100EE539C /* User+CoreDataClass.swift */; };
 		84950361202723C100EE539C /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84950357202723C100EE539C /* User+CoreDataProperties.swift */; };
+		84B8BAB6205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B8BAB5205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift */; };
+		84B901992060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B901982060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift */; };
 		84BA53DC2022084200A18BAF /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BA53DB2022084200A18BAF /* Authentication.swift */; };
 		84C1C0DE2057EBA900E9ACB2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84C1C0DD2057EBA900E9ACB2 /* Assets.xcassets */; };
 		84D7641A2020522800195B9A /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D764192020522800195B9A /* RegisterController.swift */; };
 		84D9DA432027F29E00EA23C9 /* PopupEntryPhoneNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9DA422027F29E00EA23C9 /* PopupEntryPhoneNumber.swift */; };
 		84D9DA4620280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9DA4520280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift */; };
+		84FB4173206297B000FCA753 /* OrderApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FB4172206297B000FCA753 /* OrderApiManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +67,8 @@
 		84580C21201B1ECE00961A63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84580C2C201B268600961A63 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		845D1A3D204A919500F6358D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		8467F26B2060EC930023D5F1 /* ConfirmationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationItem.swift; sourceTree = "<group>"; };
+		8467F26D2060F3CC0023D5F1 /* OrderComfirmationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderComfirmationCell.swift; sourceTree = "<group>"; };
 		846C4E66204A2E0100451EEC /* HomeOrdererController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeOrdererController.swift; sourceTree = "<group>"; };
 		847FDA37201ECC00003AF85E /* CustomTabbarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabbarController.swift; sourceTree = "<group>"; };
 		847FDA3C201ED252003AF85E /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
@@ -75,11 +82,14 @@
 		84950355202723C100EE539C /* Order+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Order+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		84950356202723C100EE539C /* User+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+CoreDataClass.swift"; sourceTree = "<group>"; };
 		84950357202723C100EE539C /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		84B8BAB5205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrdererEnterInfoController+Actions.swift"; sourceTree = "<group>"; };
+		84B901982060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderComfirmationCollectionViewController.swift; sourceTree = "<group>"; };
 		84BA53DB2022084200A18BAF /* Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
 		84C1C0DD2057EBA900E9ACB2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84D764192020522800195B9A /* RegisterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 		84D9DA422027F29E00EA23C9 /* PopupEntryPhoneNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupEntryPhoneNumber.swift; sourceTree = "<group>"; };
 		84D9DA4520280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopupEntryPhoneNumber+Actions.swift"; sourceTree = "<group>"; };
+		84FB4172206297B000FCA753 /* OrderApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderApiManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +119,7 @@
 			children = (
 				8416056F20565AD1006B6E1B /* OrdererEnterInfoController.swift */,
 				8416057120565E47006B6E1B /* OdererEnterInfoController+setupViews.swift */,
+				84B8BAB5205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift */,
 			);
 			name = OrdererEnterInfoController;
 			sourceTree = "<group>";
@@ -165,6 +176,7 @@
 				84950362202723C600EE539C /* Models */,
 				84580C2B201B267700961A63 /* Views */,
 				84580C27201B200500961A63 /* Controllers */,
+				84FB41712062973600FCA753 /* RestApiManager */,
 				847FDA3B201ED232003AF85E /* Extensions */,
 				84580C28201B22CE00961A63 /* Helper */,
 				84580C12201B1ECE00961A63 /* AppDelegate.swift */,
@@ -192,7 +204,6 @@
 		84580C28201B22CE00961A63 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				84BA53DB2022084200A18BAF /* Authentication.swift */,
 				8440FBDB2028950300B256EE /* Enumerations.swift */,
 			);
 			name = Helper;
@@ -202,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				84580C2C201B268600961A63 /* GradientView.swift */,
+				8467F26D2060F3CC0023D5F1 /* OrderComfirmationCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -218,6 +230,7 @@
 		846C4E63204A2D6D00451EEC /* Orderer */ = {
 			isa = PBXGroup;
 			children = (
+				84B901972060AD85003DD2C2 /* OrderComfirmationController */,
 				8416056E20565AA3006B6E1B /* OrdererEnterInfoController */,
 				84222917204A41A3005058FD /* HomeOrdererController */,
 			);
@@ -252,8 +265,17 @@
 				84950355202723C100EE539C /* Order+CoreDataProperties.swift */,
 				84950356202723C100EE539C /* User+CoreDataClass.swift */,
 				84950357202723C100EE539C /* User+CoreDataProperties.swift */,
+				8467F26B2060EC930023D5F1 /* ConfirmationItem.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		84B901972060AD85003DD2C2 /* OrderComfirmationController */ = {
+			isa = PBXGroup;
+			children = (
+				84B901982060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift */,
+			);
+			name = OrderComfirmationController;
 			sourceTree = "<group>";
 		};
 		84D9DA4420280CB900EA23C9 /* PopupEntryPhoneNumber */ = {
@@ -264,6 +286,15 @@
 				844EE918204D583900176512 /* PopupEntryPhongNumber+setupViews.swift */,
 			);
 			name = PopupEntryPhoneNumber;
+			sourceTree = "<group>";
+		};
+		84FB41712062973600FCA753 /* RestApiManager */ = {
+			isa = PBXGroup;
+			children = (
+				84BA53DB2022084200A18BAF /* Authentication.swift */,
+				84FB4172206297B000FCA753 /* OrderApiManager.swift */,
+			);
+			name = RestApiManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -408,11 +439,15 @@
 				84580C13201B1ECE00961A63 /* AppDelegate.swift in Sources */,
 				84D9DA432027F29E00EA23C9 /* PopupEntryPhoneNumber.swift in Sources */,
 				8495035F202723C100EE539C /* Order+CoreDataProperties.swift in Sources */,
+				84FB4173206297B000FCA753 /* OrderApiManager.swift in Sources */,
 				84950359202723C100EE539C /* Location+CoreDataProperties.swift in Sources */,
 				84222919204A41C6005058FD /* HomeOrdererController+Actions.swift in Sources */,
+				8467F26C2060EC930023D5F1 /* ConfirmationItem.swift in Sources */,
+				8467F26E2060F3CC0023D5F1 /* OrderComfirmationCell.swift in Sources */,
 				8495035E202723C100EE539C /* Order+CoreDataClass.swift in Sources */,
 				847FDA3D201ED252003AF85E /* Extension.swift in Sources */,
 				84580C2D201B268600961A63 /* GradientView.swift in Sources */,
+				84B8BAB6205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift in Sources */,
 				8416057220565E47006B6E1B /* OdererEnterInfoController+setupViews.swift in Sources */,
 				84D9DA4620280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift in Sources */,
 				844EE917204D335200176512 /* LoginController+setupViews.swift in Sources */,
@@ -420,6 +455,7 @@
 				843B7834204D304000A5514F /* HomeOrdererComtroller+setupViews.swift in Sources */,
 				8495035A202723C100EE539C /* Shipper+CoreDataClass.swift in Sources */,
 				844EE919204D583900176512 /* PopupEntryPhongNumber+setupViews.swift in Sources */,
+				84B901992060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift in Sources */,
 				84950361202723C100EE539C /* User+CoreDataProperties.swift in Sources */,
 				84D7641A2020522800195B9A /* RegisterController.swift in Sources */,
 				84580C1B201B1ECE00961A63 /* WheelShip.xcdatamodeld in Sources */,
@@ -500,6 +536,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -549,6 +586,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};

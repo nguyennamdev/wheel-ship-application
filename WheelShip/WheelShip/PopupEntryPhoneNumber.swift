@@ -11,7 +11,7 @@ import UIKit
 class PopupEntryPhoneNumber:UIViewController {
     
     var user:User?
-    var auth = Auth.instance // make instance of Auth RestApiManager
+    var auth = Authentication.instance // make instance of Auth RestApiManager
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -12,13 +12,13 @@ import UIKit
 extension HomeOrdererController {
     
     func setupFromAddressTextField(){
-        view.addSubview(fromAddressTextField)
-        fromAddressTextField.anchorWithWidthHeightConstant(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 24, leftConstant: 12, bottomConstant: 0, rightConstant: 12, widthConstant: 0, heightConstant:50)
+        view.addSubview(originAddressTextField)
+        originAddressTextField.anchorWithWidthHeightConstant(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 24, leftConstant: 12, bottomConstant: 0, rightConstant: 12, widthConstant: 0, heightConstant:50)
     }
     
     func setupToAddressTextField(){
-        view.addSubview(toAddressTextField)
-        toAddressTextField.anchorWithWidthHeightConstant(top: fromAddressTextField.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 12, leftConstant: 12, bottomConstant: 0, rightConstant: 12, widthConstant: 0, heightConstant: 50)
+        view.addSubview(destinationAddressTextField)
+        destinationAddressTextField.anchorWithWidthHeightConstant(top: originAddressTextField.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 12, leftConstant: 12, bottomConstant: 0, rightConstant: 12, widthConstant: 0, heightConstant: 50)
     }
     
     func setupGoogleMapsView(){

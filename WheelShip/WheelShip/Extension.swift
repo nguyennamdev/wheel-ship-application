@@ -84,20 +84,29 @@ extension UIColor {
 extension UITextField {
     
     func setupImageForLeftView(image:UIImage){
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: 38, height: 30))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 41, height: 25))
         let imageView = UIImageView(image: image)
-        imageView.frame = CGRect(x: 8, y: 0, width: 30, height: 30)
+        imageView.frame = CGRect(x: 8, y: 0, width: 25, height: 25)
         view.addSubview(imageView)
         leftView = view
         leftViewMode = .always
+        imageView.center = view.center
     }
     
     func setupDefault(){
-        self.backgroundColor = UIColor(white: 1, alpha: 0.3)
         self.textColor = UIColor.black
         self.borderStyle = .roundedRect
         self.backgroundColor = UIColor.white
-        
+        self.clearButtonMode = .always
+        self.font = UIFont.boldSystemFont(ofSize: 13)
+    }
+    
+    func setDefaultWithCustomBoder(){
+        self.backgroundColor = UIColor.white
+        self.layer.borderColor = UIColor.gray.cgColor
+        self.layer.borderWidth = 0.5
+        self.font = UIFont.boldSystemFont(ofSize: 13)
+        self.clearButtonMode = .always
     }
 }
 
@@ -116,3 +125,16 @@ extension String{
     }
 }
 
+extension Formatter {
+    static let withUnderDots: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.groupingSeparator = "."
+        formatter.numberStyle = .decimal
+        return formatter
+    }()
+}
+extension Double{
+    func formatedNumberWithUnderDots() -> String{
+        return Formatter.withUnderDots.string(for: self) ?? ""
+    }
+}

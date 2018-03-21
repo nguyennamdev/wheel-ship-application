@@ -8,14 +8,12 @@
 
 import UIKit
 
-class Auth{
+class Authentication{
     
     private init(){}
-    static let instance:Auth = Auth()
+    static let instance:Authentication = Authentication()
+    // MARK: private functions
     
-    // MARK : private functions
-    
-    // get request
     private func makeRequest(method:String, value:[String:Any], path:String) -> URLRequest?{
         let url = URL(string: "https://wheel-ship.herokuapp.com/users/\(path)")
         var request = URLRequest(url: url!)
@@ -45,8 +43,6 @@ class Auth{
         }
         task.resume()
     }
-    
-    
-    
-    
 }
+
+

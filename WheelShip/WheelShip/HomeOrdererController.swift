@@ -14,12 +14,13 @@ import GooglePlaces
 class HomeOrdererController:UIViewController {
     
     // MARK: Properties
+    var order:Order?
     var locationManager:CLLocationManager?
-    var fromLocation:CLLocation?{
+    var originLocation:CLLocation?{
         didSet{
-            if !userChangedFromAddress{
-                convertLocationToAddress(location: fromLocation) { (address) in
-                    self.fromAddressTextField.text = address
+            if !userChangedOriginAddress{ // when user use current location
+                convertLocationToAddress(location: originLocation) { (address) in
+                    self.originAddressTextField.text = address
                 }
             }
         }
@@ -31,15 +32,14 @@ class HomeOrdererController:UIViewController {
             }
         }
     }
-    var toLocation:CLLocation?
+    var destinationLocation:CLLocation?
     var bottomConstantOfDescriptionTextField:NSLayoutConstraint?
     var autocompleteViewController:GMSAutocompleteViewController?
     var numberOfTextFieldDidBeginEditing:Int?
-    var userChangedFromAddress = false
-    
+    var userChangedOriginAddress = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         navigationItem.title = "Thêm đơn mới"
         view.addSubview(background)
         background.frame = view.frame
@@ -51,13 +51,11 @@ class HomeOrdererController:UIViewController {
         setupToAddressTextField()
         
         navigationItem.rightBarButtonItem = righBarButtonItem
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(endingEntryText))
         view.addGestureRecognizer(tapGesture)
         
         textFieldSetDelegate()
         setupCLLocationManager()
-        
         // google apis delegate
         mapsView.delegate = self
         autocompleteViewController = GMSAutocompleteViewController()
@@ -66,14 +64,14 @@ class HomeOrdererController:UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidLoad()
-        let backBarButtonItem = UIBarButtonItem(title: "Trở lại", style: .plain, target: nil, action: nil)
+        let backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem = backBarButtonItem
     }
     
     // MARK: Private functions
     private func updateStateDoneBarButton(){
-        guard let fromAddress = fromAddressTextField.text ,
-            let toAddress = toAddressTextField.text else { return }
+        guard let fromAddress = originAddressTextField.text ,
+            let toAddress = destinationAddressTextField.text else { return }
         switch ""{
         case fromAddress, toAddress:
             righBarButtonItem.isEnabled = false
@@ -83,8 +81,8 @@ class HomeOrdererController:UIViewController {
     }
     
     private func textFieldSetDelegate(){
-        fromAddressTextField.delegate = self
-        toAddressTextField.delegate = self
+        originAddressTextField.delegate = self
+        destinationAddressTextField.delegate = self
     }
     
     private func setupCLLocationManager(){
@@ -105,23 +103,20 @@ class HomeOrdererController:UIViewController {
         return gv
     }()
     
-    let fromAddressTextField:UITextField = {
+    let originAddressTextField:UITextField = {
         let tf = UITextField()
         tf.placeholder = "Địa chỉ bắt đầu"
         tf.setupDefault()
         tf.setupImageForLeftView(image: #imageLiteral(resourceName: "placeholder"))
-        tf.font = UIFont.systemFont(ofSize: 13)
         tf.tag = 0
-        tf.clearButtonMode = .always
         return tf
     }()
     
-    let toAddressTextField:UITextField = {
+    let destinationAddressTextField:UITextField = {
         let tf = UITextField()
         tf.placeholder = "Địa chỉ đến"
         tf.setupDefault()
         tf.setupImageForLeftView(image: #imageLiteral(resourceName: "placeholder2"))
-        tf.font = UIFont.systemFont(ofSize: 13)
         tf.tag = 1
         return tf
     }()
@@ -136,7 +131,7 @@ class HomeOrdererController:UIViewController {
     
     let pageControl:UIPageControl = {
         let pageControl = UIPageControl()
-        pageControl.numberOfPages = 2
+        pageControl.numberOfPages = 3
         pageControl.currentPage = 0
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         return pageControl
@@ -144,10 +139,9 @@ class HomeOrdererController:UIViewController {
     
     lazy var righBarButtonItem:UIBarButtonItem = {
         let barButton = UIBarButtonItem(title: "Tiếp", style: .done, target: self, action: #selector(showOrdererEnterInfo))
-        barButton.isEnabled = false
+//        barButton.isEnabled = false
         return barButton
     }()
-    
 }
 
 // MARK:  implement functions of text field delegate
@@ -155,15 +149,6 @@ extension HomeOrdererController : UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         updateStateDoneBarButton()
-//        self.locationManager?.startUpdatingLocation()
-    }
-    
-    func createAMarker(location:CLLocation, title:String, snippet:String?){
-        let marker = GMSMarker()
-        marker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        marker.title = title
-        marker.snippet = snippet ?? ""
-        marker.map = mapsView
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -207,7 +192,7 @@ extension HomeOrdererController : CLLocationManagerDelegate{
         // Use Control Flow: if the user has moved the map, then don't re-center.
         // NOTE: this is using 'mapChangedFromUserInteraction' from above.
         self.loadMyLocation(location: location)
-        self.fromLocation = location
+        self.originLocation = location
     }
     
     // Handle authorization for the location manager.
@@ -285,18 +270,26 @@ extension HomeOrdererController : GMSMapViewDelegate {
 // MARK: implement functions of GMSAutocompleteViewControllerDelegate
 extension HomeOrdererController : GMSAutocompleteViewControllerDelegate {
     
+    func createAMarker(location:CLLocation, title:String, snippet:String?){
+        let marker = GMSMarker()
+        marker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        marker.title = title
+        marker.snippet = snippet ?? ""
+        marker.map = mapsView
+    }
+    
     // Handle the user's selection.
     func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
         guard let address = place.formattedAddress else { return }
         let location = CLLocation(latitude:place.coordinate.latitude, longitude: place.coordinate.longitude)
        // take address into textfields and locations
         if numberOfTextFieldDidBeginEditing == 0 {
-            self.fromAddressTextField.text = address
-            self.userChangedFromAddress = true
-            self.fromLocation = location
+            self.originAddressTextField.text = address
+            self.userChangedOriginAddress = true
+            self.originLocation = location
         }else {
-            toAddressTextField.text = address
-            // set mapChanged for map can't move to current location
+            destinationAddressTextField.text = address
+            // set mapChanged for map which it can't move to current location
             mapChangedFromUserInteraction = true
             // animate to location selected
             let camera = GMSCameraPosition.camera(withTarget: place.coordinate, zoom: 15)
@@ -304,9 +297,10 @@ extension HomeOrdererController : GMSAutocompleteViewControllerDelegate {
             // make marker that location
             createAMarker(location: location, title: place.name, snippet: place.formattedAddress)
             // assign toLocation to set value
-            self.toLocation = location
+            self.destinationLocation = location
         }
         dismiss(animated: true, completion: nil)
+        updateStateDoneBarButton()
     }
     
     func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
@@ -328,17 +322,3 @@ extension HomeOrdererController : GMSAutocompleteViewControllerDelegate {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
