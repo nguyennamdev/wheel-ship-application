@@ -28,7 +28,7 @@ class PopupEntryPhoneNumber:UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
     
-    // MARK : Views
+    // MARK: Views
 
     let gradientBackground:GradientView = {
         let gv = GradientView()

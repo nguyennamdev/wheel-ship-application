@@ -13,17 +13,22 @@ extension OrdererEnterInfoController {
     @objc func showOrderConfirmationController(){
         let orderConfirmationController = OrderConfirmationController(collectionViewLayout: UICollectionViewFlowLayout())
         let order = createDummyOrder()
+        let unitPrice = createDummyUnitPrice()
+        order?.unitPrice = unitPrice
         print(order!)
-        DispatchQueue.main.async {
-            orderConfirmationController.order = order!
-            self.navigationController?.pushViewController(orderConfirmationController, animated: false)
-        }
+        orderConfirmationController.order = order!
+        self.navigationController?.pushViewController(orderConfirmationController, animated: false)
         
     }
     @objc func isFragileSwitchValueChanged(sender:UISwitch){
-        
+        if sender.isOn {
+            unitPrice?.priceFragileOrder = 10000
+        }else {
+            unitPrice?.priceFragileOrder = 0
+        }
+        self.updateOverheadsLabel()
     }
-
+    
     @objc func showWeightPicker(){
         if weightPickerViewIsShowing{
             heightConstaintOfWeightPickerView?.constant = 0
@@ -55,9 +60,20 @@ extension OrdererEnterInfoController {
             order.isFragile = true
             order.weight = "3 - 5kg"
             order.note = "can ship gap"
-            order.prepayment = 400000
-            order.feeShip = 20000
             return order
+        }
+        return nil
+    }
+    
+    func createDummyUnitPrice() -> UnitPrice? {
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            let context = appDelegate.persistentContainer.viewContext
+            let unitPrice = UnitPrice(context: context)
+            unitPrice.prepayment = 200000
+            unitPrice.feeShip = 20000
+            unitPrice.priceFragileOrder = 10000
+            unitPrice.priceOfWeight = 5000
+            return unitPrice
         }
         return nil
     }

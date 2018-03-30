@@ -69,7 +69,7 @@ class HomeOrdererController:UIViewController {
     }
     
     // MARK: Private functions
-    private func updateStateDoneBarButton(){
+    private func updateStateBarButton(){
         guard let fromAddress = originAddressTextField.text ,
             let toAddress = destinationAddressTextField.text else { return }
         switch ""{
@@ -124,7 +124,6 @@ class HomeOrdererController:UIViewController {
     let mapsView:GMSMapView = {
         let mapView = GMSMapView()
         mapView.isMyLocationEnabled = true
-        mapView.setMinZoom(15, maxZoom: 25)
         mapView.settings.myLocationButton = true
         return mapView
     }()
@@ -148,7 +147,7 @@ class HomeOrdererController:UIViewController {
 extension HomeOrdererController : UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        updateStateDoneBarButton()
+        updateStateBarButton()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -300,7 +299,7 @@ extension HomeOrdererController : GMSAutocompleteViewControllerDelegate {
             self.destinationLocation = location
         }
         dismiss(animated: true, completion: nil)
-        updateStateDoneBarButton()
+        updateStateBarButton()
     }
     
     func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {

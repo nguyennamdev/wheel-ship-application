@@ -6,8 +6,10 @@
 //  Copyright © 2018 Nguyen Nam. All rights reserved.
 //
 
-import Foundation
 import UIKit
+import CoreLocation
+import Alamofire
+
 
 class OrdererEnterInfoController : UIViewController {
     
@@ -16,18 +18,48 @@ class OrdererEnterInfoController : UIViewController {
     let listWeight = ["0 - 3 kg", "3 - 5 kg", "Trên 5 kg"]
     var weightPickerViewIsShowing = false
     var weightAttributedText:NSMutableAttributedString?
-    let orderApiManager = OrderApiManager.shared
+    var unitPrice:UnitPrice?{
+        didSet{
+            updateStateBarButtonItem()
+            updateOverheadsLabel()
+        }
+    }
+    var order:Order?{
+        didSet{
+            self.handleDistanceMatrix()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // set background
         view.addSubview(background)
         background.frame = view.frame
-    
         // set up navigationItem
         navigationItem.rightBarButtonItem = doneBarButtonItem
         navigationItem.title = "Thêm đơn mới"
         // set up views
+        setupViews()
+        // setup weight picker view
+        weightPickerView.delegate = self
+        weightPickerView.dataSource = self
+        ////////
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewEndEdit))
+        view.addGestureRecognizer(tapGesture)
+        ////////
+        noteTextField.delegate = self
+        prepaymentTextField.delegate = self
+        initUnitPrice()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidLoad()
+        let backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
+        self.navigationItem.backBarButtonItem = backBarButtonItem
+    }
+    
+    // MARK: Private functions
+    private func setupViews(){
         setupPageControl()
         setupPhoneReciverTextField()
         setupFragileObjectView()
@@ -36,24 +68,103 @@ class OrdererEnterInfoController : UIViewController {
         setupNoteTextField()
         setupOverheadsStackView()
         setupDividerView()
-        // setup weight picker view
-        weightPickerView.delegate = self
-        weightPickerView.dataSource = self
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewEndEdit))
-        view.addGestureRecognizer(tapGesture)
-        
-        prepaymentTextField.delegate = self
-        
-        // func test destinations matrix
-        orderApiManager.makeDistanceMatrixRequests(origins: nil, destinations: nil)
+        setupDistanceLabel()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidLoad()
-        let backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
-        self.navigationItem.backBarButtonItem = backBarButtonItem
+    private func initUnitPrice(){
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate{
+            let context = appDelegate.persistentContainer.viewContext
+            self.unitPrice = UnitPrice(context: context)
+        }
     }
+    
+    private func handleDistanceMatrix(){
+        guard let origin = order?.originLocation as? CLLocation,let destination = order?.destinationLocation as? CLLocation else { return }
+        let origins = "\(origin.coordinate.latitude),\(origin.coordinate.longitude)"
+        let destinations = "\(destination.coordinate.latitude),\(destination.coordinate.longitude)"
+        let distanceMatrixApiKey = "AIzaSyAnyH3snwD3N3oru00t1cQVp_VgQNHZ5_Y"
+        Alamofire.request("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=\(origins)&destinations=\(destinations)&key=\(distanceMatrixApiKey)").responseJSON { (response) in
+            if let json = response.result.value {
+                // return tupple distance text and distance value
+                let result = self.parseDistanceJson(json: json)
+                let distanceText = result.text
+                let distanceValue = result.value
+                // feeShip = pricePerKl * (distanceValue / 1000)
+                self.getPricePerKilometerByApi(isComplete: { (pricePerKilometer) in
+                    self.unitPrice?.feeShip = Double(pricePerKilometer * (distanceValue / 1000))
+                    guard let feeShip = self.unitPrice?.feeShip, let overheads = self.unitPrice?.overheads else { return }
+                    self.setAttributedStringForDistanceLabel(value: distanceText + " = \(feeShip.formatedNumberWithUnderDots()) vnđ")
+                    self.updateOverheadsLabel()
+                })
+            }
+        }
+    }
+    
+    private func parseDistanceJson(json:Any) -> (text:String, value:Int){
+        var result:String?
+        var distanceValue:Int?
+        if let jsonData = json as? [String: Any] {
+            if let rows = jsonData["rows"] as? [[String : Any]]{
+                if let element = rows.first!["elements"] as? [[String : Any]] {
+                    if let distance = element.first!["distance"] as? [String : Any] {
+                        let text = distance["text"] as! String
+                        result = text
+                        let value = distance["value"] as! Int
+                        distanceValue = value
+                    }
+                    if let duration = element.first!["duration"] as? [String : Any] {
+                        let text = duration["text"]  as! String
+                        result?.append(" - \(text)")
+                    }
+                }
+            }
+        }
+        return (result!, distanceValue!)
+    }
+    
+    private func getPricePerKilometerByApi(isComplete:@escaping (Int) -> ()){
+        Alamofire.request("https://wheel-ship.herokuapp.com/orders/price-per-kilometer", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON(completionHandler: { (response) in
+            if let json = response.result.value as? [String: Any]{
+                if let data = json["data"] as? [[String: Any]]{
+                    let priceValue = data.first!["value"] as? Int
+                    isComplete(priceValue!)
+                }
+            }
+        })
+    }
+    
+    private func setAttributedStringForDistanceLabel(value:String){
+        let attributedString = NSMutableAttributedString(string: "\t Khoảng cách: ", attributes:[NSAttributedStringKey.foregroundColor : UIColor.gray])
+        attributedString.append(NSAttributedString(string: value, attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13)]))
+        distanceLabel.attributedText = attributedString
+    }
+    
+    private func updateStateBarButtonItem(){
+        if let feeShip =  self.unitPrice?.feeShip, let priceOfWeight = self.unitPrice?.priceOfWeight, let prepayment = self.unitPrice?.prepayment{
+            switch Double(0){
+            case feeShip,priceOfWeight,prepayment :
+                doneBarButtonItem.isEnabled = false
+            default:
+                guard let phoneNumber = phoneReceiverTextField.text, let note = noteTextField.text else { return }
+                switch "" {
+                case phoneNumber, note:
+                    doneBarButtonItem.isEnabled = false
+                default:
+                    doneBarButtonItem.isEnabled = true
+                }
+            }
+        }
+      
+    }
+    
+    // MARK: Public functions
+    public func updateOverheadsLabel(){
+        guard let overheads = self.unitPrice?.overheads else {
+            return
+        }
+        self.overheadsLabel.text = "\(overheads.formatedNumberWithUnderDots()) vnđ"
+    }
+    
     // MARK: Views
     let background:GradientView = {
         let gv = GradientView()
@@ -71,7 +182,8 @@ class OrdererEnterInfoController : UIViewController {
     }()
     
     lazy var doneBarButtonItem:UIBarButtonItem = {
-        let bt = UIBarButtonItem(title: "Tiếp tục", style: .plain, target: self, action: #selector(showOrderConfirmationController))
+        let bt = UIBarButtonItem(title: "Tiếp", style: .plain, target: self, action: #selector(showOrderConfirmationController))
+        bt.isEnabled = false
         return bt
     }()
     
@@ -161,6 +273,14 @@ class OrdererEnterInfoController : UIViewController {
         label.font = UIFont.boldSystemFont(ofSize: 18)
         return label
     }()
+    
+    let distanceLabel:UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor.black
+        label.backgroundColor = UIColor.white
+        label.font = UIFont.systemFont(ofSize: 13)
+        return label
+    }()
 }
 
 // MARK: Implement functions of UIPickerViewDelegate and DataSource
@@ -181,30 +301,42 @@ extension OrdererEnterInfoController : UIPickerViewDelegate, UIPickerViewDataSou
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let result = listWeight[row]
         // get price by row
-        var priceOfWeight:Double
         switch row {
         case 0:
-            priceOfWeight = 5000
+            self.unitPrice?.priceOfWeight = 5000
         case 1:
-            priceOfWeight = 10000
+            self.unitPrice?.priceOfWeight = 10000
         case 2:
-            priceOfWeight = 15000
+            self.unitPrice?.priceOfWeight = 15000
         default:
-            priceOfWeight = 0
+            self.unitPrice?.priceOfWeight = 0
         }
+        guard let priceOfWeight = self.unitPrice?.priceOfWeight else { return }
         weightAttributedText = NSMutableAttributedString(string: "Khối lượng : ", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13), NSAttributedStringKey.foregroundColor : UIColor.gray])
-        weightAttributedText?.append(NSAttributedString(string: "\t \t \(result) = \(priceOfWeight.formatedNumberWithUnderDots()) vnđ", attributes: [NSAttributedStringKey.foregroundColor : UIColor.black, NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13)]))
+        weightAttributedText?.append(NSAttributedString(string: "\t \(result) = \(priceOfWeight.formatedNumberWithUnderDots()) vnđ", attributes: [NSAttributedStringKey.foregroundColor : UIColor.black, NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13)]))
         weightLabel.attributedText = weightAttributedText!
+        updateOverheadsLabel()
     }
 }
 // MARK: Implement functions of UITextFieldDelegate
 extension OrdererEnterInfoController : UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        prepaymentTextField.resignFirstResponder()
+        textField.resignFirstResponder()
         return true
     }
-
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField.isEqual(prepaymentTextField){
+            if prepaymentTextField.text != "" {
+                guard let value = prepaymentTextField.text else { return }
+                self.unitPrice?.prepayment = Double(value)!
+                updateOverheadsLabel()
+            }
+        }
+        updateStateBarButtonItem()
+    }
+    
 }
 
 

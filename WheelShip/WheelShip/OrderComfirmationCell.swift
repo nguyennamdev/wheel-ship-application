@@ -36,7 +36,6 @@ class OrderConfirmationCell: UICollectionViewCell {
         setupDividerView()
     }
     
-    
     // MARK: Set up views
     private func setupImageView(){
         self.addSubview(imageView)
@@ -78,8 +77,7 @@ class OrderConfirmationCell: UICollectionViewCell {
     
     let contentLabel:UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = UIColor.gray
+        label.font = UIFont.systemFont(ofSize: 13)
         return label
     }()
     

@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="16G1212" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Location" representedClassName="Location" syncable="YES">
-        <attribute name="lattitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="longtitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-    </entity>
     <entity name="Order" representedClassName="Order" syncable="YES">
         <attribute name="destinationAddress" attributeType="String" syncable="YES"/>
-        <attribute name="feeShip" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="destinationLocation" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="isFragile" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="note" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="orderId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="originAddress" optional="YES" attributeType="String" valueTransformerName="" syncable="YES"/>
+        <attribute name="originLocation" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="phoneOrderer" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="phoneReceiver" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="prepayment" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="startTime" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="stopTime" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="weight" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="destinationLocation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Location" syncable="YES"/>
-        <relationship name="originLocation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Location" syncable="YES"/>
         <relationship name="shipper" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Shipper" inverseName="orders" inverseEntity="Shipper" syncable="YES"/>
+        <relationship name="unitPrice" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UnitPrice" inverseName="order" inverseEntity="UnitPrice" syncable="YES"/>
     </entity>
     <entity name="Orderer" representedClassName="Orderer" parentEntity="User" syncable="YES">
         <relationship name="orders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Order" syncable="YES"/>
     </entity>
     <entity name="Shipper" representedClassName="Shipper" parentEntity="User" syncable="YES">
         <relationship name="orders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Order" inverseName="shipper" inverseEntity="Order" syncable="YES"/>
+    </entity>
+    <entity name="UnitPrice" representedClassName="UnitPrice" syncable="YES">
+        <attribute name="feeShip" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="prepayment" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="priceFragileOrder" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="priceOfWeight" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="order" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Order" inverseName="unitPrice" inverseEntity="Order" syncable="YES"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
@@ -39,10 +41,10 @@
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Location" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Order" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Orderer" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Shipper" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="User" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Order" positionX="-90" positionY="89" width="128" height="268"/>
+        <element name="Orderer" positionX="-90" positionY="-63" width="128" height="60"/>
+        <element name="Shipper" positionX="214" positionY="381" width="128" height="60"/>
+        <element name="User" positionX="214" positionY="-63" width="128" height="165"/>
+        <element name="UnitPrice" positionX="333" positionY="123" width="128" height="118"/>
     </elements>
 </model>

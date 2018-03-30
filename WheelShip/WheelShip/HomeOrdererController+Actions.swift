@@ -7,24 +7,26 @@
 //
 
 import UIKit
+import CoreLocation
 
 extension HomeOrdererController {
-    
     @objc func showOrdererEnterInfo(){
-//        guard let fromAddress = fromAddressTextField.text,
-//            let toAddress = toAddressTextField.text else { return }
+        guard let originAddress = originAddressTextField.text,
+            let destinationAddress = destinationAddressTextField.text,
+            let originLocation = self.originLocation,
+            let destinationLocation = self.destinationLocation else { return }
         // init order
-        /*
         guard let appdelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = appdelegate.persistentContainer.viewContext
         self.order = Order(context: context)
         // set some value for order property
-        self.order?.fromAddress = fromAddress
-        self.order?.toAddress = toAddress
-        self.order?.setFromLocation(value: (self.fromLocation?.coordinate)!)
-        self.order?.setToLocation(value: (self.toLocation?.coordinate)!)*/
-        // pushes ordererEnterInfoController
+        self.order?.originAddress = originAddress
+        self.order?.destinationAddress = destinationAddress
+        self.order?.originLocation = originLocation
+        self.order?.destinationLocation = destinationLocation
+        // push to ordererEnterInfoController
         let orderEnterInfoController = OrdererEnterInfoController()
+        orderEnterInfoController.order = order
         self.navigationController?.pushViewController(orderEnterInfoController, animated: false)
     }
     

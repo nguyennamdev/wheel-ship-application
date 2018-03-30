@@ -24,12 +24,12 @@ extension OrdererEnterInfoController {
     
     func setupFragileObjectView(){
         view.addSubview(fragileObjectView)
-        fragileObjectView.anchorWithConstants(top: phoneReceiverTextField.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 24)
+        fragileObjectView.anchorWithConstants(top: phoneReceiverTextField.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor)
         fragileObjectView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         // make sub views
         let label = UILabel()
         let attitudeString = NSMutableAttributedString(string: "Hàng dễ vỡ : \t", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13), NSAttributedStringKey.foregroundColor : UIColor.gray])
-        attitudeString.append(NSAttributedString(string: "\t +10.000 vnđ", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13), NSAttributedStringKey.foregroundColor : UIColor.black]))
+        attitudeString.append(NSAttributedString(string: " +10.000 vnđ", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13), NSAttributedStringKey.foregroundColor : UIColor.black]))
         label.attributedText = attitudeString
         setupSubViewWithImageAndLabel(to: fragileObjectView, image: #imageLiteral(resourceName: "fragile"), label: label)
         fragileObjectView.addSubview(isFragileSwitch)
@@ -63,7 +63,7 @@ extension OrdererEnterInfoController {
     func setupNoteTextField(){
         view.addSubview(noteTextField)
         noteTextField.anchorWithConstants(top: prepaymentTextField.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0)
-        noteTextField.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        noteTextField.heightAnchor.constraint(equalToConstant: 80).isActive = true
     }
     
     func setupOverheadsStackView(){
@@ -75,7 +75,6 @@ extension OrdererEnterInfoController {
         dummyTitleLabel.textAlignment = .center
         dummyTitleLabel.font = UIFont.boldSystemFont(ofSize: 18)
         dummyTitleLabel.text = "Tổng phí"
-        overheadsLabel.text = "30000 vnđ"
         overheadsStackView.addArrangedSubview(dummyTitleLabel)
         overheadsStackView.addArrangedSubview(overheadsLabel)
     }
@@ -83,6 +82,11 @@ extension OrdererEnterInfoController {
     func setupDividerView(){
         view.addSubview(dividerView)
         dividerView.anchorWithWidthHeightConstant(top: nil, left: view.leftAnchor, bottom: overheadsStackView.topAnchor, right: view.rightAnchor,topConstant: 0,leftConstant: 12, bottomConstant: 0,rightConstant: 12,widthConstant: 0,heightConstant: 0.5)
+    }
+    
+    func setupDistanceLabel(){
+        view.addSubview(distanceLabel)
+        distanceLabel.anchorWithWidthHeightConstant(top: noteTextField.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor,topConstant:0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
     }
    
     

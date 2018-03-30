@@ -16,11 +16,11 @@ public class Order: NSManagedObject {
     
     public func getConfirmationItems() -> [ConfirmationItem]{
         var item = [ConfirmationItem]()
-        if let fromAddress = self.originAddress{
-            item.append(ConfirmationItem(image: #imageLiteral(resourceName: "placeholder"), title: "Điểm bắt đầu", content: fromAddress))
+        if let originAddress = self.originAddress{
+            item.append(ConfirmationItem(image: #imageLiteral(resourceName: "placeholder"), title: "Điểm bắt đầu", content: originAddress))
         }
-        if let toAddress = self.destinationAddress{
-            item.append(ConfirmationItem(image: #imageLiteral(resourceName: "placeholder2"), title: "Điểm giao hàng", content: toAddress))
+        if let destinationAddress = self.destinationAddress{
+            item.append(ConfirmationItem(image: #imageLiteral(resourceName: "placeholder2"), title: "Điểm giao hàng", content: destinationAddress))
         }
         if let weight = self.weight{
             item.append(ConfirmationItem(image: #imageLiteral(resourceName: "weight"), title: "Khối lượng", content: weight))
@@ -31,22 +31,13 @@ public class Order: NSManagedObject {
         if let note = self.note{
             item.append(ConfirmationItem(image: #imageLiteral(resourceName: "pencil"), title: "Ghi chú", content: note))
         }
-        item.append(ConfirmationItem(image: #imageLiteral(resourceName: "coin"), title: "Tiền trả trước", content: "\(prepayment.formatedNumberWithUnderDots()) vnđ"))
-        item.append(ConfirmationItem(image: #imageLiteral(resourceName: "coin"), title: "Phí vận chuyển", content: "\(feeShip.formatedNumberWithUnderDots()) vnđ"))
-        item.append(ConfirmationItem(image: #imageLiteral(resourceName: "coin"), title: "Tổng tiền", content: "\(overheads.formatedNumberWithUnderDots()) vnđ"))
+        if let unitPrice = self.unitPrice{
+            item.append(ConfirmationItem(image: #imageLiteral(resourceName: "coin"), title: "Tiền trả trước", content: "\(unitPrice.prepayment.formatedNumberWithUnderDots()) vnđ"))
+            item.append(ConfirmationItem(image: #imageLiteral(resourceName: "coin"), title: "Phí vận chuyển", content: "\(unitPrice.feeShip.formatedNumberWithUnderDots()) vnđ"))
+            item.append(ConfirmationItem(image: #imageLiteral(resourceName: "coin"), title: "Tổng tiền", content: "\(unitPrice.overheads.formatedNumberWithUnderDots()) vnđ"))
+        }
         return item
     }
     
-    public func setFromLocation(value:CLLocationCoordinate2D){
-        setLocation(location: self.originLocation!, value: value)
-    }
     
-    public func setToLocation(value:CLLocationCoordinate2D){
-        setLocation(location: self.destinationLocation!, value: value)
-    }
-    private func setLocation(location:Location, value:CLLocationCoordinate2D){
-        location.lattitude = value.latitude
-        location.longtitude = value.longitude
-    }
-
 }

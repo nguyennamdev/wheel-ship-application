@@ -11,6 +11,8 @@
 		8416057020565AD1006B6E1B /* OrdererEnterInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8416056F20565AD1006B6E1B /* OrdererEnterInfoController.swift */; };
 		8416057220565E47006B6E1B /* OdererEnterInfoController+setupViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8416057120565E47006B6E1B /* OdererEnterInfoController+setupViews.swift */; };
 		84222919204A41C6005058FD /* HomeOrdererController+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84222918204A41C6005058FD /* HomeOrdererController+Actions.swift */; };
+		8427270E206DC9DC00D5C6AE /* UnitPrice+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8427270C206DC9DC00D5C6AE /* UnitPrice+CoreDataClass.swift */; };
+		8427270F206DC9DC00D5C6AE /* UnitPrice+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8427270D206DC9DC00D5C6AE /* UnitPrice+CoreDataProperties.swift */; };
 		843B7834204D304000A5514F /* HomeOrdererComtroller+setupViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843B7833204D304000A5514F /* HomeOrdererComtroller+setupViews.swift */; };
 		8440FBDC2028950300B256EE /* Enumerations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8440FBDB2028950300B256EE /* Enumerations.swift */; };
 		844EE914204D32F700176512 /* RegisterController+setupViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844EE913204D32F700176512 /* RegisterController+setupViews.swift */; };
@@ -44,7 +46,6 @@
 		84D7641A2020522800195B9A /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D764192020522800195B9A /* RegisterController.swift */; };
 		84D9DA432027F29E00EA23C9 /* PopupEntryPhoneNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9DA422027F29E00EA23C9 /* PopupEntryPhoneNumber.swift */; };
 		84D9DA4620280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9DA4520280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift */; };
-		84FB4173206297B000FCA753 /* OrderApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FB4172206297B000FCA753 /* OrderApiManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,8 @@
 		8416056F20565AD1006B6E1B /* OrdererEnterInfoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdererEnterInfoController.swift; sourceTree = "<group>"; };
 		8416057120565E47006B6E1B /* OdererEnterInfoController+setupViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OdererEnterInfoController+setupViews.swift"; sourceTree = "<group>"; };
 		84222918204A41C6005058FD /* HomeOrdererController+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeOrdererController+Actions.swift"; sourceTree = "<group>"; };
+		8427270C206DC9DC00D5C6AE /* UnitPrice+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UnitPrice+CoreDataClass.swift"; sourceTree = "<group>"; };
+		8427270D206DC9DC00D5C6AE /* UnitPrice+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UnitPrice+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		843B7833204D304000A5514F /* HomeOrdererComtroller+setupViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeOrdererComtroller+setupViews.swift"; sourceTree = "<group>"; };
 		8440FBDB2028950300B256EE /* Enumerations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enumerations.swift; sourceTree = "<group>"; };
 		844EE913204D32F700176512 /* RegisterController+setupViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RegisterController+setupViews.swift"; sourceTree = "<group>"; };
@@ -89,7 +92,6 @@
 		84D764192020522800195B9A /* RegisterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 		84D9DA422027F29E00EA23C9 /* PopupEntryPhoneNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupEntryPhoneNumber.swift; sourceTree = "<group>"; };
 		84D9DA4520280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopupEntryPhoneNumber+Actions.swift"; sourceTree = "<group>"; };
-		84FB4172206297B000FCA753 /* OrderApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderApiManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,6 +257,8 @@
 		84950362202723C600EE539C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				8427270C206DC9DC00D5C6AE /* UnitPrice+CoreDataClass.swift */,
+				8427270D206DC9DC00D5C6AE /* UnitPrice+CoreDataProperties.swift */,
 				8495034E202723C100EE539C /* Location+CoreDataClass.swift */,
 				8495034F202723C100EE539C /* Location+CoreDataProperties.swift */,
 				84950350202723C100EE539C /* Shipper+CoreDataClass.swift */,
@@ -292,7 +296,6 @@
 			isa = PBXGroup;
 			children = (
 				84BA53DB2022084200A18BAF /* Authentication.swift */,
-				84FB4172206297B000FCA753 /* OrderApiManager.swift */,
 			);
 			name = RestApiManager;
 			sourceTree = "<group>";
@@ -397,9 +400,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-WheelShip/Pods-WheelShip-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -439,7 +445,6 @@
 				84580C13201B1ECE00961A63 /* AppDelegate.swift in Sources */,
 				84D9DA432027F29E00EA23C9 /* PopupEntryPhoneNumber.swift in Sources */,
 				8495035F202723C100EE539C /* Order+CoreDataProperties.swift in Sources */,
-				84FB4173206297B000FCA753 /* OrderApiManager.swift in Sources */,
 				84950359202723C100EE539C /* Location+CoreDataProperties.swift in Sources */,
 				84222919204A41C6005058FD /* HomeOrdererController+Actions.swift in Sources */,
 				8467F26C2060EC930023D5F1 /* ConfirmationItem.swift in Sources */,
@@ -448,7 +453,9 @@
 				847FDA3D201ED252003AF85E /* Extension.swift in Sources */,
 				84580C2D201B268600961A63 /* GradientView.swift in Sources */,
 				84B8BAB6205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift in Sources */,
+				8427270E206DC9DC00D5C6AE /* UnitPrice+CoreDataClass.swift in Sources */,
 				8416057220565E47006B6E1B /* OdererEnterInfoController+setupViews.swift in Sources */,
+				8427270F206DC9DC00D5C6AE /* UnitPrice+CoreDataProperties.swift in Sources */,
 				84D9DA4620280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift in Sources */,
 				844EE917204D335200176512 /* LoginController+setupViews.swift in Sources */,
 				8495035C202723C100EE539C /* Orderer+CoreDataClass.swift in Sources */,

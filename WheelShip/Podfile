@@ -6,4 +6,5 @@ source 'https://github.com/CocoaPods/Specs.git'
 target 'WheelShip' do
   pod 'GoogleMaps'
   pod 'GooglePlaces'
+  pod 'Alamofire'
 end
