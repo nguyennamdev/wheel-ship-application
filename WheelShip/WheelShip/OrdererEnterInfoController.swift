@@ -15,7 +15,6 @@ class OrdererEnterInfoController : UIViewController {
     
     // MARK: Properties
     var heightConstaintOfWeightPickerView:NSLayoutConstraint?
-    let listWeight = ["0 - 3 kg", "3 - 5 kg", "Trên 5 kg"]
     var weightPickerViewIsShowing = false
     var weightAttributedText:NSMutableAttributedString?
     var unitPrice:UnitPrice?{
@@ -24,11 +23,8 @@ class OrdererEnterInfoController : UIViewController {
             updateOverheadsLabel()
         }
     }
-    var order:Order?{
-        didSet{
-            self.handleDistanceMatrix()
-        }
-    }
+    var order:Order?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +45,12 @@ class OrdererEnterInfoController : UIViewController {
         ////////
         noteTextField.delegate = self
         prepaymentTextField.delegate = self
-        initUnitPrice()
+        phoneReceiverTextField.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        callApiToGetPriceFragileOrder()
+        handleDistanceMatrix()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -71,15 +72,24 @@ class OrdererEnterInfoController : UIViewController {
         setupDistanceLabel()
     }
     
-    private func initUnitPrice(){
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate{
-            let context = appDelegate.persistentContainer.viewContext
-            self.unitPrice = UnitPrice(context: context)
+    private func callApiToGetPriceFragileOrder(){
+        Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_fragile_order", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
+            if let result = response.result.value as? [String:Any]{
+                if let data = result["data"] as? [[String: Any]]{
+                    let priceFragileOrder = data.first?["value"] as! Double
+                    self.unitPrice?.dummyPriceFragile = priceFragileOrder
+                    let attitudeString = NSMutableAttributedString(string: "Hàng dễ vỡ : \t", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13), NSAttributedStringKey.foregroundColor : UIColor.gray])
+                    attitudeString.append(NSAttributedString(string: "+\(priceFragileOrder.formatedNumberWithUnderDots())", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13)]))
+                    DispatchQueue.main.async {
+                        self.priceFragileLabel.attributedText = attitudeString
+                    }
+                }
+            }
         }
     }
     
     private func handleDistanceMatrix(){
-        guard let origin = order?.originLocation as? CLLocation,let destination = order?.destinationLocation as? CLLocation else { return }
+        guard let origin = order?.originLocation, let destination = order?.destinationLocation else { return }
         let origins = "\(origin.coordinate.latitude),\(origin.coordinate.longitude)"
         let destinations = "\(destination.coordinate.latitude),\(destination.coordinate.longitude)"
         let distanceMatrixApiKey = "AIzaSyAnyH3snwD3N3oru00t1cQVp_VgQNHZ5_Y"
@@ -89,27 +99,27 @@ class OrdererEnterInfoController : UIViewController {
                 let result = self.parseDistanceJson(json: json)
                 let distanceText = result.text
                 let distanceValue = result.value
-                // feeShip = pricePerKl * (distanceValue / 1000)
-                self.getPricePerKilometerByApi(isComplete: { (pricePerKilometer) in
-                    self.unitPrice?.feeShip = Double(pricePerKilometer * (distanceValue / 1000))
-                    guard let feeShip = self.unitPrice?.feeShip, let overheads = self.unitPrice?.overheads else { return }
+                guard let priceDistance = self.unitPrice?.priceOfDistance?.value else { return }
+                self.unitPrice?.feeShip = Double(priceDistance * (distanceValue / 1000))
+                self.order?.distance = distanceValue
+                if let feeShip = self.unitPrice?.feeShip {
                     self.setAttributedStringForDistanceLabel(value: distanceText + " = \(feeShip.formatedNumberWithUnderDots()) vnđ")
                     self.updateOverheadsLabel()
-                })
+                }
             }
         }
     }
     
-    private func parseDistanceJson(json:Any) -> (text:String, value:Int){
+    private func parseDistanceJson(json:Any) -> (text:String, value:Double){
         var result:String?
-        var distanceValue:Int?
+        var distanceValue:Double?
         if let jsonData = json as? [String: Any] {
             if let rows = jsonData["rows"] as? [[String : Any]]{
                 if let element = rows.first!["elements"] as? [[String : Any]] {
                     if let distance = element.first!["distance"] as? [String : Any] {
                         let text = distance["text"] as! String
                         result = text
-                        let value = distance["value"] as! Int
+                        let value = distance["value"] as! Double
                         distanceValue = value
                     }
                     if let duration = element.first!["duration"] as? [String : Any] {
@@ -120,17 +130,6 @@ class OrdererEnterInfoController : UIViewController {
             }
         }
         return (result!, distanceValue!)
-    }
-    
-    private func getPricePerKilometerByApi(isComplete:@escaping (Int) -> ()){
-        Alamofire.request("https://wheel-ship.herokuapp.com/orders/price-per-kilometer", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON(completionHandler: { (response) in
-            if let json = response.result.value as? [String: Any]{
-                if let data = json["data"] as? [[String: Any]]{
-                    let priceValue = data.first!["value"] as? Int
-                    isComplete(priceValue!)
-                }
-            }
-        })
     }
     
     private func setAttributedStringForDistanceLabel(value:String){
@@ -154,7 +153,7 @@ class OrdererEnterInfoController : UIViewController {
                 }
             }
         }
-      
+        
     }
     
     // MARK: Public functions
@@ -281,6 +280,11 @@ class OrdererEnterInfoController : UIViewController {
         label.font = UIFont.systemFont(ofSize: 13)
         return label
     }()
+    
+    let priceFragileLabel:UILabel = {
+        let label = UILabel()
+        return label
+    }()
 }
 
 // MARK: Implement functions of UIPickerViewDelegate and DataSource
@@ -291,29 +295,20 @@ extension OrdererEnterInfoController : UIPickerViewDelegate, UIPickerViewDataSou
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return listWeight.count
+        return self.unitPrice?.listPriceOfWeight?.count ?? 0
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return listWeight[row]
+        return self.unitPrice?.listPriceOfWeight?[row].name
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let result = listWeight[row]
-        // get price by row
-        switch row {
-        case 0:
-            self.unitPrice?.priceOfWeight = 5000
-        case 1:
-            self.unitPrice?.priceOfWeight = 10000
-        case 2:
-            self.unitPrice?.priceOfWeight = 15000
-        default:
-            self.unitPrice?.priceOfWeight = 0
-        }
+        let result = self.unitPrice?.listPriceOfWeight?[row].name
+        self.order?.weight = result;
+        self.unitPrice?.priceOfWeight = self.unitPrice?.listPriceOfWeight?[row].value
         guard let priceOfWeight = self.unitPrice?.priceOfWeight else { return }
         weightAttributedText = NSMutableAttributedString(string: "Khối lượng : ", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13), NSAttributedStringKey.foregroundColor : UIColor.gray])
-        weightAttributedText?.append(NSAttributedString(string: "\t \(result) = \(priceOfWeight.formatedNumberWithUnderDots()) vnđ", attributes: [NSAttributedStringKey.foregroundColor : UIColor.black, NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13)]))
+        weightAttributedText?.append(NSAttributedString(string: "\t \(result ?? "") = \(priceOfWeight.formatedNumberWithUnderDots()) vnđ", attributes: [NSAttributedStringKey.foregroundColor : UIColor.black, NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13)]))
         weightLabel.attributedText = weightAttributedText!
         updateOverheadsLabel()
     }
@@ -327,13 +322,35 @@ extension OrdererEnterInfoController : UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField.isEqual(prepaymentTextField){
+        switch textField {
+        case prepaymentTextField:
             if prepaymentTextField.text != "" {
                 guard let value = prepaymentTextField.text else { return }
                 self.unitPrice?.prepayment = Double(value)!
                 updateOverheadsLabel()
             }
+        case noteTextField:
+            if noteTextField.text != ""{
+                guard let text = noteTextField.text else { return }
+                self.order?.note = text;
+            }
+        case phoneReceiverTextField:
+            if phoneReceiverTextField.checkTextIsPhoneNumber(){
+                guard let text = phoneReceiverTextField.text else { return }
+                self.order?.phoneReceiver = text;
+            }else{
+                let alertDialog = UIAlertController(title: "Nhập số điện thoại", message: "Số điện thoại của bạn nhập không hợp lệ", preferredStyle: .alert)
+                let actionAlert = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                alertDialog.addAction(actionAlert)
+                present(alertDialog, animated: true, completion: {
+                    self.phoneReceiverTextField.text = ""
+                })
+            }
+        default:
+            break
         }
+        
+        
         updateStateBarButtonItem()
     }
     

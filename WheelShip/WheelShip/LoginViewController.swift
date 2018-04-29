@@ -23,9 +23,18 @@ class LoginViewController: UIViewController {
         setupRegisterButton()
         setupQuestionLabel()
         
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        
     }
     
-
+    // MARK: Touch
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
+    
+    
     // MARK : Views
     let logoLabel:UILabel = {
         let label = UILabel()
@@ -51,7 +60,8 @@ class LoginViewController: UIViewController {
         textField.setupDefault()
         textField.placeholder = "Email Address"
         // custom left view
-        textField.setupImageForLeftView(image:#imageLiteral(resourceName: "mail"))
+        textField.setupImageForLeftView(image:#imageLiteral(resourceName: "mail2"))
+        textField.tintColor = UIColor.black
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -61,8 +71,9 @@ class LoginViewController: UIViewController {
         textField.setupDefault()
         textField.isSecureTextEntry = true
         textField.placeholder = "Password"
+        textField.tintColor = UIColor.black
         // custom left view
-        textField.setupImageForLeftView(image: #imageLiteral(resourceName: "lock"))
+        textField.setupImageForLeftView(image: #imageLiteral(resourceName: "lock2"))
         return textField
     }()
     
@@ -103,8 +114,7 @@ class LoginViewController: UIViewController {
         button.tintColor = UIColor.white
         button.addTarget(self, action: #selector(showRegisterController), for: .touchUpInside)
         return button
-    }()
-    
+    }()    
 }
 
 // actions
@@ -117,7 +127,16 @@ extension LoginViewController {
     
 }
 
+// MARK: TextFieldDelegate
 
+extension LoginViewController : UITextFieldDelegate{
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+}
 
 
 

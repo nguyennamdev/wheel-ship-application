@@ -12,19 +12,21 @@ extension OrdererEnterInfoController {
     
     @objc func showOrderConfirmationController(){
         let orderConfirmationController = OrderConfirmationController(collectionViewLayout: UICollectionViewFlowLayout())
-        let order = createDummyOrder()
-        let unitPrice = createDummyUnitPrice()
-        order?.unitPrice = unitPrice
-        print(order!)
+        self.order?.unitPrice = self.unitPrice;
         orderConfirmationController.order = order!
         self.navigationController?.pushViewController(orderConfirmationController, animated: false)
         
     }
     @objc func isFragileSwitchValueChanged(sender:UISwitch){
+        guard let dummyPriceFragile = self.unitPrice?.dummyPriceFragile else {
+            return
+        }
         if sender.isOn {
-            unitPrice?.priceFragileOrder = 10000
+            unitPrice?.priceFragileOrder = dummyPriceFragile
+            self.order?.isFragile = true;
         }else {
             unitPrice?.priceFragileOrder = 0
+            self.order?.isFragile = false;
         }
         self.updateOverheadsLabel()
     }
@@ -51,30 +53,28 @@ extension OrdererEnterInfoController {
     }
     // func used to test order
     func createDummyOrder() -> Order? {
-        if let appdelegate = UIApplication.shared.delegate as? AppDelegate{
-            let context = appdelegate.persistentContainer.viewContext
-            let order = Order(context: context)
-            order.originAddress = "ho guom, hai ba trung, ha noi"
-            order.destinationAddress = "176 truong dinh, hoang mai, ha noi"
-            order.phoneReceiver = "01657886310"
-            order.isFragile = true
-            order.weight = "3 - 5kg"
-            order.note = "can ship gap"
-            return order
-        }
+        /*
+         let order = Order(context: context)
+         order.originAddress = "ho guom, hai ba trung, ha noi"
+         order.destinationAddress = "176 truong dinh, hoang mai, ha noi"
+         order.phoneReceiver = "01657886310"
+         order.isFragile = true
+         order.weight = "3 - 5kg"
+         order.note = "can ship gap"
+         return order
+         }*/
         return nil
     }
     
     func createDummyUnitPrice() -> UnitPrice? {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            let context = appDelegate.persistentContainer.viewContext
-            let unitPrice = UnitPrice(context: context)
-            unitPrice.prepayment = 200000
-            unitPrice.feeShip = 20000
-            unitPrice.priceFragileOrder = 10000
-            unitPrice.priceOfWeight = 5000
-            return unitPrice
-        }
+        /*
+         let unitPrice = UnitPrice(context: context)
+         unitPrice.prepayment = 200000
+         unitPrice.feeShip = 20000
+         unitPrice.priceFragileOrder = 10000
+         unitPrice.priceOfWeight = 5000
+         return unitPrice
+         }*/
         return nil
     }
 }

@@ -15,18 +15,15 @@ extension HomeOrdererController {
             let destinationAddress = destinationAddressTextField.text,
             let originLocation = self.originLocation,
             let destinationLocation = self.destinationLocation else { return }
-        // init order
-        guard let appdelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let context = appdelegate.persistentContainer.viewContext
-        self.order = Order(context: context)
-        // set some value for order property
         self.order?.originAddress = originAddress
-        self.order?.destinationAddress = destinationAddress
         self.order?.originLocation = originLocation
-        self.order?.destinationLocation = destinationLocation
+        self.order?.destinationAddress = destinationAddress
+        self.order?.destinationLocation = destinationLocation;
+        self.order?.orderId = String().randomString();
         // push to ordererEnterInfoController
         let orderEnterInfoController = OrdererEnterInfoController()
         orderEnterInfoController.order = order
+        orderEnterInfoController.unitPrice = self.unitPrice
         self.navigationController?.pushViewController(orderEnterInfoController, animated: false)
     }
     

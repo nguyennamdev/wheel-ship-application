@@ -15,13 +15,12 @@ class CustomTabbarController: UITabBarController {
         
         view.backgroundColor = UIColor.white
         viewControllers = [ setupHomeController(),
-                            setupLibaryController()]
-        
+                            setupHistoryViewController()]
+        self.tabBar.tintColor = UIColor.black
         // if user is not logged in
-        /*
-        if isLoggedIn() {
-            perform(#selector(showLoginController), with: nil, afterDelay: 0.01)
-        }*/
+//        if isLoggedIn() {
+//            perform(#selector(showLoginController), with: nil, afterDelay: 0.01)
+//        }
     }
     
     // MARK : - private functions
@@ -29,19 +28,20 @@ class CustomTabbarController: UITabBarController {
         let homeOrdererController = HomeOrdererController()
         homeOrdererController.tabBarItem.title = "Trang chủ"
         homeOrdererController.tabBarItem.image = #imageLiteral(resourceName: "wheel")
+        homeOrdererController.user = createDummyUser();
         let navigationHome = UINavigationController(rootViewController: homeOrdererController)
         return navigationHome
     }
     
-    private func setupLibaryController() -> UINavigationController{
-        let vc = UIViewController()
-        vc.view.backgroundColor = UIColor.blue
-        vc.tabBarItem.title = "Library"
-        vc.tabBarItem.image = #imageLiteral(resourceName: "wheel")
-        vc.title = "Library"
-        let navigationHome = UINavigationController(rootViewController: vc)
+    private func setupHistoryViewController() -> UINavigationController{
+        let historyViewController = HistoryViewController()
+        historyViewController.tabBarItem.title = "Lịch sử"
+        historyViewController.tabBarItem.image = #imageLiteral(resourceName: "wheel")
+        let navigationHome = UINavigationController(rootViewController: historyViewController)
         return navigationHome
     }
+    
+
     
     private func isLoggedIn() -> Bool{
         return UserDefaults.standard.getIsLoggedIn()
@@ -50,5 +50,14 @@ class CustomTabbarController: UITabBarController {
     @objc private func showLoginController(){
         let loginController = LoginViewController()
         present(loginController, animated: true, completion: nil)
+    }
+    
+    private func createDummyUser() -> User{
+        let user = User()
+        user.uid = "id000001";
+        user.name = "nguyen nam";
+        user.phoneNumber = "016231231231";
+        user.isShipper = TypeOfUser.isOrderer;
+        return user;
     }
 }

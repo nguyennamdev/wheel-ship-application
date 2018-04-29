@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class OrderConfirmationController : UICollectionViewController {
     
@@ -22,7 +23,7 @@ class OrderConfirmationController : UICollectionViewController {
             self.collectionView?.reloadData()
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // config collection view
@@ -32,7 +33,7 @@ class OrderConfirmationController : UICollectionViewController {
         
         self.navigationItem.title = "Xác nhận"
         initRightBarButtonItem()
-       
+        
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -50,26 +51,94 @@ class OrderConfirmationController : UICollectionViewController {
         self.navigationItem.rightBarButtonItem = rightBarButtonItem
     }
     
-    // MARK: Actions
-    @objc private func completeOrder(){
-        print("done")
-        let homeOrdererController = self.navigationController?.viewControllers[0] as? HomeOrdererController
-        self.navigationController?.popToViewController(homeOrdererController!, animated: true)
+    // MARK: init parameters
+    private func initParameters() -> [String: Any]?{
+        // wrap data
+        guard let orderId = self.order?.orderId,
+            let uId = self.order?.user?.uid,
+            let originAddress = self.order?.originAddress,
+            let destinationAddress = self.order?.destinationAddress,
+            let oriLattitude = self.order?.originLocation?.coordinate.latitude,
+            let oriLongtitude = self.order?.originLocation?.coordinate.longitude,
+            let desLattitude = self.order?.destinationLocation?.coordinate.latitude,
+            let desLongtitude = self.order?.destinationLocation?.coordinate.longitude,
+            let distance = self.order?.distance,
+            let note = self.order?.note,
+            let isFragile = self.order?.isFragile,
+            let phoneReceiver = self.order?.phoneReceiver,
+            let weight = self.order?.weight,
+            let prepayment = self.order?.unitPrice?.prepayment,
+            let feeShip = self.order?.unitPrice?.feeShip,
+            let overheads = self.order?.unitPrice?.overheads,
+            let priceOfWeight = self.order?.unitPrice?.priceOfWeight,
+            let priceOfOrderFragile = self.order?.unitPrice?.priceFragileOrder else { return nil}
+        let parameter = ["orderId": orderId,
+                         "userId": uId,
+                         "originAddress": originAddress,
+                         "destinationAddress": destinationAddress,
+                         "oriLattitude": oriLattitude,
+                         "oriLongtitude": oriLongtitude,
+                         "desLattitude": desLattitude,
+                         "desLongtitude": desLongtitude,
+                         "distance": distance,
+                         "isFragile": isFragile,
+                         "note": note,
+                         "phoneReceiver": phoneReceiver,
+                         "weight": weight,
+                         "prepayment": prepayment,
+                         "feeShip": feeShip,
+                         "priceOfWeight": priceOfWeight,
+                         "priceOfOrderFragile": priceOfOrderFragile,
+                         "overheads": overheads] as [String : Any]
+        return parameter
     }
     
-    // MARK: Views
-    let background:GradientView = {
-        let gv = GradientView()
-        gv.colors = [ UIColor.rgb(r: 190, g: 147, b: 197).cgColor,
-                      UIColor.rgb(r: 123, g: 198, b: 204).cgColor]
-        return gv
-    }()
+    private func showAlertHaveError(message: String){
+        
+        let alert = UIAlertController(title: "Có lỗi", message: message + "\n Vui lòng thử lại sau", preferredStyle: UIAlertControllerStyle.alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        present(alert, animated: true, completion:nil)
+    }
+    
+    private func showAlertOrderComplete(){
+        let alert = UIAlertController(title: "Đặt đơn hàng", message: "Bạn đã đặt đơn hàng thành công", preferredStyle: UIAlertControllerStyle.alert)
+        let cancelAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(cancelAction)
+        present(alert, animated: true) {
+            let homeOrdererController = self.navigationController?.viewControllers[0] as? HomeOrdererController
+            self.navigationController?.popToViewController(homeOrdererController!, animated: true)
+        }
+    }
+    // MARK: Actions
+    @objc private func completeOrder(){
+        // blur background
+        self.collectionView?.alpha = 0.2
+        // request to api to confirm order
+        guard let parameters = initParameters() else { return }
+        Alamofire.request("https://wheel-ship.herokuapp.com/orders/insert_new_order", method: .post, parameters: parameters, encoding: JSONEncoding.default ).responseJSON { (response) in
+            if let resultValue = response.result.value as? [String:Any]{
+                if let result = resultValue["result"] as? String{
+                    if result == "OK" {
+                        self.collectionView?.alpha = 1;
+                        self.showAlertOrderComplete()
+                    }else{
+                        self.collectionView?.alpha = 1;
+                        let message = resultValue["message"] as? String
+                        self.showAlertHaveError(message: message!)
+                    }
+                }
+            }
+        }
+    }
+
+    
 }
 
 // MARK: Implement functions of UICollectionViewDelegateFlowLayout
 extension OrderConfirmationController : UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 50)
+        return CGSize(width: view.frame.width, height: view.frame.height / 10);
     }
 }
 

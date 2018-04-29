@@ -10,12 +10,17 @@ import UIKit
 import CoreLocation
 import GoogleMaps
 import GooglePlaces
+import Alamofire
 
 class HomeOrdererController:UIViewController {
     
     // MARK: Properties
-    var order:Order?
     var locationManager:CLLocationManager?
+    var destinationLocation:CLLocation?
+    var bottomConstantOfDescriptionTextField:NSLayoutConstraint?
+    var autocompleteViewController:GMSAutocompleteViewController?
+    var numberOfTextFieldDidBeginEditing:Int?
+    var userChangedOriginAddress = false
     var originLocation:CLLocation?{
         didSet{
             if !userChangedOriginAddress{ // when user use current location
@@ -32,11 +37,14 @@ class HomeOrdererController:UIViewController {
             }
         }
     }
-    var destinationLocation:CLLocation?
-    var bottomConstantOfDescriptionTextField:NSLayoutConstraint?
-    var autocompleteViewController:GMSAutocompleteViewController?
-    var numberOfTextFieldDidBeginEditing:Int?
-    var userChangedOriginAddress = false
+    var unitPrice:UnitPrice?
+    var order:Order?
+    var user:User?{
+        didSet{
+            order = Order();
+            order?.user = self.user
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +68,10 @@ class HomeOrdererController:UIViewController {
         mapsView.delegate = self
         autocompleteViewController = GMSAutocompleteViewController()
         autocompleteViewController?.delegate = self
+        // init unit price
+        unitPrice = UnitPrice()
+        callApiToGetPriceDistance()
+        callApiToGetListPriceWeight()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -69,6 +81,34 @@ class HomeOrdererController:UIViewController {
     }
     
     // MARK: Private functions
+    private func callApiToGetPriceDistance(){
+        Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_distance", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
+            if let result = response.result.value as? [String:Any]{
+                if let data = result["data"] as? [[String: Any]]{
+                   let price = Price()
+                   price.setValueWithKey(value: data.first!)
+                   self.unitPrice?.priceOfDistance = price
+                }
+            }
+        }
+    }
+    
+    private func callApiToGetListPriceWeight(){
+        Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_weights", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
+            if let result = response.result.value as? [String: Any]{
+                if let data = result["data"] as? [[String: Any]]{
+                    var prices = [Price]()
+                    data.forEach({ (element) in
+                        let price = Price()
+                        price.setValueWithKey(value: element)
+                        prices.append(price)
+                    })
+                    self.unitPrice?.listPriceOfWeight = prices
+                }
+            }
+        }
+    }
+    
     private func updateStateBarButton(){
         guard let fromAddress = originAddressTextField.text ,
             let toAddress = destinationAddressTextField.text else { return }
@@ -98,8 +138,7 @@ class HomeOrdererController:UIViewController {
     // MARK: Views
     let background:GradientView = {
         let gv = GradientView()
-        gv.colors = [ UIColor.rgb(r: 190, g: 147, b: 197).cgColor,
-                      UIColor.rgb(r: 123, g: 198, b: 204).cgColor]
+        gv.setupDefaultColor()
         return gv
     }()
     
@@ -162,18 +201,6 @@ extension HomeOrdererController : UITextFieldDelegate {
             numberOfTextFieldDidBeginEditing = 1
         }
         self.present(autocompleteViewController!, animated: true, completion: nil)
-    }
-    // alert user enter phone number don't match pattern
-    func checkUserEnterPhoneNumber(text:String){
-        let pattern = "^(01[2689]|09)[0-9]{8}$"
-        let predicate = NSPredicate(format: "self MATCHES [c] %@", pattern)
-        
-        if !predicate.evaluate(with: text){
-            let alertDialog = UIAlertController(title: "Sai số điện thoại", message: "Bạn đã nhập số điện thoại không đúng định dạng", preferredStyle:.alert)
-            let okAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
-            alertDialog.addAction(okAction)
-            self.present(alertDialog, animated: true, completion: nil)
-        }
     }
 }
 // MARK: implement functions of CLLocationManagerDelegate

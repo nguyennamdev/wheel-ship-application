@@ -27,11 +27,7 @@ extension OrdererEnterInfoController {
         fragileObjectView.anchorWithConstants(top: phoneReceiverTextField.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor)
         fragileObjectView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         // make sub views
-        let label = UILabel()
-        let attitudeString = NSMutableAttributedString(string: "Hàng dễ vỡ : \t", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13), NSAttributedStringKey.foregroundColor : UIColor.gray])
-        attitudeString.append(NSAttributedString(string: " +10.000 vnđ", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13), NSAttributedStringKey.foregroundColor : UIColor.black]))
-        label.attributedText = attitudeString
-        setupSubViewWithImageAndLabel(to: fragileObjectView, image: #imageLiteral(resourceName: "fragile"), label: label)
+        setupSubViewWithImageAndLabel(to: fragileObjectView, image: #imageLiteral(resourceName: "fragile"), label: priceFragileLabel)
         fragileObjectView.addSubview(isFragileSwitch)
         isFragileSwitch.centerYAnchor.constraint(equalTo: fragileObjectView.centerYAnchor).isActive = true
         isFragileSwitch.rightAnchor.constraint(equalTo: fragileObjectView.rightAnchor, constant: -8).isActive = true
@@ -43,7 +39,7 @@ extension OrdererEnterInfoController {
         weightContainerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         // sub views
         setupSubViewWithImageAndLabel(to: weightContainerView, image: #imageLiteral(resourceName: "weight"), label:weightLabel)
-        setupRightImage(to: weightContainerView, image: #imageLiteral(resourceName: "down-arrow"))
+        setupRightImage(to: weightContainerView, image:#imageLiteral(resourceName: "down-arrow"))
         setupWeightPickerView()
     }
     

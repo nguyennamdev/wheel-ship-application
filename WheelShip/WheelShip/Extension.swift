@@ -94,7 +94,6 @@ extension UITextField {
     }
     
     func setupDefault(){
-        self.textColor = UIColor.black
         self.borderStyle = .roundedRect
         self.backgroundColor = UIColor.white
         self.clearButtonMode = .always
@@ -115,7 +114,7 @@ extension String{
         let letters:NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let len = UInt32(letters.length)
         var randomString = ""
-        for _ in 0..<8
+        for _ in 0..<10
         {
             let rand = arc4random_uniform(len)
             var nextChar = letters.character(at: Int(rand))
@@ -138,3 +137,23 @@ extension Double{
         return Formatter.withUnderDots.string(for: self) ?? ""
     }
 }
+
+extension UITextField {
+    func checkTextIsPhoneNumber() -> Bool{
+        // check phone number is true with pattern
+        let pattern = "^(01[2689]|09)[0-9]{8}$"
+        let predicate = NSPredicate(format: "self MATCHES [c] %@", pattern)
+        if !predicate.evaluate(with: self.text) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+}
+
+
+
+
+
+
+

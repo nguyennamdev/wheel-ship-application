@@ -72,16 +72,17 @@ class RegisterController:UIViewController {
         tf.setupDefault()
         tf.placeholder = " Họ tên"
         // custom left view
-        tf.setupImageForLeftView(image: #imageLiteral(resourceName: "user"))
+        tf.setupImageForLeftView(image: #imageLiteral(resourceName: "avatar"))
         return tf
     }()
     
     let emailTextField:UITextField = {
         let tf = UITextField()
         tf.setupDefault()
+        tf.textColor = UIColor.black
         tf.placeholder = " Địa chỉ email"
         tf.keyboardType = .emailAddress
-        tf.setupImageForLeftView(image: #imageLiteral(resourceName: "mail"))
+        tf.setupImageForLeftView(image:#imageLiteral(resourceName: "mail2"))
         return tf
     }()
     
@@ -90,7 +91,7 @@ class RegisterController:UIViewController {
         tf.setupDefault()
         tf.placeholder = " Mật khẩu"
         tf.isSecureTextEntry = true
-        tf.setupImageForLeftView(image: #imageLiteral(resourceName: "lock"))
+        tf.setupImageForLeftView(image: #imageLiteral(resourceName: "lock2"))
         return tf
     }()
     
@@ -99,7 +100,7 @@ class RegisterController:UIViewController {
         tf.setupDefault()
         tf.placeholder = " Nhập lại mật khẩu"
         tf.isSecureTextEntry = true
-        tf.setupImageForLeftView(image: #imageLiteral(resourceName: "lock"))
+        tf.setupImageForLeftView(image: #imageLiteral(resourceName: "lock2"))
         return tf
     }()
     
@@ -126,8 +127,7 @@ extension RegisterController {
     
     @objc func handleShowPopupEntryPhoneNumer(){
         if checkDataUserEntryed() {
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-            let managedContext = appDelegate.persistentContainer.viewContext
+            /*
             // init user and set value for property
             user = User(context: managedContext)
             user?.uid =  String().randomString()
@@ -140,7 +140,7 @@ extension RegisterController {
             // show popup
             let popupEntryPhoneNumber = PopupEntryPhoneNumber()
             popupEntryPhoneNumber.user = self.user
-            self.present(popupEntryPhoneNumber, animated: true, completion: nil)
+            self.present(popupEntryPhoneNumber, animated: true, completion: nil)*/
         }else{
             print("false")
         }
@@ -183,7 +183,6 @@ extension RegisterController : UITextFieldDelegate{
             repasswordTextField.font = UIFont.systemFont(ofSize: 16)
         }else if textField == emailTextField{
             emailTextField.text = nil
-            emailTextField.textColor = UIColor.white
             emailTextField.font = UIFont.systemFont(ofSize: 16)
         }
     }
