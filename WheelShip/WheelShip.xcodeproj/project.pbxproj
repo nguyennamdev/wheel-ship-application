@@ -33,6 +33,7 @@
 		8480DDFB2088968D00A8EA05 /* HistoryViewController+SetupViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8480DDFA2088968D00A8EA05 /* HistoryViewController+SetupViews.swift */; };
 		84AF8B6B208AD25A003E3559 /* OrdersHistoryCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF8B6A208AD25A003E3559 /* OrdersHistoryCollectionCell.swift */; };
 		84AF8B6D208AD2AD003E3559 /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF8B6C208AD2AD003E3559 /* BaseCell.swift */; };
+		84B5235320A099F100186F12 /* UICollectionView+setEmptyMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B5235220A099F100186F12 /* UICollectionView+setEmptyMessage.swift */; };
 		84B8BAB6205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B8BAB5205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift */; };
 		84B901992060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B901982060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift */; };
 		84BA53DC2022084200A18BAF /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BA53DB2022084200A18BAF /* Authentication.swift */; };
@@ -40,6 +41,7 @@
 		84D7641A2020522800195B9A /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D764192020522800195B9A /* RegisterController.swift */; };
 		84D9DA432027F29E00EA23C9 /* PopupEntryPhoneNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9DA422027F29E00EA23C9 /* PopupEntryPhoneNumber.swift */; };
 		84D9DA4620280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9DA4520280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift */; };
+		84DE89422096AAF900BD55A8 /* Define.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DE89412096AAF900BD55A8 /* Define.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +75,7 @@
 		8480DDFA2088968D00A8EA05 /* HistoryViewController+SetupViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryViewController+SetupViews.swift"; sourceTree = "<group>"; };
 		84AF8B6A208AD25A003E3559 /* OrdersHistoryCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersHistoryCollectionCell.swift; sourceTree = "<group>"; };
 		84AF8B6C208AD2AD003E3559 /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
+		84B5235220A099F100186F12 /* UICollectionView+setEmptyMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+setEmptyMessage.swift"; sourceTree = "<group>"; };
 		84B8BAB5205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrdererEnterInfoController+Actions.swift"; sourceTree = "<group>"; };
 		84B901982060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderComfirmationCollectionViewController.swift; sourceTree = "<group>"; };
 		84BA53DB2022084200A18BAF /* Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
@@ -80,6 +83,7 @@
 		84D764192020522800195B9A /* RegisterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 		84D9DA422027F29E00EA23C9 /* PopupEntryPhoneNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupEntryPhoneNumber.swift; sourceTree = "<group>"; };
 		84D9DA4520280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopupEntryPhoneNumber+Actions.swift"; sourceTree = "<group>"; };
+		84DE89412096AAF900BD55A8 /* Define.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Define.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +178,7 @@
 		84580C11201B1ECE00961A63 /* WheelShip */ = {
 			isa = PBXGroup;
 			children = (
+				84DE89402096AABA00BD55A8 /* Common */,
 				842D1825207860F4009FAE23 /* Model */,
 				84580C2B201B267700961A63 /* Views */,
 				84AF8B69208AD221003E3559 /* Cells */,
@@ -249,6 +254,7 @@
 			isa = PBXGroup;
 			children = (
 				847FDA3C201ED252003AF85E /* Extension.swift */,
+				84B5235220A099F100186F12 /* UICollectionView+setEmptyMessage.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -288,6 +294,14 @@
 				844EE918204D583900176512 /* PopupEntryPhongNumber+setupViews.swift */,
 			);
 			name = PopupEntryPhoneNumber;
+			sourceTree = "<group>";
+		};
+		84DE89402096AABA00BD55A8 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				84DE89412096AAF900BD55A8 /* Define.swift */,
+			);
+			name = Common;
 			sourceTree = "<group>";
 		};
 		84FB41712062973600FCA753 /* RestApiManager */ = {
@@ -444,6 +458,7 @@
 				84D9DA432027F29E00EA23C9 /* PopupEntryPhoneNumber.swift in Sources */,
 				84222919204A41C6005058FD /* HomeOrdererController+Actions.swift in Sources */,
 				8467F26E2060F3CC0023D5F1 /* OrderComfirmationCell.swift in Sources */,
+				84B5235320A099F100186F12 /* UICollectionView+setEmptyMessage.swift in Sources */,
 				847FDA3D201ED252003AF85E /* Extension.swift in Sources */,
 				84580C2D201B268600961A63 /* GradientView.swift in Sources */,
 				84B8BAB6205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift in Sources */,
@@ -464,6 +479,7 @@
 				8480DDFB2088968D00A8EA05 /* HistoryViewController+SetupViews.swift in Sources */,
 				844EE914204D32F700176512 /* RegisterController+setupViews.swift in Sources */,
 				842D182720786158009FAE23 /* OrderModel.swift in Sources */,
+				84DE89422096AAF900BD55A8 /* Define.swift in Sources */,
 				84BA53DC2022084200A18BAF /* Authentication.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

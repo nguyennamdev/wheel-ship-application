@@ -10,8 +10,24 @@ import UIKit
 
 class OrdersHistoryCollectionCell : BaseCell {
     
-    var isHadShipper:Bool = false
-    var isFragile:Bool = true
+    var oder:Order?{
+        didSet{
+            showingDetailContainer()
+            guard let order = self.oder else { return }
+            setBasicValue(order: order)
+            setDetailValue(order: order)
+            if order.status == OrderStage.hadShipper {
+                self.stateImageView.image = #imageLiteral(resourceName: "check")
+            }else{
+                self.stateImageView.image = #imageLiteral(resourceName: "sand-clock")
+            }
+            if order.shipperId == ""{
+                infoShipperLabel.attributedText = attitudeString((Define.SHIPPER, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" Chưa có người nhận", UIColor.white))
+            }else{
+            }
+        }
+    }
+    
     // closure attitudeString
     let attitudeString = { (title:(String,UIColor),content:(String, UIColor)) -> NSMutableAttributedString in
         let attritude = NSMutableAttributedString(string: title.0, attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 13), NSAttributedStringKey.foregroundColor: title.1])
@@ -19,20 +35,6 @@ class OrdersHistoryCollectionCell : BaseCell {
         return attritude
     }
     
-    var a:AAA?{
-        didSet{
-            if (a?.isShowing)!{
-                downArrowView.image = #imageLiteral(resourceName: "up-arrow")
-                detailContainer.isHidden = false
-            }else{
-                downArrowView.image = #imageLiteral(resourceName: "drop-down-arrow")
-                detailContainer.isHidden = true
-            }
-            UIView.animate(withDuration: 0.5) {
-                self.layoutIfNeeded()
-            }
-        }
-    }
     
     override func setupViews() {
         setContainView()
@@ -44,10 +46,56 @@ class OrdersHistoryCollectionCell : BaseCell {
         setupPhoneReceiverLabel()
         setupDownArrowView()
         setupDetailContainer()
-        
-      
-        
     }
+    
+    // MARK: Private functions
+    private func showingDetailContainer(){
+        if (self.oder?.isShowing)!{
+            downArrowView.image = #imageLiteral(resourceName: "up-arrow")
+            detailContainer.isHidden = false
+        }else{
+            downArrowView.image = #imageLiteral(resourceName: "drop-down-arrow")
+            detailContainer.isHidden = true
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.layoutIfNeeded()
+        }
+    }
+    private func setBasicValue(order:Order){
+        guard let date = order.startTime,
+            let shipperId = order.shipperId,
+            let originAddress = order.originAddress,
+            let destinationAddress = order.destinationAddress,
+            let phoneReceiver = order.phoneReceiver
+            else { return }
+        dateLabel.text = date
+        infoShipperLabel.attributedText = attitudeString((Define.SHIPPER,#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(shipperId)", UIColor.white))
+        originLabel.attributedText = attitudeString((Define.ORIGIN_ADDRESS,#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(originAddress)", UIColor.white))
+        destinationLabel.attributedText = attitudeString((Define.DESTINATION_ADDRESS,#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(destinationAddress)", UIColor.white))
+        phoneReceiverLabel.attributedText = attitudeString((Define.PHONE_RECEIVER,#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(phoneReceiver)", UIColor.white))
+    }
+    
+    
+    private func setDetailValue(order:Order){
+        guard let prepayment = order.unitPrice?.prepayment,
+            let priceOfWeight = order.unitPrice?.priceOfWeight,
+            let priceOrderFragile = order.unitPrice?.priceFragileOrder,
+            let feeShip = order.unitPrice?.feeShip,
+            let overheads = order.unitPrice?.overheads else { return }
+        if order.isFragile{
+            detailContainer.addArrangedSubview(priceOfOrderFragileLabel)
+        }
+        detailContainer.addArrangedSubview(feeShipLabel)
+        detailContainer.addArrangedSubview(overheadsLabel)
+        prepaymentLabel.attributedText = attitudeString((Define.PREPAYMENT, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(prepayment.formatedNumberWithUnderDots())", UIColor.white))
+        priceOfWeightLabel.attributedText = attitudeString((Define.PRICE_OF_WEIHGT, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(priceOfWeight.formatedNumberWithUnderDots())", UIColor.white))
+        if order.isFragile{
+            priceOfOrderFragileLabel.attributedText = attitudeString((Define.PRICE_OF_ORDER_FRAGILE, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(priceOrderFragile.formatedNumberWithUnderDots())", UIColor.white))
+        }
+        feeShipLabel.attributedText = attitudeString((Define.FEESHIP, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(feeShip.formatedNumberWithUnderDots())", UIColor.white))
+        overheadsLabel.attributedText = attitudeString((Define.OVERHEADS, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(overheads.formatedNumberWithUnderDots())", UIColor.white))
+    }
+    
     
     // MARK:setup view
     private func setContainView(){
@@ -65,25 +113,23 @@ class OrdersHistoryCollectionCell : BaseCell {
     private func setupInfoShipperLabel(){
         containerView.addSubview(infoShipperLabel)
         infoShipperLabel.anchorWithConstants(top: dateLabel.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, topConstant: 4, leftConstant: 8, bottomConstant: 0, rightConstant: 4)
-        infoShipperLabel.attributedText = attitudeString(("Shipper: ",#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), ("Nguyen Tu Vu", UIColor.white))
     }
     
     private func setupOriginAddressLabel(){
         containerView.addSubview(originLabel)
         originLabel.anchorWithConstants(top: infoShipperLabel.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: stateImageView.leftAnchor, topConstant: 4, leftConstant: 8, bottomConstant: 0, rightConstant: 4)
-        originLabel.attributedText = attitudeString(("Điểm bắt đầu: ",#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), ("Tam trinh", UIColor.white))
+        originLabel.heightAnchor.constraint(equalToConstant: 32).isActive = true
     }
     
     private func setupDestinationAddressLabel(){
         containerView.addSubview(destinationLabel)
         destinationLabel.anchorWithConstants(top: originLabel.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: stateImageView.leftAnchor, topConstant: 4, leftConstant: 8, bottomConstant: 0, rightConstant: 4)
-        destinationLabel.attributedText = attitudeString(("Điểm đến", #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), ("123 Tran Dai Nghia, Ha Noi", UIColor.white))
+        destinationLabel.heightAnchor.constraint(equalToConstant: 32).isActive = true
     }
     
     private func setupPhoneReceiverLabel(){
         containerView.addSubview(phoneReceiverLabel)
         phoneReceiverLabel.anchorWithConstants(top: destinationLabel.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, topConstant: 4, leftConstant: 8, bottomConstant: 0, rightConstant: 4)
-        phoneReceiverLabel.attributedText = attitudeString(("SĐT người nhận", #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), ("0165786310", UIColor.white))
     }
     
     private func  setupStateImage(){
@@ -115,19 +161,6 @@ class OrdersHistoryCollectionCell : BaseCell {
         // add subview
         detailContainer.addArrangedSubview(prepaymentLabel)
         detailContainer.addArrangedSubview(priceOfWeightLabel)
-        if isFragile{
-            detailContainer.addArrangedSubview(priceOfOrderFragileLabel)
-        }
-        detailContainer.addArrangedSubview(feeShipLabel)
-        detailContainer.addArrangedSubview(overheadsLabel)
-        
-        prepaymentLabel.attributedText = attitudeString(("Tiền ứng: ", #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), ("0165786310", UIColor.white))
-        priceOfWeightLabel.attributedText = attitudeString(("Phí khối lượng: ", #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), ("0165786310", UIColor.white))
-        if isFragile{
-            priceOfOrderFragileLabel.attributedText = attitudeString(("Phí hàng dễ vỡ: ", #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), ("0165786310", UIColor.white))
-        }
-        feeShipLabel.attributedText = attitudeString(("Phí vận chuyển: ", #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), ("0165786310", UIColor.white))
-        overheadsLabel.attributedText = attitudeString(("Tổng phí: ", #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), ("0165786310", UIColor.white))
     }
     
     // MARK: Views
@@ -150,7 +183,6 @@ class OrdersHistoryCollectionCell : BaseCell {
     let dateLabel:UILabel = {
         let label = UILabel()
         label.textColor = UIColor.gray
-        label.text = "22/2/2018 18:23 am"
         label.textAlignment = .right
         label.font = UIFont.systemFont(ofSize: 13)
         return label
@@ -164,6 +196,7 @@ class OrdersHistoryCollectionCell : BaseCell {
     
     let destinationLabel:UILabel = {
         let label = UILabel()
+        label.numberOfLines = 0
         return label
     }()
     
@@ -203,36 +236,26 @@ class OrdersHistoryCollectionCell : BaseCell {
     
     let prepaymentLabel:UILabel = {
         let label = UILabel()
-        label.text = "22fafa"
-        label.font = UIFont.systemFont(ofSize: 13)
         return label
     }()
     
     let priceOfWeightLabel:UILabel = {
         let label = UILabel()
-        label.text = "111111"
-        label.font = UIFont.systemFont(ofSize: 13)
         return label
     }()
     
     let priceOfOrderFragileLabel:UILabel = {
         let label = UILabel()
-        label.text = "33333"
-        label.font = UIFont.systemFont(ofSize: 13)
         return label
     }()
     
     let feeShipLabel:UILabel = {
         let label = UILabel()
-        label.text = "444444"
-        label.font = UIFont.systemFont(ofSize: 13)
         return label
     }()
     
     let overheadsLabel:UILabel = {
         let label = UILabel()
-        label.text = "55555"
-        label.font = UIFont.systemFont(ofSize: 13)
         return label
     }()
 }

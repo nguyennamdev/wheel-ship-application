@@ -37,6 +37,7 @@ class CustomTabbarController: UITabBarController {
         let historyViewController = HistoryViewController()
         historyViewController.tabBarItem.title = "Lịch sử"
         historyViewController.tabBarItem.image = #imageLiteral(resourceName: "wheel")
+        historyViewController.user = createDummyUser();
         let navigationHome = UINavigationController(rootViewController: historyViewController)
         return navigationHome
     }

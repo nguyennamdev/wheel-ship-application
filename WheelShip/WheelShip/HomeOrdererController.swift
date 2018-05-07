@@ -42,7 +42,7 @@ class HomeOrdererController:UIViewController {
     var user:User?{
         didSet{
             order = Order();
-            order?.user = self.user
+            order?.userId = self.user?.uid;
         }
     }
 

@@ -55,7 +55,7 @@ class OrderConfirmationController : UICollectionViewController {
     private func initParameters() -> [String: Any]?{
         // wrap data
         guard let orderId = self.order?.orderId,
-            let uId = self.order?.user?.uid,
+            let uId = self.order?.userId,
             let originAddress = self.order?.originAddress,
             let destinationAddress = self.order?.destinationAddress,
             let oriLattitude = self.order?.originLocation?.coordinate.latitude,
@@ -76,9 +76,9 @@ class OrderConfirmationController : UICollectionViewController {
                          "userId": uId,
                          "originAddress": originAddress,
                          "destinationAddress": destinationAddress,
-                         "oriLattitude": oriLattitude,
+                         "oriLatitude": oriLattitude,
                          "oriLongtitude": oriLongtitude,
-                         "desLattitude": desLattitude,
+                         "desLatitude": desLattitude,
                          "desLongtitude": desLongtitude,
                          "distance": distance,
                          "isFragile": isFragile,
@@ -94,7 +94,6 @@ class OrderConfirmationController : UICollectionViewController {
     }
     
     private func showAlertHaveError(message: String){
-        
         let alert = UIAlertController(title: "Có lỗi", message: message + "\n Vui lòng thử lại sau", preferredStyle: UIAlertControllerStyle.alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
@@ -103,12 +102,12 @@ class OrderConfirmationController : UICollectionViewController {
     
     private func showAlertOrderComplete(){
         let alert = UIAlertController(title: "Đặt đơn hàng", message: "Bạn đã đặt đơn hàng thành công", preferredStyle: UIAlertControllerStyle.alert)
-        let cancelAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alert.addAction(cancelAction)
-        present(alert, animated: true) {
+        let cancelAction = UIAlertAction(title: "OK", style: .cancel) { (action) in
             let homeOrdererController = self.navigationController?.viewControllers[0] as? HomeOrdererController
             self.navigationController?.popToViewController(homeOrdererController!, animated: true)
         }
+        alert.addAction(cancelAction)
+        present(alert, animated: true, completion: nil);
     }
     // MARK: Actions
     @objc private func completeOrder(){
@@ -131,8 +130,6 @@ class OrderConfirmationController : UICollectionViewController {
             }
         }
     }
-
-    
 }
 
 // MARK: Implement functions of UICollectionViewDelegateFlowLayout

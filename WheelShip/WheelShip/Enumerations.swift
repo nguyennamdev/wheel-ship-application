@@ -17,3 +17,8 @@ enum TypeOfUser:Int16{
     case isShipper // raw value of 0
     case isOrderer // raw value of 1
 }
+
+enum OrderStage:Int16{
+    case waitingShipper // raw value of 0
+    case hadShipper     // raw value of 1
+}

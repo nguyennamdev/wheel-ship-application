@@ -7,38 +7,33 @@
 //
 
 import UIKit
-
-class AAA {
-    var isShowing:Bool = false
-}
+import Alamofire
 
 class HistoryViewController: UIViewController {
     
     let cellId = "cellId"
-    var isShowing: Bool = false
-    var listOrders:[AAA]?
-
+    var user:User?
+    var arrOrder:[Order]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupViews()
         self.navigationItem.title = "Lịch sử đặt hàng"
-        ordersCollectionView.dataSource = self
-        ordersCollectionView.delegate = self
         ordersCollectionView.backgroundColor = UIColor.clear
-        dummyOrder()
+        self.ordersCollectionView.dataSource = self
+        self.ordersCollectionView.delegate = self
         // register collection view
         ordersCollectionView.register(OrdersHistoryCollectionCell.self, forCellWithReuseIdentifier: cellId)
     }
     
-    
-    private func dummyOrder(){
-        listOrders = [AAA]()
-        listOrders = [
-            AAA(),
-            AAA(),
-            AAA()
-        ]
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if self.statusOrderSegment.selectedSegmentIndex == 0{
+            self.loadOrderWaitShipperById()
+        }else{
+            self.loadOrderCompleteById()
+        }
     }
     
     // MARK: Private funtions
@@ -48,7 +43,40 @@ class HistoryViewController: UIViewController {
         setupStatusOrderSegment()
         setupOrdersCollectionView()
     }
-
+    
+    private func loadOrderById(urlString: String){
+        guard let user = self.user else { return }
+        Alamofire.request(urlString, method: .get, parameters: ["userId": user.uid!] , encoding: URLEncoding.default, headers: nil).responseJSON { (dataResponse) in
+            if let resultValue = dataResponse.result.value as? NSDictionary{
+                // check size of data response
+                if let size = resultValue.value(forKey: "size") as? Int{
+                    if size > 0 {
+                        if let data = resultValue.value(forKey: "data") as? [NSDictionary]{
+                            self.arrOrder = [Order]()
+                            for element in data{
+                                let order = Order()
+                                order.setValueByNSDictionary(dictionary: element)
+                                self.arrOrder?.append(order);
+                            }
+                            self.ordersCollectionView.reloadData()
+                        }
+                    }else{
+                        self.arrOrder = [Order]()
+                        self.ordersCollectionView.reloadData()
+                    }
+                }
+            }
+        }
+    }
+    
+    private func loadOrderCompleteById(){
+        self.loadOrderById(urlString: "https://wheel-ship.herokuapp.com/orders/order_complete")
+    }
+    
+    private func loadOrderWaitShipperById(){
+        self.loadOrderById(urlString: "https://wheel-ship.herokuapp.com/orders/order_by_user")
+    }
+    
     // MARK: Views
     let background:GradientView = {
         let gv = GradientView()
@@ -73,42 +101,45 @@ class HistoryViewController: UIViewController {
     
     // MARK: Actions
     @objc func statusOrderSegmentValueChanged(sender: UISegmentedControl){
-        
+        if sender.selectedSegmentIndex == 0{
+            self.loadOrderWaitShipperById()
+        }else{
+            self.loadOrderCompleteById()
+        }
     }
     
 }
 
-
-// CollectionView delegate and datasource
+//// MARK: CollectionView delegate and datasource
 extension HistoryViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
-
-
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return listOrders?.count ?? 0
+        if (self.arrOrder?.count == 0){
+            ordersCollectionView.setEmptyMessage("Không có dữ liệu để hiển thị :(")
+        }else{
+            self.ordersCollectionView.restore()
+        }
+        return arrOrder?.count ?? 0
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? OrdersHistoryCollectionCell
-        cell?.a = listOrders?[indexPath.row]
+        cell?.oder = self.arrOrder?[indexPath.row]
         return cell!
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if listOrders![indexPath.row].isShowing{
-            return CGSize(width: view.bounds.width, height: 200)
+        if (self.arrOrder?[indexPath.row].isShowing)!{
+            return CGSize(width: view.bounds.width, height: 250)
         }else{
-            return CGSize(width: view.bounds.width, height: 130)
+            return CGSize(width: view.bounds.width, height: 150)
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if listOrders![indexPath.row].isShowing{
-            listOrders![indexPath.row].isShowing = false
-        }else {
-            listOrders![indexPath.row].isShowing = true
-        }
+        self.arrOrder?[indexPath.row].isShowing = !(self.arrOrder?[indexPath.row].isShowing)!
         self.ordersCollectionView.reloadData()
     }
-
+    
 }
 
