@@ -117,8 +117,8 @@ class OrderConfirmationController : UICollectionViewController {
         guard let parameters = initParameters() else { return }
         Alamofire.request("https://wheel-ship.herokuapp.com/orders/insert_new_order", method: .post, parameters: parameters, encoding: JSONEncoding.default ).responseJSON { (response) in
             if let resultValue = response.result.value as? [String:Any]{
-                if let result = resultValue["result"] as? String{
-                    if result == "OK" {
+                if let result = resultValue["result"] as? Bool{
+                    if result {
                         self.collectionView?.alpha = 1;
                         self.showAlertOrderComplete()
                     }else{

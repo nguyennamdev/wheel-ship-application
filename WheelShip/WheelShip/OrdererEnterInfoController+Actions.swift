@@ -18,11 +18,8 @@ extension OrdererEnterInfoController {
         
     }
     @objc func isFragileSwitchValueChanged(sender:UISwitch){
-        guard let dummyPriceFragile = self.unitPrice?.dummyPriceFragile else {
-            return
-        }
         if sender.isOn {
-            unitPrice?.priceFragileOrder = dummyPriceFragile
+            unitPrice?.priceFragileOrder = self.dummyPriceFragileOder
             self.order?.isFragile = true;
         }else {
             unitPrice?.priceFragileOrder = 0

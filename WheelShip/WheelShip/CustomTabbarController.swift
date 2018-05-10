@@ -55,7 +55,7 @@ class CustomTabbarController: UITabBarController {
     
     private func createDummyUser() -> User{
         let user = User()
-        user.uid = "id000001";
+        user.uid = "test0001";
         user.name = "nguyen nam";
         user.phoneNumber = "016231231231";
         user.isShipper = TypeOfUser.isOrderer;

@@ -80,6 +80,9 @@ class HomeOrdererController:UIViewController {
         self.navigationItem.backBarButtonItem = backBarButtonItem
     }
     
+
+    
+    
     // MARK: Private functions
     private func callApiToGetPriceDistance(){
         Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_distance", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in

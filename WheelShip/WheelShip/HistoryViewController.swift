@@ -15,6 +15,7 @@ class HistoryViewController: UIViewController {
     var user:User?
     var arrOrder:[Order]?
     
+    // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,6 +37,10 @@ class HistoryViewController: UIViewController {
         }
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        navigationItem.title = "Trở lại"
+    }
+    
     // MARK: Private funtions
     private func setupViews(){
         view.addSubview(background)
@@ -45,6 +50,7 @@ class HistoryViewController: UIViewController {
     }
     
     private func loadOrderById(urlString: String){
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         guard let user = self.user else { return }
         Alamofire.request(urlString, method: .get, parameters: ["userId": user.uid!] , encoding: URLEncoding.default, headers: nil).responseJSON { (dataResponse) in
             if let resultValue = dataResponse.result.value as? NSDictionary{
@@ -65,6 +71,7 @@ class HistoryViewController: UIViewController {
                         self.ordersCollectionView.reloadData()
                     }
                 }
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
             }
         }
     }
@@ -110,7 +117,7 @@ class HistoryViewController: UIViewController {
     
 }
 
-//// MARK: CollectionView delegate and datasource
+// MARK: CollectionView delegate and datasource
 extension HistoryViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -125,6 +132,7 @@ extension HistoryViewController : UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? OrdersHistoryCollectionCell
         cell?.oder = self.arrOrder?[indexPath.row]
+        cell?.orderHistoryDelegate = self 
         return cell!
     }
     
@@ -141,5 +149,27 @@ extension HistoryViewController : UICollectionViewDelegate, UICollectionViewData
         self.ordersCollectionView.reloadData()
     }
     
+}
+
+// MARK: Implement OrdersHistoryDelegate
+extension HistoryViewController : OrdersHistoryDelegate {
+    
+    func deleteAOrderByOrderId(orderId: String) {
+        let parameter:Parameters = ["orderId": orderId]
+        Alamofire.request("https://wheel-ship.herokuapp.com/orders/delete_order", method: .delete, parameters: parameter, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
+            if let value = response.result.value as? [String: Any] {
+                if let result = value["result"] as? Bool{
+                    if result {
+                       self.statusOrderSegment.selectedSegmentIndex == 0 ? self.loadOrderWaitShipperById() : self.loadOrderCompleteById()
+                    }
+                }
+            }
+        }
+    }
+    
+    func editAOrderByOrderId(orderId: String) {
+        let editViewController = EditOrderViewController(nibName: "EditOrderViewController", bundle: nil)
+        self.navigationController?.pushViewController(editViewController, animated: true)
+    }
 }
 

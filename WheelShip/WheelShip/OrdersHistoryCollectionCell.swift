@@ -9,7 +9,10 @@
 import UIKit
 
 class OrdersHistoryCollectionCell : BaseCell {
+    
+    // MARK: Properties
     var isShowingActions:Bool = false
+    var orderHistoryDelegate:OrdersHistoryDelegate?
     var oder:Order?{
         didSet{
             showingDetailContainer()
@@ -128,6 +131,18 @@ class OrdersHistoryCollectionCell : BaseCell {
             self.layoutIfNeeded()
         }
         isShowingActions = !isShowingActions
+    }
+    
+    @objc private func deleteAOrder(){
+        if let orderId = self.oder?.orderId {
+             orderHistoryDelegate?.deleteAOrderByOrderId(orderId: orderId)
+        }
+    }
+    
+    @objc private func editAOrder(){
+        if let orderId = self.oder?.orderId {
+            orderHistoryDelegate?.editAOrderByOrderId(orderId: orderId)
+        }
     }
 
     // MARK:setup view
@@ -339,6 +354,7 @@ class OrdersHistoryCollectionCell : BaseCell {
         //86,204,242
         button.backgroundColor = UIColor.rgb(r: 86, g: 204, b: 242)
         button.setImage(#imageLiteral(resourceName: "edit"), for: .normal)
+        button.addTarget(self, action: #selector(editAOrder), for: .touchUpInside)
         return button
     }()
     
@@ -347,6 +363,7 @@ class OrdersHistoryCollectionCell : BaseCell {
         //240,80,83
         button.backgroundColor = UIColor.rgb(r: 240, g: 80, b: 83)
         button.setImage(#imageLiteral(resourceName: "delete"), for: .normal)
+        button.addTarget(self, action: #selector(deleteAOrder), for: .touchUpInside)
         return button
     }()
     

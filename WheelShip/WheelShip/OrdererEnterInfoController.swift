@@ -17,6 +17,7 @@ class OrdererEnterInfoController : UIViewController {
     var heightConstaintOfWeightPickerView:NSLayoutConstraint?
     var weightPickerViewIsShowing = false
     var weightAttributedText:NSMutableAttributedString?
+    var dummyPriceFragileOder:Double = 0
     var unitPrice:UnitPrice?{
         didSet{
             updateStateBarButtonItem()
@@ -59,6 +60,7 @@ class OrdererEnterInfoController : UIViewController {
         self.navigationItem.backBarButtonItem = backBarButtonItem
     }
     
+    
     // MARK: Private functions
     private func setupViews(){
         setupPageControl()
@@ -77,11 +79,9 @@ class OrdererEnterInfoController : UIViewController {
             if let result = response.result.value as? [String:Any]{
                 if let data = result["data"] as? [[String: Any]]{
                     let priceFragileOrder = data.first?["value"] as! Double
-                    self.unitPrice?.dummyPriceFragile = priceFragileOrder
-                    let attitudeString = NSMutableAttributedString(string: "Hàng dễ vỡ : \t", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13), NSAttributedStringKey.foregroundColor : UIColor.gray])
-                    attitudeString.append(NSAttributedString(string: "+\(priceFragileOrder.formatedNumberWithUnderDots())", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13)]))
+                    self.dummyPriceFragileOder = priceFragileOrder
                     DispatchQueue.main.async {
-                        self.priceFragileLabel.attributedText = attitudeString
+                        self.priceFragileLabel.setAttitudeString(title: ("Hàng dễ vỡ : \t", UIColor.gray), content: ("+\(priceFragileOrder.formatedNumberWithUnderDots())", UIColor.black, UIFont.boldSystemFont(ofSize: 13)))
                     }
                 }
             }
@@ -103,7 +103,7 @@ class OrdererEnterInfoController : UIViewController {
                 self.unitPrice?.feeShip = Double(priceDistance * (distanceValue / 1000))
                 self.order?.distance = distanceValue
                 if let feeShip = self.unitPrice?.feeShip {
-                    self.setAttributedStringForDistanceLabel(value: distanceText + " = \(feeShip.formatedNumberWithUnderDots()) vnđ")
+                    self.distanceLabel.setAttitudeString(title: ("\t Khoảng cách: ", UIColor.gray), content: (distanceText + " = \(feeShip.formatedNumberWithUnderDots()) vnđ", UIColor.black, UIFont.boldSystemFont(ofSize: 13)))
                     self.updateOverheadsLabel()
                 }
             }
@@ -132,11 +132,6 @@ class OrdererEnterInfoController : UIViewController {
         return (result!, distanceValue!)
     }
     
-    private func setAttributedStringForDistanceLabel(value:String){
-        let attributedString = NSMutableAttributedString(string: "\t Khoảng cách: ", attributes:[NSAttributedStringKey.foregroundColor : UIColor.gray])
-        attributedString.append(NSAttributedString(string: value, attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13)]))
-        distanceLabel.attributedText = attributedString
-    }
     
     private func updateStateBarButtonItem(){
         if let feeShip =  self.unitPrice?.feeShip, let priceOfWeight = self.unitPrice?.priceOfWeight, let prepayment = self.unitPrice?.prepayment{
@@ -307,9 +302,8 @@ extension OrdererEnterInfoController : UIPickerViewDelegate, UIPickerViewDataSou
         self.order?.weight = result;
         self.unitPrice?.priceOfWeight = self.unitPrice?.listPriceOfWeight?[row].value
         guard let priceOfWeight = self.unitPrice?.priceOfWeight else { return }
-        weightAttributedText = NSMutableAttributedString(string: "Khối lượng : ", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13), NSAttributedStringKey.foregroundColor : UIColor.gray])
-        weightAttributedText?.append(NSAttributedString(string: "\t \(result ?? "") = \(priceOfWeight.formatedNumberWithUnderDots()) vnđ", attributes: [NSAttributedStringKey.foregroundColor : UIColor.black, NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13)]))
-        weightLabel.attributedText = weightAttributedText!
+        // set attributed text
+        weightLabel.setAttitudeString(title: ("Khối lượng : ", UIColor.gray), content: ("\t \(result ?? "") = \(priceOfWeight.formatedNumberWithUnderDots()) vnđ", UIColor.black, UIFont.boldSystemFont(ofSize: 13)))
         updateOverheadsLabel()
     }
 }

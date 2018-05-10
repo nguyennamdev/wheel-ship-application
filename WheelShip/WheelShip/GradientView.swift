@@ -15,6 +15,7 @@ class GradientView:UIView {
             updateView()
         }
     }
+
     
     var defaultColor:[CGColor] = [ UIColor.rgb(r: 190, g: 147, b: 197).cgColor,
                                     UIColor.rgb(r: 123, g: 198, b: 204).cgColor]
@@ -35,5 +36,6 @@ class GradientView:UIView {
         let layer = self.layer as? CAGradientLayer
         layer?.colors = defaultColor
     }
+    
  
 }
