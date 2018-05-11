@@ -25,6 +25,7 @@ class OrdererEnterInfoController : UIViewController {
         }
     }
     var order:Order?
+    var arrWeightPrice:[Price] = [Price]()
     
     
     override func viewDidLoad() {
@@ -52,6 +53,7 @@ class OrdererEnterInfoController : UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         callApiToGetPriceFragileOrder()
         handleDistanceMatrix()
+        callApiToGetListPriceWeight()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -74,6 +76,8 @@ class OrdererEnterInfoController : UIViewController {
         setupDistanceLabel()
     }
     
+    // MARK: Call apis
+    
     private func callApiToGetPriceFragileOrder(){
         Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_fragile_order", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
             if let result = response.result.value as? [String:Any]{
@@ -88,11 +92,26 @@ class OrdererEnterInfoController : UIViewController {
         }
     }
     
+    private func callApiToGetListPriceWeight(){
+        Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_weights", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
+            if let result = response.result.value as? [String: Any]{
+                if let data = result["data"] as? [[String: Any]]{
+                    data.forEach({ (element) in
+                        let price = Price()
+                        price.setValueWithKey(value: element)
+                        self.arrWeightPrice.append(price)
+                    })
+                    self.weightPickerView.reloadAllComponents()
+                }
+            }
+        }
+    }
+    
     private func handleDistanceMatrix(){
         guard let origin = order?.originLocation, let destination = order?.destinationLocation else { return }
         let origins = "\(origin.coordinate.latitude),\(origin.coordinate.longitude)"
         let destinations = "\(destination.coordinate.latitude),\(destination.coordinate.longitude)"
-        let distanceMatrixApiKey = "AIzaSyAnyH3snwD3N3oru00t1cQVp_VgQNHZ5_Y"
+        let distanceMatrixApiKey = getMatrixApiKey()
         Alamofire.request("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=\(origins)&destinations=\(destinations)&key=\(distanceMatrixApiKey)").responseJSON { (response) in
             if let json = response.result.value {
                 // return tupple distance text and distance value
@@ -108,6 +127,15 @@ class OrdererEnterInfoController : UIViewController {
                 }
             }
         }
+    }
+    
+    private func getMatrixApiKey() -> String {
+        guard let path = Bundle.main.path(forResource: "GoogleService", ofType: "plist") else {
+            return ""
+        }
+        let dict = NSDictionary(contentsOfFile: path)
+        let matrixApiKey = dict?.value(forKey: "Matrix API key") as! String
+        return matrixApiKey
     }
     
     private func parseDistanceJson(json:Any) -> (text:String, value:Double){
@@ -290,17 +318,17 @@ extension OrdererEnterInfoController : UIPickerViewDelegate, UIPickerViewDataSou
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return self.unitPrice?.listPriceOfWeight?.count ?? 0
+        return self.arrWeightPrice.count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return self.unitPrice?.listPriceOfWeight?[row].name
+        return self.arrWeightPrice[row].name
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let result = self.unitPrice?.listPriceOfWeight?[row].name
+        let result = self.arrWeightPrice[row].name
         self.order?.weight = result;
-        self.unitPrice?.priceOfWeight = self.unitPrice?.listPriceOfWeight?[row].value
+        self.unitPrice?.priceOfWeight = self.arrWeightPrice[row].value
         guard let priceOfWeight = self.unitPrice?.priceOfWeight else { return }
         // set attributed text
         weightLabel.setAttitudeString(title: ("Khối lượng : ", UIColor.gray), content: ("\t \(result ?? "") = \(priceOfWeight.formatedNumberWithUnderDots()) vnđ", UIColor.black, UIFont.boldSystemFont(ofSize: 13)))
@@ -343,8 +371,6 @@ extension OrdererEnterInfoController : UITextFieldDelegate {
         default:
             break
         }
-        
-        
         updateStateBarButtonItem()
     }
     

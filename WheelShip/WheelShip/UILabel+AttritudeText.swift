@@ -16,5 +16,10 @@ extension UILabel {
         attritude.append(NSAttributedString(string: content.0, attributes: [NSAttributedStringKey.foregroundColor: content.1, NSAttributedStringKey.font : content.2]))
         self.attributedText = attritude
     }
+    
+    func setAttitudeString(content:(String, UIColor, UIFont)){
+        let attribute = NSAttributedString(string: content.0, attributes: [NSAttributedStringKey.foregroundColor: content.1, NSAttributedStringKey.font : content.2])
+        self.attributedText = attribute
+    }
      
 }

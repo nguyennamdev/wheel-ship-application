@@ -169,6 +169,7 @@ extension HistoryViewController : OrdersHistoryDelegate {
     
     func editAOrderByOrderId(orderId: String) {
         let editViewController = EditOrderViewController(nibName: "EditOrderViewController", bundle: nil)
+        editViewController.orderIdToEdit = orderId
         self.navigationController?.pushViewController(editViewController, animated: true)
     }
 }

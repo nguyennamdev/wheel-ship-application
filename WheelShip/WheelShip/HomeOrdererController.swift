@@ -71,7 +71,8 @@ class HomeOrdererController:UIViewController {
         // init unit price
         unitPrice = UnitPrice()
         callApiToGetPriceDistance()
-        callApiToGetListPriceWeight()
+
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -96,21 +97,7 @@ class HomeOrdererController:UIViewController {
         }
     }
     
-    private func callApiToGetListPriceWeight(){
-        Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_weights", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
-            if let result = response.result.value as? [String: Any]{
-                if let data = result["data"] as? [[String: Any]]{
-                    var prices = [Price]()
-                    data.forEach({ (element) in
-                        let price = Price()
-                        price.setValueWithKey(value: element)
-                        prices.append(price)
-                    })
-                    self.unitPrice?.listPriceOfWeight = prices
-                }
-            }
-        }
-    }
+   
     
     private func updateStateBarButton(){
         guard let fromAddress = originAddressTextField.text ,

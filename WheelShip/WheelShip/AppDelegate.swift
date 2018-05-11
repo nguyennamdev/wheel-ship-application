@@ -17,10 +17,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
-        // setup google maps api
-        GMSServices.provideAPIKey("AIzaSyB262YPUMrNR6JSfZKUOMzKBW_klHUslsc")
-        GMSPlacesClient.provideAPIKey("AIzaSyB262YPUMrNR6JSfZKUOMzKBW_klHUslsc")
+        // get api key from plist file
+        if let path = Bundle.main.path(forResource: "GoogleServiceApi", ofType: "plist"){
+            let dict = NSDictionary(contentsOfFile: path)
+            let mapApiKey = dict?.value(forKey: "API key") as! String
+            // setup google maps api
+            GMSServices.provideAPIKey(mapApiKey)
+            GMSPlacesClient.provideAPIKey(mapApiKey)
+        }
+   
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
