@@ -136,6 +136,13 @@ extension Double{
     func formatedNumberWithUnderDots() -> String{
         return Formatter.withUnderDots.string(for: self) ?? ""
     }
+    
+    func setMinTailingDigits() -> String{
+        let formatter = NumberFormatter()
+        formatter.minimumFractionDigits = 1
+        return formatter.string(from: Double(self) as NSNumber)!
+    }
+    
 }
 
 extension UITextField {

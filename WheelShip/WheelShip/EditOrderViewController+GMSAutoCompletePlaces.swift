@@ -16,7 +16,7 @@ extension EditOrderViewController : GMSAutocompleteViewControllerDelegate {
     
     // Handle the distance address
     func handleDistanceAddress(originLocation:CLLocation, destinationLocation:CLLocation){
-        if let path = Bundle.main.path(forResource: "GoogleService", ofType: "plist"){
+        if let path = Bundle.main.path(forResource: "GoogleServiceApi", ofType: "plist"){
             let dict = NSDictionary(contentsOfFile: path)
             let distanceMatrixApiKey = dict?.value(forKey: "Matrix API key") as! String
             
@@ -30,13 +30,14 @@ extension EditOrderViewController : GMSAutocompleteViewControllerDelegate {
                     let result = self.parseDistanceJson(json: json)
                     let distanceText = result.text
                     let distanceValue = result.value
+                    // get price distance/km to calculated fee ship
                     guard let priceDistance = self.order.unitPrice?.priceOfDistance?.value else { return }
                     self.order.unitPrice?.feeShip = Double(priceDistance * (distanceValue / 1000))
                     self.order.distance = distanceValue
-                    if let feeShip = self.order.unitPrice?.feeShip {
-                        self.distanceLabel.setAttitudeString(title: ("\t Khoảng cách: ", UIColor.gray), content: (distanceText + " = \(feeShip.formatedNumberWithUnderDots()) vnđ", UIColor.black, UIFont.boldSystemFont(ofSize: 13)))
-                        self.updateOverheadsLabel()
-                    }
+                    
+                    self.distanceLabel.attributedText = NSAttributedString(string: distanceText, attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 16)])
+                    self.feeShipLabel.attributedText = NSAttributedString(string: "\((self.order.unitPrice?.feeShip.formatedNumberWithUnderDots() ?? ""))", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 16)])
+                    self.updateOverheadsLabel()
                 }
             }
         }
@@ -76,6 +77,9 @@ extension EditOrderViewController : GMSAutocompleteViewControllerDelegate {
         }else if currentTextFieldIsShowing == destinationAddressTextField.tag {
             destinationAddressTextField.text = address
             self.order.destinationLocation = location
+        }
+        if (self.originAddressTextField.text != oldOriginAddress || self.destinationAddressTextField.text != oldDestinationAddress){
+            handleDistanceAddress(originLocation: self.order.originLocation!, destinationLocation: self.order.destinationLocation!)
         }
         dismiss(animated: true, completion: nil)
         self.updateStateBarButton()

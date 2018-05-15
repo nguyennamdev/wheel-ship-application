@@ -92,16 +92,12 @@ class OrdersHistoryCollectionCell : BaseCell {
             let priceOrderFragile = order.unitPrice?.priceFragileOrder,
             let feeShip = order.unitPrice?.feeShip,
             let overheads = order.unitPrice?.overheads else { return }
-        if order.isFragile{
-            detailContainer.addArrangedSubview(priceOfOrderFragileLabel)
-        }
+        detailContainer.addArrangedSubview(priceOfOrderFragileLabel)
         detailContainer.addArrangedSubview(feeShipLabel)
         detailContainer.addArrangedSubview(overheadsLabel)
         prepaymentLabel.attributedText = attitudeString((Define.PREPAYMENT, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(prepayment.formatedNumberWithUnderDots())", UIColor.white))
         priceOfWeightLabel.attributedText = attitudeString((Define.PRICE_OF_WEIHGT, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(priceOfWeight.formatedNumberWithUnderDots())", UIColor.white))
-        if order.isFragile{
             priceOfOrderFragileLabel.attributedText = attitudeString((Define.PRICE_OF_ORDER_FRAGILE, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(priceOrderFragile.formatedNumberWithUnderDots())", UIColor.white))
-        }
         feeShipLabel.attributedText = attitudeString((Define.FEESHIP, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(feeShip.formatedNumberWithUnderDots())", UIColor.white))
         overheadsLabel.attributedText = attitudeString((Define.OVERHEADS, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(overheads.formatedNumberWithUnderDots())", UIColor.white))
     }

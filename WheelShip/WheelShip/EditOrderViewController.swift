@@ -14,6 +14,7 @@ import GooglePlaces
 class EditOrderViewController: UIViewController {
     
     // MARK: Views
+    @IBOutlet weak var subScrollView: UIView!
     @IBOutlet weak var backgroundView: GradientView!
     @IBOutlet weak var phoneReceiverTextField: UITextField!
     @IBOutlet weak var destinationAddressTextField: UITextField!
@@ -27,9 +28,17 @@ class EditOrderViewController: UIViewController {
     @IBOutlet weak var priceOfOrderFragileLabel: UILabel!
     @IBOutlet weak var priceOfWeightLabel: UILabel!
     @IBOutlet weak var overheadsLabel: UILabel!
+    let activityIndicator:UIActivityIndicatorView = {
+        let ac = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+        ac.startAnimating()
+        ac.color = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+        return ac
+    }()
     var previousButton:UIBarButtonItem?
     var nextButton:UIBarButtonItem?
     var updateBarButtonItem:UIBarButtonItem?
+    var oldOriginAddress:String?
+    var oldDestinationAddress:String?
     
     // MARK: Properties
     var orderIdToEdit:String?
@@ -41,7 +50,7 @@ class EditOrderViewController: UIViewController {
             if orderFragileSwitch.isOn {
                 self.priceOfOrderFragileLabel.attributedText = NSAttributedString(string: "\(priceFragileOrder.formatedNumberWithUnderDots()) vnđ", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 16)])
             }else{
-                  self.priceOfOrderFragileLabel.attributedText = NSAttributedString(string: "0 vnđ", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 16)])
+                self.priceOfOrderFragileLabel.attributedText = NSAttributedString(string: "0 vnđ", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 16)])
             }
         }
     }
@@ -58,6 +67,13 @@ class EditOrderViewController: UIViewController {
         self.navigationItem.title = "Chỉnh sửa đơn hàng"
         customRightBarButtonItem()
         backgroundView.setupDefaultColor()
+        
+        // add subview
+        view.addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        
         
         setupTextFields()
         // set datasource and delegate for picker view
@@ -76,6 +92,8 @@ class EditOrderViewController: UIViewController {
         autocompleteViewController = GMSAutocompleteViewController()
         autocompleteViewController?.delegate = self
         
+        
+        
     }
     // MARK: Public functions
     
@@ -90,17 +108,22 @@ class EditOrderViewController: UIViewController {
         if originAddressTextField.text == "" || destinationAddressTextField.text == "" || phoneReceiverTextField.text == "" || weightTextField.text == "" || prepaymentTextField.text == "" || noteTextField.text == ""{
             updateBarButtonItem?.isEnabled = false
         }else{
+            guard let prepayment = prepaymentTextField.text else { return }
             updateBarButtonItem?.isEnabled = true
+            self.order.originAddress = originAddressTextField.text
+            self.order.destinationAddress = destinationAddressTextField.text
+            self.order.phoneReceiver = phoneReceiverTextField.text
+            self.order.note = noteTextField.text
+            self.order.unitPrice?.prepayment = Double(prepayment)!
+            self.order.weight = weightTextField.text
         }
     }
     
     // MARK: Private funcions
-  
     private func customRightBarButtonItem(){
         updateBarButtonItem = UIBarButtonItem(title: "Xong", style: .done, target: self, action: #selector(updateOrder))
         updateBarButtonItem?.isEnabled = false
         self.navigationItem.rightBarButtonItem = updateBarButtonItem
-        
     }
     
     // MARK: Call api to get data
@@ -113,7 +136,10 @@ class EditOrderViewController: UIViewController {
                 if let value = response.result.value as? NSDictionary{
                     if let data = value.value(forKey: "data") as? NSDictionary{
                         self.order.setValueByNSDictionary(dictionary: data)
+                        self.oldOriginAddress = self.order.originAddress
+                        self.oldDestinationAddress = self.order.destinationAddress
                         DispatchQueue.main.async {
+                            self.activityIndicator.stopAnimating()
                             self.loadOrderData(order: self.order)
                         }
                     }
@@ -129,15 +155,16 @@ class EditOrderViewController: UIViewController {
         destinationAddressTextField.text = order.destinationAddress
         phoneReceiverTextField.text = order.phoneReceiver
         weightTextField.text = order.weight
-        prepaymentTextField.text = "\(unitPrice.prepayment)"
+        prepaymentTextField.text = "\(unitPrice.prepayment.formatedNumberWithUnderDots())"
         noteTextField.text = order.note
         order.isFragile == true ? (orderFragileSwitch.setOn(true, animated: true)) : (orderFragileSwitch.setOn(false, animated: true))
-        distanceLabel.setAttitudeString(content: ("\(order.distance!.formatedNumberWithUnderDots()) km", UIColor.black, UIFont.boldSystemFont(ofSize: 16)))
+        let distance:Double = order.distance! / 1000
+        distanceLabel.setAttitudeString(content: ("\(distance.setMinTailingDigits()) km", UIColor.black, UIFont.boldSystemFont(ofSize: 16)))
         feeShipLabel.setAttitudeString(content: ("\(unitPrice.feeShip.formatedNumberWithUnderDots()) vnđ", UIColor.black, UIFont.boldSystemFont(ofSize: 16)))
         priceOfWeightLabel.setAttitudeString(content: ("\(unitPrice.priceOfWeight!.formatedNumberWithUnderDots()) vnđ", UIColor.black, UIFont.boldSystemFont(ofSize: 16)))
         overheadsLabel.setAttitudeString(content: ("\(unitPrice.overheads.formatedNumberWithUnderDots()) vnd", UIColor.black, UIFont.boldSystemFont(ofSize: 16)))
     }
-
+    
     private func callApiToGetListPriceWeight(){
         Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_weights", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
             if let result = response.result.value as? [String: Any]{
@@ -163,7 +190,7 @@ class EditOrderViewController: UIViewController {
             }
         }
     }
-  
+    
     private func callApiToGetPriceDistance(){
         Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_distance", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
             if let result = response.result.value as? [String:Any]{
@@ -205,7 +232,6 @@ class EditOrderViewController: UIViewController {
         originAddressTextField.inputAccessoryView = toolBar
         destinationAddressTextField.inputAccessoryView = toolBar
         phoneReceiverTextField.inputAccessoryView = toolBar
-        prepaymentTextField.inputAccessoryView = toolBar
         noteTextField.inputAccessoryView = toolBar
     }
     
@@ -223,9 +249,10 @@ class EditOrderViewController: UIViewController {
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
         toolBar.items = [previousButton!, nextButton!, space, doneButton]
-        // weightTextField set input view and accessory view
+        // weightTextField, prepaymentTextField set input view and accessory view
         weightTextField.inputView = priceOfWeightPicker
         weightTextField.inputAccessoryView = toolBar
+        prepaymentTextField.inputAccessoryView = toolBar
     }
     
     
@@ -233,12 +260,15 @@ class EditOrderViewController: UIViewController {
     @IBAction func orderFragileValueChanged(_ sender: UISwitch) {
         if sender.isOn {
             self.order.unitPrice?.priceFragileOrder = priceFragileOrder
+            self.order.isFragile = true
         }else {
             self.order.unitPrice?.priceFragileOrder = 0
+            self.order.isFragile = false
         }
         if let price = self.order.unitPrice?.priceFragileOrder {
             self.priceOfOrderFragileLabel.attributedText = NSAttributedString(string: "\(price.formatedNumberWithUnderDots()) vnđ", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 16)])
         }
+        self.updateStateBarButton()
         self.updateOverheadsLabel()
     }
     
@@ -261,14 +291,82 @@ class EditOrderViewController: UIViewController {
     }
     
     @objc private func completeSelectWeight(){
-        weightTextField.resignFirstResponder()
-    }
-    
-    @objc private func updateOrder(){
+        self.subScrollView.endEditing(true)
+        let row = priceOfWeightPicker.selectedRow(inComponent: 0)
+        weightTextField.text = self.arrWeightPrice[row].name
+        // new value price of weight
+        self.order.unitPrice?.priceOfWeight = self.arrWeightPrice[row].value
+        self.priceOfWeightLabel.setAttitudeString(content: ("\(self.order.unitPrice?.priceOfWeight?.formatedNumberWithUnderDots() ?? "0") vnđ", UIColor.black, UIFont.boldSystemFont(ofSize: 16)))
+        self.updateOverheadsLabel()
         
     }
     
+    @objc private func backToRootView(){
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    private func initParameters() -> Parameters?{
+        // wrap data
+        guard let orderId = self.order.orderId,
+            let originAddress = self.order.originAddress,
+            let destinationAddress = self.order.destinationAddress,
+            let oriLattitude = self.order.originLocation?.coordinate.latitude,
+            let oriLongtitude = self.order.originLocation?.coordinate.longitude,
+            let desLattitude = self.order.destinationLocation?.coordinate.latitude,
+            let desLongtitude = self.order.destinationLocation?.coordinate.longitude,
+            let distance = self.order.distance,
+            let note = self.order.note,
+            let phoneReceiver = self.order.phoneReceiver,
+            let weight = self.order.weight,
+            let prepayment =  self.order.unitPrice?.prepayment,
+            let feeShip = self.order.unitPrice?.feeShip,
+            let priceOfWeight = self.order.unitPrice?.priceOfWeight,
+            let priceOfOrderFragile = self.order.unitPrice?.priceFragileOrder,
+            let overheads = self.order.unitPrice?.overheads else { return nil}
+        let parameter = ["orderId": orderId,
+                         "originAddress": originAddress,
+                         "destinationAddress": destinationAddress,
+                         "oriLatitude": oriLattitude,
+                         "oriLongtitude": oriLongtitude,
+                         "desLatitude": desLattitude,
+                         "desLongtitude": desLongtitude,
+                         "distance": distance,
+                         "isFragile": self.order.isFragile,
+                         "note": note,
+                         "phoneReceiver": phoneReceiver,
+                         "weight": weight,
+                         "prepayment": prepayment,
+                         "feeShip": feeShip,
+                         "priceOfWeight": priceOfWeight,
+                         "priceOfOrderFragile": priceOfOrderFragile,
+                         "overheads": overheads] as Parameters
+        return parameter
+    }
+    
+    @objc private func updateOrder(){
+        // request api to update order
+        guard let parameter = initParameters() else {
+            return
+        }
+        // unenable updateBarButton until update complete
+        updateBarButtonItem?.isEnabled = false
+        Alamofire.request("https://wheel-ship.herokuapp.com/orders/update_order", method: .put, parameters: parameter, encoding: URLEncoding.httpBody, headers: nil).responseJSON { (data) in
+            if let data = data.result.value as? [String: Any]{
+                if let result = data["result"] as? Bool{
+                    if result{
+                        self.presentAlertWithTitleAndMessage(title: "Sửa đơn hàng", message: "Bạn đã sửa đơn hàng thành công")
+                    }else{
+                        let message = data["message"] as? String
+                        self.presentAlertWithTitleAndMessage(title: "Lỗi", message: message!)
+                    }
+                    self.updateBarButtonItem?.isEnabled = true
+                }
+            }
+        }
+        
+    }
 }
+
 
 // MARK: Implement UITextFieldDelegate
 extension EditOrderViewController : UITextFieldDelegate{
@@ -293,6 +391,7 @@ extension EditOrderViewController : UITextFieldDelegate{
     func textFieldDidEndEditing(_ textField: UITextField) {
         updateStateBarButton()
     }
+    
 }
 
 // MARK: Implement UIPickerViewDatasource and UIPickerViewDelegate

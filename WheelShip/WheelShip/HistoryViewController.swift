@@ -37,10 +37,6 @@ class HistoryViewController: UIViewController {
         }
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        navigationItem.title = "Trở lại"
-    }
-    
     // MARK: Private funtions
     private func setupViews(){
         view.addSubview(background)

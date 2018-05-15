@@ -2,7 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>_XCCurrentVersionName</key>
-	<string>WheelShip.xcdatamodel</string>
+	<key>Matrix API key</key>
+	<string>AIzaSyAnyH3snwD3N3oru00t1cQVp_VgQNHZ5_Y</string>
+    <key>API key</key>
+    <string>AIzaSyB262YPUMrNR6JSfZKUOMzKBW_klHUslsc</string>
 </dict>
 </plist>
