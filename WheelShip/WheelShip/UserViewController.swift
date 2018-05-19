@@ -48,7 +48,6 @@ class UserViewController: UIViewController , UITableViewDataSource , UITableView
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        user = UserDefaults.standard.getUser()
         initListDetailUser()
         detailProfileTableView.reloadData()
     }

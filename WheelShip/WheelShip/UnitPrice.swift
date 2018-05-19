@@ -13,9 +13,10 @@ class UnitPrice: NSObject {
     public var order: Order?
     public var prepayment: Double = 0
     public var feeShip: Double = 0
-    public var priceOfDistance:Price?
     public var priceOfWeight:Double?
     public var priceFragileOrder:Double? = 0
+    
+    public var priceOfDistance:Price?
 
     public var overheads:Double {
         return feeShip + prepayment + (priceOfWeight ?? 0) + (priceFragileOrder ?? 0)

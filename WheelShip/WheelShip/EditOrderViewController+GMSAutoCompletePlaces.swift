@@ -37,6 +37,7 @@ extension EditOrderViewController : GMSAutocompleteViewControllerDelegate {
                     
                     self.distanceLabel.attributedText = NSAttributedString(string: distanceText, attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 16)])
                     self.feeShipLabel.attributedText = NSAttributedString(string: "\((self.order.unitPrice?.feeShip.formatedNumberWithUnderDots() ?? ""))", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 16)])
+                    self.updateStateBarButton()
                     self.updateOverheadsLabel()
                 }
             }

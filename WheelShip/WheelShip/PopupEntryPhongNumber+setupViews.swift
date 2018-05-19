@@ -17,6 +17,11 @@ extension PopupEntryPhoneNumber {
         gradientBackground.frame = view.frame
     }
     
+    func setupBackButton(){
+        view.addSubview(backButton)
+        backButton.anchorWithWidthHeightConstant(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: nil, right: nil, topConstant: 24, leftConstant: 16, bottomConstant: 0, rightConstant: 0, widthConstant: 40, heightConstant: 40)
+    }
+    
     func setupIconImageView(){
         view.addSubview(iconImageView)
         iconImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true

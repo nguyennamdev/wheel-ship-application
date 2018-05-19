@@ -18,7 +18,7 @@ extension UIViewController {
         present(alert, animated: true, completion: completion)
     }
     
-    func presentAlertWithTitleAndMessage(tile:String, message:String, action:((UIAlertAction) -> Void)?){
+    func presentAlertWithTitleAndMessage(title:String, message:String, action:((UIAlertAction) -> Void)?){
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: action)
         alert.addAction(cancel)

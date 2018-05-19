@@ -71,9 +71,9 @@ class LoginViewController: UIViewController {
         // get root view to set new view controllers
         if let customTabbar = UIApplication.shared.keyWindow?.rootViewController as? CustomTabbarController{
             if user.userType == TypeOfUser.isOrderer {
-                customTabbar.loadViewControllersForOrderer()
+                customTabbar.loadViewControllersForOrderer(user: user)
             }else if user.userType == TypeOfUser.isShipper{
-                customTabbar.loadViewControllersForShipper()
+                customTabbar.loadViewControllersForShipper(user: user)
             }
         }
     }

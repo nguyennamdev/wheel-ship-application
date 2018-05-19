@@ -8,7 +8,7 @@
 
 import Foundation
 
-class User: NSCoding {
+class User: NSObject, NSCoding {
     
     
     public var uid: String?
@@ -23,7 +23,7 @@ class User: NSCoding {
     public var orders:Set<Order>?
     
     
-    init() {
+    override init() {
         
     }
   
@@ -69,7 +69,7 @@ class User: NSCoding {
         self.name = dictionary.value(forKey: "name") as? String
         self.email = dictionary.value(forKey: "email") as? String
         self.password = dictionary.value(forKey: "password") as? String
-        self.password = dictionary.value(forKey: "imageUrl") as? String
+        self.imageUrl = dictionary.value(forKey: "imageUrl") as? String
         self.phoneNumber = dictionary.value(forKey: "phoneNumber") as? String
         self.isActive = dictionary.value(forKey: "isActive") as? Int
         self.userType = TypeOfUser(rawValue: dictionary.value(forKey: "isShipper") as! Int)

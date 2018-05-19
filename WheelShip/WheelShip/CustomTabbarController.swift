@@ -11,7 +11,6 @@ import UIKit
 class CustomTabbarController: UITabBarController {
     
     var user:User?
-    var userViewController:UserViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,33 +18,35 @@ class CustomTabbarController: UITabBarController {
         view.backgroundColor = UIColor.white
         self.tabBar.tintColor = UIColor.black
      
-        
-        // userViewController is common view controller
-        self.userViewController = UserViewController()
-        
         // if user is not logged in
         if isLoggedIn() == false{
             perform(#selector(showLoginController), with: nil, afterDelay: 0.01)
         }else{
             self.user = UserDefaults.standard.getUser()
+       
             if self.user?.userType == TypeOfUser.isOrderer {
-                loadViewControllersForOrderer()
+                loadViewControllersForOrderer(user: self.user!)
             }else{
-                loadViewControllersForShipper()
+                loadViewControllersForShipper(user: self.user!)
             }
         }
     }
     
-    public func loadViewControllersForOrderer(){
+    public func loadViewControllersForOrderer(user:User){
+        
         // init first tabbar item
         let homeOrdererController = HomeOrdererController()
+        homeOrdererController.user = user
         let navigationHomeOrderer = setupTabbarItem(item: homeOrdererController, title: "Trang chủ", image: #imageLiteral(resourceName: "homepage"))
         
         // init second tabbar item
         let historyViewController = HistoryViewController()
+        historyViewController.user = user
         let navigationHistoryVC = setupTabbarItem(item: historyViewController, title: "Lịch sử", image: #imageLiteral(resourceName: "folder"))
         
-        let navigationUserVC = setupTabbarItem(item: userViewController!, title: "Cá nhân", image: #imageLiteral(resourceName: "user"))
+        let userViewController = UserViewController()
+        userViewController.user = user
+        let navigationUserVC = setupTabbarItem(item: userViewController, title: "Cá nhân", image: #imageLiteral(resourceName: "user"))
         
         // set view controllers for tabbar
         self.viewControllers = [ navigationHomeOrderer,
@@ -53,7 +54,8 @@ class CustomTabbarController: UITabBarController {
                             navigationUserVC ]
     }
     
-    public func loadViewControllersForShipper(){
+    public func loadViewControllersForShipper(user:User){
+        
         // first tabbar item
         let homeShipperController = UIViewController()
         homeShipperController.view.backgroundColor = UIColor.red
@@ -64,7 +66,9 @@ class CustomTabbarController: UITabBarController {
         libraryViewController.view.backgroundColor = UIColor.blue
         let navigationLibraryVC = setupTabbarItem(item: libraryViewController, title: "Thư viện", image: #imageLiteral(resourceName: "folder"))
         
-        let navigationUserVC = setupTabbarItem(item: userViewController!, title: "Cá nhân", image: #imageLiteral(resourceName: "user"))
+        let userViewController = UserViewController()
+        userViewController.user = user
+        let navigationUserVC = setupTabbarItem(item: userViewController, title: "Cá nhân", image: #imageLiteral(resourceName: "user"))
         
         // set view controllers for tabbar
         self.viewControllers = [ navigationHomeShipper, navigationLibraryVC, navigationUserVC]
@@ -81,7 +85,7 @@ class CustomTabbarController: UITabBarController {
         return UserDefaults.standard.getIsLoggedIn()
     }
     
-    @objc private func showLoginController(){
+    @objc public func showLoginController(){
         let loginController = LoginViewController()
         present(loginController, animated: true, completion: nil)
     }

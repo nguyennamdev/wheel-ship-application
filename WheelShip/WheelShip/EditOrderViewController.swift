@@ -155,7 +155,7 @@ class EditOrderViewController: UIViewController {
         destinationAddressTextField.text = order.destinationAddress
         phoneReceiverTextField.text = order.phoneReceiver
         weightTextField.text = order.weight
-        prepaymentTextField.text = "\(unitPrice.prepayment.formatedNumberWithUnderDots())"
+        prepaymentTextField.text = "\(unitPrice.prepayment)"
         noteTextField.text = order.note
         order.isFragile == true ? (orderFragileSwitch.setOn(true, animated: true)) : (orderFragileSwitch.setOn(false, animated: true))
         let distance:Double = order.distance! / 1000
@@ -163,6 +163,7 @@ class EditOrderViewController: UIViewController {
         feeShipLabel.setAttitudeString(content: ("\(unitPrice.feeShip.formatedNumberWithUnderDots()) vnđ", UIColor.black, UIFont.boldSystemFont(ofSize: 16)))
         priceOfWeightLabel.setAttitudeString(content: ("\(unitPrice.priceOfWeight!.formatedNumberWithUnderDots()) vnđ", UIColor.black, UIFont.boldSystemFont(ofSize: 16)))
         overheadsLabel.setAttitudeString(content: ("\(unitPrice.overheads.formatedNumberWithUnderDots()) vnd", UIColor.black, UIFont.boldSystemFont(ofSize: 16)))
+    
     }
     
     private func callApiToGetListPriceWeight(){

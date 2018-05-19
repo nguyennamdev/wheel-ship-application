@@ -21,11 +21,14 @@ class PopupEntryPhoneNumber:UIViewController {
         }
     }
     
+    var addNewAccount: ((Bool) -> Void)?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // setup view
         setupGradientView()
+        setupBackButton()
         setupIconImageView()
         setupTitleTextView()
         setupPhoneNumberTextField()
@@ -92,6 +95,14 @@ class PopupEntryPhoneNumber:UIViewController {
         return button
     }()
     
+    
+    lazy var backButton:UIButton = {
+        let button = UIButton(type: UIButtonType.system)
+        button.setImage(#imageLiteral(resourceName: "close"), for: .normal)
+        button.tintColor = UIColor.white
+        button.addTarget(self, action: #selector(backToPreviousController), for: .touchUpInside)
+        return button
+    }()
 }
 
 // MARK: Implement UITextFieldDelegate

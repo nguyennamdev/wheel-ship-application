@@ -332,6 +332,7 @@ extension OrdererEnterInfoController : UIPickerViewDelegate, UIPickerViewDataSou
         guard let priceOfWeight = self.unitPrice?.priceOfWeight else { return }
         // set attributed text
         weightLabel.setAttitudeString(title: ("Khối lượng : ", UIColor.gray), content: ("\t \(result ?? "") = \(priceOfWeight.formatedNumberWithUnderDots()) vnđ", UIColor.black, UIFont.boldSystemFont(ofSize: 13)))
+        updateStateBarButtonItem()
         updateOverheadsLabel()
     }
 }

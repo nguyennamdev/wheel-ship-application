@@ -37,6 +37,10 @@ extension PopupEntryPhoneNumber {
         }
     }
     
+    @objc func backToPreviousController(){
+        dismiss(animated: true, completion: nil)
+    }
+    
     // MARK: Functions additional for actions
     private func handleAddNewUser(){
         self.user?.phoneNumber = phoneNumberTextField.text
@@ -59,29 +63,15 @@ extension PopupEntryPhoneNumber {
             if let value = data.result.value as? [String: Any]{
                 if let result = value["result"] as? Bool {
                     if result{
-                        self.presentAlertWithTitleAndMessage(tile: "Thành công!", message: "Bạn đã đăng ký thành công", action: { (action) in
-                            // save user and set user was logged
-                            UserDefaults.standard.saveUser(user: self.user!)
-                            UserDefaults.standard.setIsLoggedIn(value: true)
-                            // redirect to root view
-                            self.redirectToRootView()
+                        self.presentAlertWithTitleAndMessage(title: "Thành công!", message: "Bạn đã đăng ký thành công", action: { (action) in
+                            self.dismiss(animated: true, completion: nil)
+                            self.addNewAccount!(true)
                         })
                     }else{
                         let message = value["message"] as? String
                         self.presentAlertWithTitleAndMessage(title: "Lỗi", message: message!, completion: nil)
                     }
                 }
-            }
-        }
-    }
-    
-    private func redirectToRootView(){
-        dismiss(animated: true, completion: nil)
-        if let customTabbarViewController = UIApplication.shared.keyWindow?.rootViewController as? CustomTabbarController {
-            if self.user?.userType == TypeOfUser.isOrderer {
-                customTabbarViewController.loadViewControllersForOrderer()
-            }else{
-                customTabbarViewController.loadViewControllersForShipper()
             }
         }
     }

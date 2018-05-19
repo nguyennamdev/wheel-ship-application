@@ -12,6 +12,7 @@ import CoreData
 class RegisterController:UIViewController {
     
    var user:User?
+   var addNewAccount: ((Bool) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,16 @@ class RegisterController:UIViewController {
         setupATextField(newView: repasswordTextField, bottomOf: passwordTextField)
         setupRegisterButton()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        addNewAccount = {(isComplete:Bool) -> Void in
+            if isComplete{
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
 
@@ -148,6 +159,7 @@ extension RegisterController {
                     // show popup
                     let popupEntryPhoneNumber = PopupEntryPhoneNumber()
                     popupEntryPhoneNumber.user = self.user
+                    popupEntryPhoneNumber.addNewAccount = self.addNewAccount
                     self.present(popupEntryPhoneNumber, animated: true, completion: nil)
                 }
             }

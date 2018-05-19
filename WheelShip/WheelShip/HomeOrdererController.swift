@@ -71,8 +71,8 @@ class HomeOrdererController:UIViewController {
         // init unit price
         unitPrice = UnitPrice()
         callApiToGetPriceDistance()
-
         
+        updateStateBarButton()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -80,10 +80,7 @@ class HomeOrdererController:UIViewController {
         let backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem = backBarButtonItem
     }
-    
 
-    
-    
     // MARK: Private functions
     private func callApiToGetPriceDistance(){
         Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_distance", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
