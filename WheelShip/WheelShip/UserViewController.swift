@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Alamofire
 
 
 struct DetailUser {
@@ -20,21 +21,13 @@ struct DetailUser {
 class UserViewController: UIViewController , UITableViewDataSource , UITableViewDelegate{
     
     let cellId = "cellId"
-    var user:User?{
-        didSet{
-            guard let name = user?.name
-                else {
-                    return
-            }
-            nameLabel.text = name
-        }
-    }
+    var user:User?
     
     var listDetailUser:[DetailUser]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        
         let background = GradientView()
         view.addSubview(background)
         background.setupDefaultColor()
@@ -43,34 +36,37 @@ class UserViewController: UIViewController , UITableViewDataSource , UITableView
         // custom navigation item
         self.navigationItem.title = "Thông tin cá nhân"
         
+        // make button logout
+        let logoutBarButtonItem = UIBarButtonItem(title: "Logout", style: UIBarButtonItemStyle.plain, target: self, action: #selector(handleLogoutUser))
+        self.navigationItem.leftBarButtonItem = logoutBarButtonItem
+        
         setupViews()
         detailProfileTableView.delegate = self
         detailProfileTableView.dataSource = self
         detailProfileTableView.rowHeight = 50
         detailProfileTableView.register(UserTableViewCell.self, forCellReuseIdentifier: cellId)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        user = UserDefaults.standard.getUser()
         initListDetailUser()
-    }
-
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        detailProfileTableView.reloadData()
     }
     
+    // MARK: Actions
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listDetailUser?.count ?? 0
+    @objc private func handleLogoutUser(){
+        // logout on server
+        Alamofire.request("https://wheel-ship.herokuapp.com/users/logout", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil)
+        // save user didn't log in
+        UserDefaults.standard.setIsLoggedIn(value: false)
+        self.perform(#selector(showLoginViewController), with: nil, afterDelay: 0.01)
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! UserTableViewCell
-        cell.detailUser = listDetailUser?[indexPath.row]
-        cell.tintColor = UIColor.white
-        cell.selectionStyle = .none
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+    @objc private func showLoginViewController(){
+        //        UserDefaults.standard.setIsLoggedIn(value: true)
+        let loginViewController = LoginViewController()
+        self.present(loginViewController, animated: true, completion: nil)
     }
     
     
@@ -93,7 +89,12 @@ class UserViewController: UIViewController , UITableViewDataSource , UITableView
         detailProfileTableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant:12).isActive = true
         detailProfileTableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant:-12).isActive = true
         
-        
+        setupChangePasswordButton()
+    }
+    
+    private func setupChangePasswordButton(){
+        view.addSubview(changePasswordButton)
+        changePasswordButton.anchorWithWidthHeightConstant(top: detailProfileTableView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 24, leftConstant: 12, bottomConstant: 0, rightConstant: 12, widthConstant: 0, heightConstant: 50)
     }
     
     private func initListDetailUser(){
@@ -110,6 +111,15 @@ class UserViewController: UIViewController , UITableViewDataSource , UITableView
         ]
         
     }
+    
+    // MARK: Actions
+    @objc private func handleChangePassword(){
+        let changePasswordViewController = ChangePasswordViewController(nibName: "ChangePasswordViewController", bundle: nil)
+        changePasswordViewController.modalPresentationStyle = .overCurrentContext
+        changePasswordViewController.user = self.user
+        self.navigationController?.present(changePasswordViewController, animated: true, completion: nil)
+    }
+    
     
     
     let nameLabel:UILabel = {
@@ -134,9 +144,55 @@ class UserViewController: UIViewController , UITableViewDataSource , UITableView
         image.clipsToBounds = true
         image.layer.borderWidth = 2
         image.layer.borderColor = UIColor.white.cgColor
+        image.image = #imageLiteral(resourceName: "user2")
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
+    
+    lazy var changePasswordButton:UIButton = {
+        let button = UIButton()
+        button.setTitle("Đổi mật khẩu", for: .normal)
+        button.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        button.setTitleColor(.white, for: .normal)
+        button.addTarget(self, action: #selector(handleChangePassword), for: .touchUpInside)
+        return button
+    }()
+}
 
-
+// MARK: Implement UITableViewDatasource and UITableViewDelegate
+extension UserViewController {
+    
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return listDetailUser?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! UserTableViewCell
+        cell.detailUser = listDetailUser?[indexPath.row]
+        cell.tintColor = UIColor.white
+        cell.selectionStyle = .none
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.row {
+        case 0:
+            let editUserNameVC = EditUserNameViewController()
+            editUserNameVC.user = self.user
+            self.navigationController?.pushViewController(editUserNameVC, animated: true)
+        case 1:
+            let popupEntryPhoneNumber = PopupEntryPhoneNumber()
+            popupEntryPhoneNumber.userToEdit = self.user
+            self.navigationController?.pushViewController(popupEntryPhoneNumber, animated: true)
+        default:
+            break
+        }
+    }
+    
 }

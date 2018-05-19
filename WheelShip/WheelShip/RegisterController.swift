@@ -11,7 +11,7 @@ import CoreData
 
 class RegisterController:UIViewController {
     
-    weak var user:User?
+   var user:User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +25,7 @@ class RegisterController:UIViewController {
         setupATextField(newView: passwordTextField, bottomOf: emailTextField)
         setupATextField(newView: repasswordTextField, bottomOf: passwordTextField)
         setupRegisterButton()
+        
     }
     
 
@@ -127,22 +128,31 @@ extension RegisterController {
     
     @objc func handleShowPopupEntryPhoneNumer(){
         if checkDataUserEntryed() {
-            /*
-            // init user and set value for property
-            user = User(context: managedContext)
-            user?.uid =  String().randomString()
-            user?.name = nameTextField.text!
-            user?.email = emailTextField.text!
-            user?.password = passwordTextField.text!
-            user?.isActive = UserState.isActive.rawValue
-            user?.isShipper = TypeOfUser.isOrderer.rawValue // is orderer
-            
-            // show popup
-            let popupEntryPhoneNumber = PopupEntryPhoneNumber()
-            popupEntryPhoneNumber.user = self.user
-            self.present(popupEntryPhoneNumber, animated: true, completion: nil)*/
+            if !emailTextField.checkTextIsEmail(){
+                emailTextField.text = "Sai định dạng, vd: example@gmail.com"
+                emailTextField.textColor = UIColor.red
+            }else{ // check text repasswordTextField matches passwordTextField
+                if repasswordTextField.text != passwordTextField.text {
+                    repasswordTextField.text = "Nhập lại mật khẩu sai"
+                    repasswordTextField.isSecureTextEntry = false
+                    repasswordTextField.textColor = UIColor.red
+                }else{
+                    let uid = String().randomString()
+                    
+                    guard let name = nameTextField.text,
+                        let email = emailTextField.text,
+                        let password = passwordTextField.text else { return }
+                    
+                    // init user and set value for property
+                    self.user = User(uid: uid, name: name, email: email, password: password, imageUrl: "", phoneNumber: nil, isActive: UserState.isActive.rawValue, userType: TypeOfUser.isOrderer)
+                    // show popup
+                    let popupEntryPhoneNumber = PopupEntryPhoneNumber()
+                    popupEntryPhoneNumber.user = self.user
+                    self.present(popupEntryPhoneNumber, animated: true, completion: nil)
+                }
+            }
         }else{
-            print("false")
+            presentAlertWithTitleAndMessage(title: "Vui lòng", message: "Bạn hãy nhập đầy đủ thông tin trên!")
         }
     }
     
@@ -156,34 +166,18 @@ extension RegisterController : UITextFieldDelegate{
         return true
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField == repasswordTextField {
-            if repasswordTextField.text != passwordTextField.text{
-                repasswordTextField.text = "Nhập lại mật khẩu sai"
-                repasswordTextField.isSecureTextEntry = false
-                repasswordTextField.textColor = UIColor.red
-                repasswordTextField.font = UIFont.systemFont(ofSize: 13)
-            }
-        }else if textField == emailTextField{
-            let pattern = "^([^0-9]\\w*)@gmail(\\.com(\\.vn)?)$"
-            let predicate = NSPredicate(format: "self MATCHES [c] %@", pattern)
-            if !predicate.evaluate(with: textField.text){
-                emailTextField.text = "Sai định dạng, vd: example@gmail.com"
-                emailTextField.textColor = UIColor.red
-                emailTextField.font = UIFont.systemFont(ofSize: 13)
-            }
+ 
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.textColor = UIColor.black
+        textField.text = ""
+        if textField.isEqual(passwordTextField) || textField.isEqual(repasswordTextField){
+            textField.isSecureTextEntry = true
         }
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField == repasswordTextField {
-            repasswordTextField.text = nil
-            repasswordTextField.isSecureTextEntry = true
-            repasswordTextField.textColor = UIColor.white
-            repasswordTextField.font = UIFont.systemFont(ofSize: 16)
-        }else if textField == emailTextField{
-            emailTextField.text = nil
-            emailTextField.font = UIFont.systemFont(ofSize: 16)
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField.isEqual(emailTextField){
+            textField.text = textField.text?.lowercased()
         }
     }
 }

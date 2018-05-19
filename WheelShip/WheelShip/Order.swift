@@ -54,7 +54,7 @@ class Order: NSObject {
         self.phoneReceiver = dictionary.value(forKey: "phoneReceiver") as? String;
         self.startTime = dictionary.value(forKey: "startTime") as? String;
         self.stopTime = dictionary.value(forKey: "stopTime") as? String;
-        self.status = OrderStage(rawValue: (dictionary.value(forKey: "status") as? Int16)!);
+        self.status = OrderStage(rawValue: (dictionary.value(forKey: "status") as? Int)!);
         self.weight = dictionary.value(forKey: "weight") as? String;
         // unit price
         self.unitPrice = UnitPrice()

@@ -24,6 +24,20 @@ extension UserDefaults{
         return bool(forKey: UserDefaultKeys.isLoggedIn.rawValue)
     }
     
+    
+    func saveUser(user:User){
+        let encodeData:Data = NSKeyedArchiver.archivedData(withRootObject: user)
+        self.set(encodeData, forKey: "user")
+        self.synchronize()
+    }
+    
+    func getUser() -> User{
+        let decode = self.object(forKey: "user") as! Data
+        let user = NSKeyedUnarchiver.unarchiveObject(with: decode) as! User
+        return user
+    }
+
+    
 }
 
 extension UIView{
@@ -156,6 +170,18 @@ extension UITextField {
             return true;
         }
     }
+    
+    func checkTextIsEmail() -> Bool{
+        // check email with pattern
+        let pattern = "^([^0-9]\\w*)@gmail(\\.com(\\.vn)?)$"
+        let predicate = NSPredicate(format: "self MATCHES [c] %@", pattern)
+        if !predicate.evaluate(with: self.text){
+            return false
+        }else{
+            return true
+        }
+    }
+    
 }
 
 

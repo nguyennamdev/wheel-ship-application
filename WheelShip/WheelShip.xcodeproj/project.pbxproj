@@ -47,6 +47,9 @@
 		84BA53DC2022084200A18BAF /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BA53DB2022084200A18BAF /* Authentication.swift */; };
 		84BB854620A3E67600BD5334 /* EditOrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BB854420A3E67600BD5334 /* EditOrderViewController.swift */; };
 		84BB854720A3E67600BD5334 /* EditOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BB854520A3E67600BD5334 /* EditOrderViewController.xib */; };
+		84CB857320AD29EE005E97C4 /* EditUserNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB857220AD29EE005E97C4 /* EditUserNameViewController.swift */; };
+		84CB857A20AD6ECF005E97C4 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB857820AD6ECF005E97C4 /* ChangePasswordViewController.swift */; };
+		84CB857B20AD6ECF005E97C4 /* ChangePasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84CB857920AD6ECF005E97C4 /* ChangePasswordViewController.xib */; };
 		84D7641A2020522800195B9A /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D764192020522800195B9A /* RegisterController.swift */; };
 		84D9DA432027F29E00EA23C9 /* PopupEntryPhoneNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9DA422027F29E00EA23C9 /* PopupEntryPhoneNumber.swift */; };
 		84D9DA4620280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9DA4520280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift */; };
@@ -99,6 +102,9 @@
 		84BA53DB2022084200A18BAF /* Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
 		84BB854420A3E67600BD5334 /* EditOrderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditOrderViewController.swift; sourceTree = "<group>"; };
 		84BB854520A3E67600BD5334 /* EditOrderViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditOrderViewController.xib; sourceTree = "<group>"; };
+		84CB857220AD29EE005E97C4 /* EditUserNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserNameViewController.swift; sourceTree = "<group>"; };
+		84CB857820AD6ECF005E97C4 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
+		84CB857920AD6ECF005E97C4 /* ChangePasswordViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChangePasswordViewController.xib; sourceTree = "<group>"; };
 		84D764192020522800195B9A /* RegisterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 		84D9DA422027F29E00EA23C9 /* PopupEntryPhoneNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupEntryPhoneNumber.swift; sourceTree = "<group>"; };
 		84D9DA4520280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopupEntryPhoneNumber+Actions.swift"; sourceTree = "<group>"; };
@@ -220,6 +226,7 @@
 		84580C27201B200500961A63 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				84E49E4F20AE94D200D2114A /* CustomTabbarViewController */,
 				847FDA37201ECC00003AF85E /* CustomTabbarController.swift */,
 				844EE915204D333D00176512 /* LoginController */,
 				844EE912204D32DE00176512 /* RegisterController */,
@@ -299,6 +306,9 @@
 			isa = PBXGroup;
 			children = (
 				84AA1D6520AA797A0093BE74 /* UserViewController.swift */,
+				84CB857220AD29EE005E97C4 /* EditUserNameViewController.swift */,
+				84CB857820AD6ECF005E97C4 /* ChangePasswordViewController.swift */,
+				84CB857920AD6ECF005E97C4 /* ChangePasswordViewController.xib */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -346,6 +356,13 @@
 				84DE89412096AAF900BD55A8 /* Define.swift */,
 			);
 			name = Common;
+			sourceTree = "<group>";
+		};
+		84E49E4F20AE94D200D2114A /* CustomTabbarViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = CustomTabbarViewController;
 			sourceTree = "<group>";
 		};
 		84EC3EB020A2E7B0002FA46D /* EditOrderViewController */ = {
@@ -436,6 +453,7 @@
 			files = (
 				84A0262720A546F90090FC70 /* GoogleServiceApi.plist in Resources */,
 				8498292820A1B795005ECA38 /* Asset.xcassets in Resources */,
+				84CB857B20AD6ECF005E97C4 /* ChangePasswordViewController.xib in Resources */,
 				84BB854720A3E67600BD5334 /* EditOrderViewController.xib in Resources */,
 				84580C20201B1ECE00961A63 /* LaunchScreen.storyboard in Resources */,
 			);
@@ -522,6 +540,7 @@
 				84580C2D201B268600961A63 /* GradientView.swift in Sources */,
 				84BB854620A3E67600BD5334 /* EditOrderViewController.swift in Sources */,
 				84B8BAB6205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift in Sources */,
+				84CB857320AD29EE005E97C4 /* EditUserNameViewController.swift in Sources */,
 				842D18292078617B009FAE23 /* ConfirmationItem.swift in Sources */,
 				8416057220565E47006B6E1B /* OdererEnterInfoController+setupViews.swift in Sources */,
 				84AF8B6D208AD2AD003E3559 /* BaseCell.swift in Sources */,
@@ -531,6 +550,7 @@
 				843B7834204D304000A5514F /* HomeOrdererComtroller+setupViews.swift in Sources */,
 				84DB4BEB20A1F0B1002A49E2 /* OrdersHistoryDelegate.swift in Sources */,
 				844EE919204D583900176512 /* PopupEntryPhongNumber+setupViews.swift in Sources */,
+				84CB857A20AD6ECF005E97C4 /* ChangePasswordViewController.swift in Sources */,
 				8480DDF92088936D00A8EA05 /* HistoryViewController.swift in Sources */,
 				84B901992060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift in Sources */,
 				84AF8B6B208AD25A003E3559 /* OrdersHistoryCollectionCell.swift in Sources */,

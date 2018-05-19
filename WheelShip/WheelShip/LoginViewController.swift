@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import Alamofire
 
 class LoginViewController: UIViewController {
  
+    var user:User?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -33,7 +36,47 @@ class LoginViewController: UIViewController {
         view.endEditing(true)
     }
     
+    // MARK: Private func
+    private func callApiToLogin(email: String, password: String){
+        let parameter = ["logEmail": email, "logPassword": password] as Parameters
+        Alamofire.request("http://wheel-ship.herokuapp.com/users/login", method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: nil).responseJSON(completionHandler: { (data) in
+            if let value = data.result.value as? NSDictionary {
+                if let result = value.value(forKey: "result") as? Bool{
+                    if result{
+                        if let userDictionary = value.value(forKey: "data") as? NSDictionary{
+                            self.parseJsonDataToUser(data: userDictionary)
+                            UserDefaults.standard.saveUser(user: self.user!)
+                            self.handleUserType(user: self.user!)
+                            // save user logged
+                            UserDefaults.standard.setIsLoggedIn(value: true)
+                            // dismiss
+                            self.dismiss(animated: true, completion: nil)
+                        }
+                    }else{
+                        let message = value.value(forKey: "message") as? String
+                        self.presentAlertWithTitleAndMessage(title: "Lỗi", message: message!)
+                    }
+                }
+            }
+        })
+    }
     
+    private func parseJsonDataToUser(data:NSDictionary){
+        self.user = User()
+        user?.setValueWithDictionary(dictionary: data)
+    }
+    
+    private func handleUserType(user:User){
+        // if user is orderer, tabbar will set view controllers other user is shipper
+        // get root view to set new view controllers
+        if let customTabbar = UIApplication.shared.keyWindow?.rootViewController as? CustomTabbarController{
+            if user.userType == TypeOfUser.isOrderer {
+                customTabbar.loadViewControllersForOrderer()
+            }else if user.userType == TypeOfUser.isShipper{
+                customTabbar.loadViewControllersForShipper()
+            }
+        }
+    }
     
     // MARK : Views
     let logoLabel:UILabel = {
@@ -63,6 +106,7 @@ class LoginViewController: UIViewController {
         textField.setupImageForLeftView(image:#imageLiteral(resourceName: "mail2"))
         textField.tintColor = UIColor.black
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.clearsOnBeginEditing = true
         return textField
     }()
     
@@ -74,10 +118,11 @@ class LoginViewController: UIViewController {
         textField.tintColor = UIColor.black
         // custom left view
         textField.setupImageForLeftView(image: #imageLiteral(resourceName: "lock2"))
+//        textField.clea
         return textField
     }()
     
-    let loginButton:UIButton = {
+    lazy var loginButton:UIButton = {
         let button = UIButton(type: UIButtonType.system)
         button.backgroundColor = UIColor.clear
         button.layer.borderWidth = 1
@@ -85,6 +130,7 @@ class LoginViewController: UIViewController {
         button.layer.cornerRadius = 5
         button.tintColor = UIColor.white
         button.setTitle("ĐĂNG NHẬP", for: .normal)
+        button.addTarget(self, action: #selector(handleLoginUser), for: .touchUpInside)
         return button
     }()
     
@@ -117,7 +163,7 @@ class LoginViewController: UIViewController {
     }()    
 }
 
-// actions
+// MARK: Actions
 extension LoginViewController {
     
     @objc fileprivate func showRegisterController(){
@@ -125,6 +171,24 @@ extension LoginViewController {
         present(registerController, animated: true, completion: nil)
     }
     
+    @objc fileprivate func handleLoginUser(){
+        if emailTextField.text == ""{
+            emailTextField.text = "Bạn chưa nhập email"
+            emailTextField.textColor = UIColor.red
+        }else if passwordTextField.text == "" {
+            passwordTextField.isSecureTextEntry = false
+            passwordTextField.text = "Bạn chưa nhập password"
+            passwordTextField.textColor = UIColor.red
+        }else{
+            if emailTextField.checkTextIsEmail(){
+              // invoke func call api to login
+              callApiToLogin(email: emailTextField.text!, password: passwordTextField.text!)
+            }else{
+                emailTextField.text = "Email sai định dạng"
+                emailTextField.textColor = UIColor.red
+            }
+        }
+    }
 }
 
 // MARK: TextFieldDelegate
@@ -134,6 +198,20 @@ extension LoginViewController : UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.text = ""
+        textField.textColor = UIColor.black
+        if textField.isEqual(passwordTextField){
+            textField.isSecureTextEntry = true
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField.isEqual(emailTextField){
+            emailTextField.text = textField.text?.lowercased()
+        }
     }
     
 }

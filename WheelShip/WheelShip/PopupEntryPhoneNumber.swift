@@ -12,6 +12,14 @@ class PopupEntryPhoneNumber:UIViewController {
     
     var user:User?
     var auth = Authentication.instance // make instance of Auth RestApiManager
+    var userToEdit:User?{
+        didSet{
+            guard let phoneNumber = userToEdit?.phoneNumber else {
+                return
+            }
+            self.phoneNumberTextField.text = phoneNumber
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +34,8 @@ class PopupEntryPhoneNumber:UIViewController {
         // add tap gesture to return text field
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapReturn))
         view.addGestureRecognizer(tapGesture)
+        
+        self.phoneNumberTextField.delegate = self
     }
     
     // MARK: Views
@@ -69,6 +79,7 @@ class PopupEntryPhoneNumber:UIViewController {
         tf.setupImageForLeftView(image: #imageLiteral(resourceName: "telephone"))
         tf.placeholder = "Nhập số điện thoại"
         tf.keyboardType = .numberPad
+        tf.clearsOnBeginEditing = true
         return tf
     }()
     
@@ -77,8 +88,19 @@ class PopupEntryPhoneNumber:UIViewController {
         button.setTitle("OK", for: .normal)
         button.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.3420125575)
         button.tintColor = UIColor.white
-        button.addTarget(self ,action: #selector(handleRegisterAccount), for: .touchUpInside)
+        button.addTarget(self ,action: #selector(handleUserPhoneNumber), for: .touchUpInside)
         return button
     }()
     
 }
+
+// MARK: Implement UITextFieldDelegate
+extension PopupEntryPhoneNumber : UITextFieldDelegate {
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.textColor = UIColor.black
+    }
+    
+}
+
+
