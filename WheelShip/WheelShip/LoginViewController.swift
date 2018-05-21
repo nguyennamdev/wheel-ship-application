@@ -107,6 +107,7 @@ class LoginViewController: UIViewController {
         textField.tintColor = UIColor.black
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.clearsOnBeginEditing = true
+        textField.keyboardType = .emailAddress
         return textField
     }()
     

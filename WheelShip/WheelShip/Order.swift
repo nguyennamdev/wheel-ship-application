@@ -21,6 +21,7 @@ class Order: NSObject {
     public var distance: Double?
     public var isFragile: Bool = false
     public var note: String?
+    public var phoneOrderer: String? = ""
     public var phoneReceiver: String?
     public var unitPrice: UnitPrice?
     public var startTime: String?
@@ -51,6 +52,7 @@ class Order: NSObject {
         self.distance = dictionary.value(forKey: "distance") as? Double;
         self.isFragile = dictionary.value(forKey: "isFragile") as! Bool;
         self.note = dictionary.value(forKey: "note") as? String;
+        self.phoneOrderer = dictionary.value(forKeyPath: "userData.phoneNumber") as? String
         self.phoneReceiver = dictionary.value(forKey: "phoneReceiver") as? String;
         self.startTime = dictionary.value(forKey: "startTime") as? String;
         self.stopTime = dictionary.value(forKey: "stopTime") as? String;
@@ -96,4 +98,5 @@ class Order: NSObject {
         }
         return item
     }
+    
 }

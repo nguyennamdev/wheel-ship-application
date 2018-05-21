@@ -12,11 +12,7 @@ import Alamofire
 class HistoryViewController: UIViewController {
     
     let cellId = "cellId"
-    var user:User?{
-        didSet{
-            print(user?.name)
-        }
-    }
+    var user:User?
     var arrOrder:[Order]?
     
     // MARK: Life cycle

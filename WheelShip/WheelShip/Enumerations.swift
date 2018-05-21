@@ -19,6 +19,7 @@ enum TypeOfUser:Int{
 }
 
 enum OrderStage:Int{
-    case waitingShipper // raw value of 0
-    case hadShipper     // raw value of 1
+    case waitingShipper  // raw value of 0
+    case waitingResponse // raw value of 1
+    case hadShipper      // raw value of 2
 }
