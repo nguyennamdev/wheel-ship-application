@@ -11,7 +11,17 @@ import Alamofire
 
 class HomeShipperViewCell: TableViewCell {
     
-    var isSave:Bool = false
+    var isSave:Bool? = false{
+        didSet{
+            if isSave!{
+                self.saveButton.setTitleColor(UIColor.blue, for: .normal)
+                self.saveButton.setTitle(" Đã lưu", for: .normal)
+            }else{
+                self.saveButton.setTitleColor(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), for: .normal)
+                self.saveButton.setTitle(" Lưu lại", for: .normal)
+            }
+        }
+    }
     var userId:String?
     var shipperDelegate:ShipperDelegate?
     
@@ -39,18 +49,20 @@ class HomeShipperViewCell: TableViewCell {
             else {
                 return
         }
-        Alamofire.request("http://localhost:3000/orders/accept_order", method: .put, parameters: ["orderId": orderId, "shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+         UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        Alamofire.request("https://wheel-ship.herokuapp.com/orders/accept_order", method: .put, parameters: ["orderId": orderId, "shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if let value = data.result.value as? [String: Any]{
                 if let result = value["result"] as? String {
                     // if result is wait response, it will do not allow get this order
                     if result == "WaitResponse"{
-                        self.shipperDelegate?.responseAcceptRequest(title: "Xin lỗi", message: "Đơn hàng này đã có người đặt trước rồi")
+                        self.shipperDelegate?.presentResponseResult(title: "Xin lỗi", message: "Đơn hàng này đã có người đặt trước rồi")
                     }else if result == "Wait"{
-                        self.shipperDelegate?.responseAcceptRequest(title: "Thành công", message: "Bạn đã đặt được đơn hàng và chờ người đặt hàng phản hồi")
+                        self.shipperDelegate?.presentResponseResult(title: "Thành công", message: "Bạn đã đặt được đơn hàng và chờ người đặt hàng phản hồi")
                         self.statusOrderLabel.setAttitudeString(title: (Define.STATUS, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content:(" \(Define.STATUS_WAIT_REPONSE)", #colorLiteral(red: 0.4392156899, green: 0.01176470611, blue: 0.1921568662, alpha: 1)))
                     }else{
                         let message: String = value["message"] as! String
-                        self.shipperDelegate?.responseAcceptRequest(title: "Lỗi", message: message)
+                        self.shipperDelegate?.presentResponseResult(title: "Lỗi", message: message)
                     }
                 }
             }
@@ -68,20 +80,19 @@ class HomeShipperViewCell: TableViewCell {
     }
     
     @objc private func handleSaveOrder(){
-        if isSave {
+        if isSave! {
             return
         }
         guard let userId = self.userId,
             let orderId = self.order?.orderId
             else { return }
-        Alamofire.request("http://localhost:3000/users/save_order", method: .put, parameters:[ "uid": userId, "orderId": orderId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        Alamofire.request("https://wheel-ship.herokuapp.com/users/save_order", method: .put, parameters:[ "uid": userId, "orderId": orderId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
             if let value = data.result.value as? [String: Any]{
                 if let result = value["result"] as? Bool{
                     if result{
-                        self.saveButton.setTitleColor(UIColor.blue, for: .normal)
-                        self.saveButton.tintColor = UIColor.black
-                        self.saveButton.setTitle(" Đã lưu", for: .normal)
                         self.isSave = true
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     }
                 }
             }

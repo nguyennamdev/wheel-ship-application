@@ -26,26 +26,9 @@ class HomeShipperViewController : UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        loadOrdersFromApi()
+        self.loadOrdersFromApi()
     }
-    
-    // MARK: Call Api
-    private func loadOrdersFromApi(){
-        Alamofire.request("http://localhost:3000/orders/list_order", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
-            if let value = data.result.value as? NSDictionary {
-                if let orderDictionary = value.value(forKey: "data") as? [NSDictionary] {
-                    self.arrOrder.removeAll()
-                    for dict in orderDictionary{
-                        let order = Order()
-                        order.setValueByNSDictionary(dictionary: dict)
-                        // append to arr order
-                        self.arrOrder.append(order)
-                    }
-                    self.tableView.reloadData()
-                }
-            }
-        }
-    }
+
 }
 
 
@@ -66,6 +49,7 @@ extension HomeShipperViewController {
         cell?.order = self.arrOrder[indexPath.row]
         cell?.userId = self.user?.uid
         cell?.shipperDelegate = self
+        cell?.isSave = false
         return cell!
     }
     
@@ -78,8 +62,9 @@ extension HomeShipperViewController {
 
 extension HomeShipperViewController : ShipperDelegate {
     
-    func responseAcceptRequest(title: String, message: String) {
+    func presentResponseResult(title: String, message: String) {
         self.presentAlertWithTitleAndMessage(title: title, message: message)
     }
+    
     
 }

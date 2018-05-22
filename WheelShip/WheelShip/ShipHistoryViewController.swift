@@ -12,23 +12,51 @@ class ShipHistoryViewController : UIViewController{
     
     var user:User?
     let cellId = "cellId"
+    var arrOrder:[Order] = [Order]()
+    
+    
+    // MARK: Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.navigationItem.title = "Thư viện"
         view.backgroundColor  = UIColor.white
         setupViews()
         
     }
     
-    // MARK: Actions
-    @objc func orderStatusSegmentValueChanged(sender:UISegmentedControl){
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        switch orderStatusSegment.selectedSegmentIndex {
+        case 0:
+            callApiToGetListOrderSaved()
+        case 1:
+            callApiToGetListOrderAccepted()
+        default:
+            break
+        }
+        
+    }
+    
+    func loadAgainData(){
+        switch orderStatusSegment.selectedSegmentIndex {
+        case 0:
+            callApiToGetListOrderSaved()
+        case 1:
+            callApiToGetListOrderAccepted()
+        case 2:
+            callApiToGetListOrderCompleted()
+        default:
+            break
+        }
         ordersTableView.reloadData()
     }
     
-    
-    // MARK: Call apis
-    
-    
+    // MARK: Actions
+    @objc func orderStatusSegmentValueChanged(sender:UISegmentedControl){
+        loadAgainData()
+    }
     
     // MARK: setup views
     private func setupViews(){
@@ -43,7 +71,7 @@ class ShipHistoryViewController : UIViewController{
     
     private func setupOrdersTableView(){
         self.view.addSubview(ordersTableView)
-        ordersTableView.anchorWithConstants(top: orderStatusSegment.bottomAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor)
+        ordersTableView.anchorWithConstants(top: orderStatusSegment.bottomAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor, topConstant: 12)
         ordersTableView.delegate = self
         ordersTableView.dataSource = self
         ordersTableView.register(ShipHistoryViewCell.self, forCellReuseIdentifier: cellId)
@@ -69,13 +97,22 @@ class ShipHistoryViewController : UIViewController{
 extension ShipHistoryViewController : UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        if (self.arrOrder.count == 0){
+            self.ordersTableView.setEmptyMessage("Không có đơn hàng để hiển thị :(")
+        }else{
+            self.ordersTableView.restore()
+        }
+        return arrOrder.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as? ShipHistoryViewCell
         cell?.userId = self.user?.uid
         cell?.shipperDelegate = self
+        cell?.order = self.arrOrder[indexPath.row]
+        cell?.isEnabledCancelButton = self.arrOrder[indexPath.row].status
+        cell?.isCompletedOrder = self.arrOrder[indexPath.row].isCompleted
+        
         if orderStatusSegment.selectedSegmentIndex == 0 {
             cell?.isHadAcceptButton = true
         }else{
@@ -85,6 +122,9 @@ extension ShipHistoryViewController : UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if self.arrOrder[indexPath.row].isCompleted! {
+            return 310
+        }
         return 335
     }
     
@@ -93,8 +133,41 @@ extension ShipHistoryViewController : UITableViewDataSource, UITableViewDelegate
 // MARK: Implement ShipperDelegate
 extension ShipHistoryViewController : ShipperDelegate {
     
-    func responseAcceptRequest(title: String, message: String) {
+    func unsaveOrder(orderId: String, userId: String) {
+        callApiToUnsaveOrder(orderId: orderId, userId: userId)
+    }
+    
+    func presentResponseResult(title: String, message: String) {
         self.presentAlertWithTitleAndMessage(title: title, message: message)
+        loadAgainData()
+    }
+    
+    func shipperCall(phoneOrderer: String, phoneReceiver: String) {
+        if orderStatusSegment.selectedSegmentIndex == 0 {
+            if let url = URL(string: "tel://\(phoneOrderer)"),
+                UIApplication.shared.canOpenURL(url){
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }else {
+            let alert = UIAlertController(title: "Gọi điện", message: "Bạn muốn gọi điện cho ai?", preferredStyle: .actionSheet)
+            let callOrdererAction = UIAlertAction(title: "Người đặt hàng", style: .default, handler: { (action) in
+                if let url = URL(string: "tel://\(phoneOrderer)"),
+                    UIApplication.shared.canOpenURL(url){
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
+            })
+            let callReceiverAction = UIAlertAction(title: "Nguời nhận hàng", style: .default, handler: { (action) in
+                if let url = URL(string: "tel://\(phoneReceiver)"),
+                    UIApplication.shared.canOpenURL(url){
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
+            })
+            let cancelAction = UIAlertAction(title: "Huỷ", style: .cancel, handler: nil)
+            alert.addAction(callOrdererAction)
+            alert.addAction(callReceiverAction)
+            alert.addAction(cancelAction)
+            present(alert, animated: true, completion: nil)
+        }
     }
     
 }

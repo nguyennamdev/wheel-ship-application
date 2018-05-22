@@ -63,6 +63,7 @@ class CustomTabbarController: UITabBarController {
         
         // second tabbar item
         let shipHistoryViewController = ShipHistoryViewController()
+        shipHistoryViewController.user = user
         let navigationLibraryVC = setupTabbarItem(item: shipHistoryViewController, title: "Thư viện", image: #imageLiteral(resourceName: "folder_tabbar"))
         
         let userViewController = UserViewController()

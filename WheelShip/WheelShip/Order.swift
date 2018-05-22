@@ -29,6 +29,7 @@ class Order: NSObject {
     public var status: OrderStage?
     public var weight: String?
     public var shipperId: String?
+    public var isCompleted: Bool?
     public var isShowing: Bool = false 
     
     
@@ -56,8 +57,9 @@ class Order: NSObject {
         self.phoneReceiver = dictionary.value(forKey: "phoneReceiver") as? String;
         self.startTime = dictionary.value(forKey: "startTime") as? String;
         self.stopTime = dictionary.value(forKey: "stopTime") as? String;
-        self.status = OrderStage(rawValue: (dictionary.value(forKey: "status") as? Int)!);
-        self.weight = dictionary.value(forKey: "weight") as? String;
+        self.status = OrderStage(rawValue: (dictionary.value(forKey: "status") as? Int)!)
+        self.weight = dictionary.value(forKey: "weight") as? String
+        self.isCompleted = dictionary.value(forKey: "isComplete") as? Bool
         // unit price
         self.unitPrice = UnitPrice()
         self.unitPrice?.prepayment = (dictionary.value(forKey: "prepayment") as? Double)!

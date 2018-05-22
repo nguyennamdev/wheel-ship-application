@@ -14,32 +14,79 @@ class ShipHistoryViewCell: TableViewCell {
     var userId:String?
     var shipperDelegate:ShipperDelegate?
     
+    var isEnabledCancelButton:OrderStage?
+    var isCompletedOrder:Bool?{
+        didSet{
+            if isCompletedOrder! == true{
+                buttonsStackView.removeFromSuperview()
+            }else{
+                setupButtonsStackView()
+            }
+        }
+    }
+
     var isHadAcceptButton:Bool? = false{
         didSet{
             if isHadAcceptButton!{
-                acceptOrderButton.isHidden = false
-                buttonsStackView.removeArrangedSubview(callButton)
-                buttonsStackView.addArrangedSubview(acceptOrderButton)
+                customButtonsWithHaveAcceptButton()
             }else{
-                buttonsStackView.removeArrangedSubview(acceptOrderButton)
-                acceptOrderButton.isHidden = true
+                customButtonsWithoutAcceptButton()
             }
-            buttonsStackView.addArrangedSubview(callButton)
         }
     }
+ 
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         super.setupViews()
         setupDividerView()
         setupButtonsStackView()
-    
+        
         acceptOrderButton.addTarget(self, action: #selector(handleAcceptOrderToOrderer), for: .touchUpInside)
-        callButton.addTarget(self, action: #selector(handleCall), for: .touchUpInside)
+        callButton.addTarget(self, action: #selector(handleShipperCall), for: .touchUpInside)
+        cancelOrderButton.addTarget(self, action: #selector(handleCancelOrder), for: .touchUpInside)
+        unsaveOrderButton.addTarget(self, action: #selector(handleUnsaveOrder), for: .touchUpInside)
+        completeOrderButton.addTarget(self, action: #selector(handleCompleteOrder), for: .touchUpInside)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: Private funcs
+    
+    private func customButtonsWithHaveAcceptButton(){
+        acceptOrderButton.isHidden = false
+        cancelOrderButton.isHidden = true
+        unsaveOrderButton.isHidden = false
+        completeOrderButton.isHidden = true
+        // remove sub view don't display
+        buttonsStackView.removeArrangedSubview(cancelOrderButton)
+        buttonsStackView.removeArrangedSubview(callButton)
+        // add again buttons
+        buttonsStackView.addArrangedSubview(acceptOrderButton)
+        buttonsStackView.addArrangedSubview(callButton)
+        buttonsStackView.addArrangedSubview(unsaveOrderButton)
+    }
+    
+    private func customButtonsWithoutAcceptButton(){
+        acceptOrderButton.isHidden = true
+        cancelOrderButton.isHidden = false
+        unsaveOrderButton.isHidden = true
+        //
+        buttonsStackView.removeArrangedSubview(acceptOrderButton)
+        buttonsStackView.addArrangedSubview(callButton)
+        
+        if let enable = self.isEnabledCancelButton{
+            if enable != OrderStage.hadShipper {
+                completeOrderButton.isHidden = true
+                buttonsStackView.addArrangedSubview(cancelOrderButton)
+            }else{
+                completeOrderButton.isHidden = false
+                buttonsStackView.addArrangedSubview(completeOrderButton)
+            }
+        }
     }
     
     private static func buttonForTitle(title:String, imageName:String) -> UIButton{
@@ -59,26 +106,49 @@ class ShipHistoryViewCell: TableViewCell {
             else {
                 return
         }
-        Alamofire.request("http://localhost:3000/orders/accept_order", method: .put, parameters: ["orderId": orderId, "shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+        acceptOrder(orderId: orderId, shipperId: shipperId)
+    }
+    
+    @objc func handleShipperCall(){
+        guard let phoneOrderer = self.order?.phoneOrderer , let phoneRecever = self.order?.phoneReceiver else {
+            return
+        }
+        self.shipperDelegate?.shipperCall!(phoneOrderer: phoneOrderer, phoneReceiver: phoneRecever)
+    }
+    
+    @objc func handleCancelOrder(){
+        guard let shipperId = self.userId,
+            let orderId = self.order?.orderId
+            else {
+                return
+        }
+        cancelOrder(orderId: orderId, shipperId: shipperId)
+    }
+    
+    @objc func handleUnsaveOrder(){
+        guard let shipperId = self.userId,
+            let orderId = self.order?.orderId
+            else {
+                return
+        }
+        self.shipperDelegate?.unsaveOrder!(orderId: orderId, userId: shipperId)
+    }
+    
+    @objc func handleCompleteOrder(){
+        guard let orderId = self.order?.orderId else {
+            return
+        }
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        Alamofire.request("https://wheel-ship.herokuapp.com/orders/completed_ship_order", method: .put, parameters: ["orderId": orderId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if let value = data.result.value as? [String: Any]{
-                if let result = value["result"] as? String {
-                    // if result is wait response, it will do not allow get this order
-                    if result == "WaitResponse"{
-                        self.shipperDelegate?.responseAcceptRequest(title: "Xin lỗi", message: "Đơn hàng này đã có người đặt trước rồi")
-                    }else if result == "Wait"{
-                        self.shipperDelegate?.responseAcceptRequest(title: "Thành công", message: "Bạn đã đặt được đơn hàng và chờ người đặt hàng phản hồi")
-                        self.statusOrderLabel.setAttitudeString(title: (Define.STATUS, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content:(" \(Define.STATUS_WAIT_REPONSE)", #colorLiteral(red: 0.4392156899, green: 0.01176470611, blue: 0.1921568662, alpha: 1)))
-                    }else{
-                        let message: String = value["message"] as! String
-                        self.shipperDelegate?.responseAcceptRequest(title: "Lỗi", message: message)
+                if let result = value["result"] as? Bool{
+                    if result{
+                        self.shipperDelegate?.presentResponseResult(title: "Thành công", message: "Cảm ơn bạn đã vận chuyển hàng")
                     }
                 }
             }
         }
-    }
-    
-    @objc func handleCall(){
-        print("call")
     }
     
     // MARK: setup views
@@ -97,9 +167,6 @@ class ShipHistoryViewCell: TableViewCell {
     
     
     // MARK: Views
-    let acceptOrderButton:UIButton = ShipHistoryViewCell.buttonForTitle(title: "Nhận đơn", imageName: "send")
-    let callButton:UIButton = ShipHistoryViewCell.buttonForTitle(title: "Gọi điện", imageName: "talking")
-    
     let dividerView:UIView = UIView()
     
     let buttonsStackView:UIStackView = {
@@ -108,4 +175,13 @@ class ShipHistoryViewCell: TableViewCell {
         stackView.axis = .horizontal
         return stackView
     }()
+    
+    // buttons
+    let acceptOrderButton:UIButton = ShipHistoryViewCell.buttonForTitle(title: "Nhận đơn", imageName: "send")
+    let callButton:UIButton = ShipHistoryViewCell.buttonForTitle(title: "Gọi điện", imageName: "talking")
+    let cancelOrderButton:UIButton = ShipHistoryViewCell.buttonForTitle(title: "Huỷ đơn", imageName: "cancel2")
+    let unsaveOrderButton:UIButton = ShipHistoryViewCell.buttonForTitle(title: "Xoá", imageName: "delete")
+    let completeOrderButton:UIButton = ShipHistoryViewCell.buttonForTitle(title: "Hoàn thành", imageName: "star")
+    
+    
 }

@@ -9,8 +9,12 @@
 import Foundation
 
 
-protocol ShipperDelegate {
+@objc protocol ShipperDelegate {
     
-    func responseAcceptRequest(title:String, message:String)
+    func presentResponseResult(title:String, message:String)
+   
+    @objc optional func unsaveOrder(orderId:String, userId:String)
+    
+    @objc optional func shipperCall(phoneOrderer:String, phoneReceiver:String)
     
 }

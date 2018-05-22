@@ -44,6 +44,9 @@
 		84A0262920A5594A0090FC70 /* Price.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A0262820A5594A0090FC70 /* Price.swift */; };
 		84AA1D6620AA797A0093BE74 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AA1D6520AA797A0093BE74 /* UserViewController.swift */; };
 		84AA1D6820AA79CA0093BE74 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AA1D6720AA79CA0093BE74 /* UserTableViewCell.swift */; };
+		84AC220C20B3C51400EAF7F8 /* ShipHistoryViewController+CallApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AC220B20B3C51400EAF7F8 /* ShipHistoryViewController+CallApis.swift */; };
+		84AC220E20B3C55000EAF7F8 /* HomeShipViewController+CallApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AC220D20B3C55000EAF7F8 /* HomeShipViewController+CallApis.swift */; };
+		84AC221120B3D0EA00EAF7F8 /* ShipHistoryTableViewCell+MethodApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AC221020B3D0EA00EAF7F8 /* ShipHistoryTableViewCell+MethodApis.swift */; };
 		84AF8B6B208AD25A003E3559 /* OrdersHistoryCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF8B6A208AD25A003E3559 /* OrdersHistoryCollectionCell.swift */; };
 		84AF8B6D208AD2AD003E3559 /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF8B6C208AD2AD003E3559 /* BaseCell.swift */; };
 		84B480A720A9D21700E35DA3 /* UIViewController+PresentAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B480A620A9D21700E35DA3 /* UIViewController+PresentAlert.swift */; };
@@ -106,6 +109,9 @@
 		84A0262820A5594A0090FC70 /* Price.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Price.swift; sourceTree = "<group>"; };
 		84AA1D6520AA797A0093BE74 /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		84AA1D6720AA79CA0093BE74 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
+		84AC220B20B3C51400EAF7F8 /* ShipHistoryViewController+CallApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShipHistoryViewController+CallApis.swift"; sourceTree = "<group>"; };
+		84AC220D20B3C55000EAF7F8 /* HomeShipViewController+CallApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeShipViewController+CallApis.swift"; sourceTree = "<group>"; };
+		84AC221020B3D0EA00EAF7F8 /* ShipHistoryTableViewCell+MethodApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShipHistoryTableViewCell+MethodApis.swift"; sourceTree = "<group>"; };
 		84AF8B6A208AD25A003E3559 /* OrdersHistoryCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersHistoryCollectionCell.swift; sourceTree = "<group>"; };
 		84AF8B6C208AD2AD003E3559 /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
 		84B480A620A9D21700E35DA3 /* UIViewController+PresentAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+PresentAlert.swift"; sourceTree = "<group>"; };
@@ -184,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				8408425B20B16CA800B52818 /* HomeShipperViewController.swift */,
+				84AC220D20B3C55000EAF7F8 /* HomeShipViewController+CallApis.swift */,
 			);
 			name = HomeShipperViewController;
 			sourceTree = "<group>";
@@ -192,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				8448A9F520B3162F00C79ED7 /* ShipHistoryViewController.swift */,
+				84AC220B20B3C51400EAF7F8 /* ShipHistoryViewController+CallApis.swift */,
 			);
 			name = ShipHistoryViewController;
 			sourceTree = "<group>";
@@ -346,6 +354,15 @@
 			name = User;
 			sourceTree = "<group>";
 		};
+		84AC220F20B3D0C200EAF7F8 /* ShipHistoryTableCell */ = {
+			isa = PBXGroup;
+			children = (
+				8448A9F920B31DDA00C79ED7 /* ShipHistoryTableViewCell.swift */,
+				84AC221020B3D0EA00EAF7F8 /* ShipHistoryTableViewCell+MethodApis.swift */,
+			);
+			name = ShipHistoryTableCell;
+			sourceTree = "<group>";
+		};
 		84AF8B69208AD221003E3559 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -355,7 +372,7 @@
 				84AF8B6A208AD25A003E3559 /* OrdersHistoryCollectionCell.swift */,
 				84AA1D6720AA79CA0093BE74 /* UserTableViewCell.swift */,
 				8408425D20B16F8D00B52818 /* HomeShipperViewCell.swift */,
-				8448A9F920B31DDA00C79ED7 /* ShipHistoryTableViewCell.swift */,
+				84AC220F20B3D0C200EAF7F8 /* ShipHistoryTableCell */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -595,11 +612,14 @@
 				84CB857A20AD6ECF005E97C4 /* ChangePasswordViewController.swift in Sources */,
 				8480DDF92088936D00A8EA05 /* HistoryViewController.swift in Sources */,
 				84B901992060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift in Sources */,
+				84AC220E20B3C55000EAF7F8 /* HomeShipViewController+CallApis.swift in Sources */,
 				84AF8B6B208AD25A003E3559 /* OrdersHistoryCollectionCell.swift in Sources */,
+				84AC220C20B3C51400EAF7F8 /* ShipHistoryViewController+CallApis.swift in Sources */,
 				842D182F2078619B009FAE23 /* User.swift in Sources */,
 				84D7641A2020522800195B9A /* RegisterController.swift in Sources */,
 				8448A9F820B3180E00C79ED7 /* TableBaseCell.swift in Sources */,
 				847FDA38201ECC00003AF85E /* CustomTabbarController.swift in Sources */,
+				84AC221120B3D0EA00EAF7F8 /* ShipHistoryTableViewCell+MethodApis.swift in Sources */,
 				8440FBDC2028950300B256EE /* Enumerations.swift in Sources */,
 				8423220C20A4498B00DA5227 /* UILabel+AttritudeText.swift in Sources */,
 				8480DDFB2088968D00A8EA05 /* HistoryViewController+SetupViews.swift in Sources */,

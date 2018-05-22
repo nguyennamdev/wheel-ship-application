@@ -191,7 +191,6 @@ class TableViewCell: UITableViewCell {
     let stopTime:UILabel = {
         let label = UILabel()
         label.textColor = UIColor.gray
-        label.text = "9h truosc "
         label.font = UIFont.systemFont(ofSize: 13)
         return label
     }()
@@ -205,8 +204,6 @@ class TableViewCell: UITableViewCell {
     let originAddressLabel:UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.text = "Hồ hoàn kiếm, hồ gươm, hà nội, trương định trần đại nghĩa"
-        label.font = UIFont.systemFont(ofSize: 13)
         return label
     }()
     
@@ -214,8 +211,6 @@ class TableViewCell: UITableViewCell {
     let destinationLabel:UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 13)
-        label.text = "Hồ hoàn kiếm, hồ gươm, hà nội, trương định trần đại nghĩa"
         return label
     }()
     
