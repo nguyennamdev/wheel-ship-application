@@ -131,7 +131,7 @@ class EditOrderViewController: UIViewController {
         guard let orderId = self.orderIdToEdit else {
             return
         }
-        Alamofire.request("https://wheel-ship.herokuapp.com/orders/order_by_orderId", method: .get
+        Alamofire.request("https://wheel-ship.herokuapp.com/orders/orderer/order_by_orderId", method: .get
             , parameters: ["orderId": orderId], encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
                 if let value = response.result.value as? NSDictionary{
                     if let data = value.value(forKey: "data") as? NSDictionary{
@@ -351,7 +351,7 @@ class EditOrderViewController: UIViewController {
         }
         // unenable updateBarButton until update complete
         updateBarButtonItem?.isEnabled = false
-        Alamofire.request("https://wheel-ship.herokuapp.com/orders/update_order", method: .put, parameters: parameter, encoding: URLEncoding.httpBody, headers: nil).responseJSON { (data) in
+        Alamofire.request("https://wheel-ship.herokuapp.com/orders/orderer/update_order", method: .put, parameters: parameter, encoding: URLEncoding.httpBody, headers: nil).responseJSON { (data) in
             if let data = data.result.value as? [String: Any]{
                 if let result = data["result"] as? Bool{
                     if result{

@@ -13,8 +13,7 @@ class ShipHistoryViewController : UIViewController{
     var user:User?
     let cellId = "cellId"
     var arrOrder:[Order] = [Order]()
-    
-    
+
     // MARK: Life cycle
     
     override func viewDidLoad() {
@@ -123,9 +122,9 @@ extension ShipHistoryViewController : UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.arrOrder[indexPath.row].isCompleted! {
-            return 310
+            return 340
         }
-        return 335
+        return 380
     }
     
 }

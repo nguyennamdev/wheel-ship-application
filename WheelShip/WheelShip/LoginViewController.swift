@@ -39,7 +39,7 @@ class LoginViewController: UIViewController {
     // MARK: Private func
     private func callApiToLogin(email: String, password: String){
         let parameter = ["logEmail": email, "logPassword": password] as Parameters
-        Alamofire.request("http://wheel-ship.herokuapp.com/users/login", method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: nil).responseJSON(completionHandler: { (data) in
+        Alamofire.request("http://localhost:3000/users/login", method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: nil).responseJSON(completionHandler: { (data) in
             if let value = data.result.value as? NSDictionary {
                 if let result = value.value(forKey: "result") as? Bool{
                     if result{
@@ -54,7 +54,7 @@ class LoginViewController: UIViewController {
                         }
                     }else{
                         let message = value.value(forKey: "message") as? String
-                        self.presentAlertWithTitleAndMessage(title: "Lỗi", message: message!)
+                        self.presentAlertWithTitleAndMessage(title: "Lỗi", message: message ?? "")
                     }
                 }
             }

@@ -50,7 +50,7 @@ class HomeShipperViewCell: TableViewCell {
                 return
         }
          UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        Alamofire.request("https://wheel-ship.herokuapp.com/orders/accept_order", method: .put, parameters: ["orderId": orderId, "shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+        Alamofire.request("https://wheel-ship.herokuapp.com/orders/shipper/accept_order", method: .put, parameters: ["orderId": orderId, "shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
              UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if let value = data.result.value as? [String: Any]{
                 if let result = value["result"] as? String {
@@ -115,9 +115,10 @@ class HomeShipperViewCell: TableViewCell {
     }
     
     private static func buttonForTitle(title:String, imageName:String) -> UIButton{
-        let button = UIButton()
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         button.setTitle(" \(title)", for: .normal)
-        button.setImage(UIImage(named: imageName)?.resizeImage(newSize: CGSize(width: 22, height: 22)), for: .normal)
+//        button.setImage(UIImage(named: imageName)?.resizeImage(newSize: CGSize(width: 18, height: 18)), for: .normal)
+        button.setImage(UIImage(named: imageName), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         button.setTitleColor(#colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1), for: .normal)
         button.setTitleColor(UIColor.red, for: .highlighted)

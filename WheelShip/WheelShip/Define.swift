@@ -27,6 +27,7 @@ class Define: NSObject {
     static let PRICE_OF_ORDER_FRAGILE   = "Phí hàng dễ vỡ    "
     static let FEESHIP                  = "Phí vận chuyển    "
     static let STATUS_HAD_SHIPPER       = "Đơn hàng của bạn"
+    static let ORDER_ID                 = "Mã vận chuyển "
     
     
 }

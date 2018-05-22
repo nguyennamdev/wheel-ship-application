@@ -47,6 +47,8 @@
 		84AC220C20B3C51400EAF7F8 /* ShipHistoryViewController+CallApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AC220B20B3C51400EAF7F8 /* ShipHistoryViewController+CallApis.swift */; };
 		84AC220E20B3C55000EAF7F8 /* HomeShipViewController+CallApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AC220D20B3C55000EAF7F8 /* HomeShipViewController+CallApis.swift */; };
 		84AC221120B3D0EA00EAF7F8 /* ShipHistoryTableViewCell+MethodApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AC221020B3D0EA00EAF7F8 /* ShipHistoryTableViewCell+MethodApis.swift */; };
+		84AECBA120B465D700E921FB /* ShipperNotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AECBA020B465D700E921FB /* ShipperNotificationViewController.swift */; };
+		84AECBA320B4681400E921FB /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AECBA220B4681400E921FB /* Notification.swift */; };
 		84AF8B6B208AD25A003E3559 /* OrdersHistoryCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF8B6A208AD25A003E3559 /* OrdersHistoryCollectionCell.swift */; };
 		84AF8B6D208AD2AD003E3559 /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF8B6C208AD2AD003E3559 /* BaseCell.swift */; };
 		84B480A720A9D21700E35DA3 /* UIViewController+PresentAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B480A620A9D21700E35DA3 /* UIViewController+PresentAlert.swift */; };
@@ -112,6 +114,8 @@
 		84AC220B20B3C51400EAF7F8 /* ShipHistoryViewController+CallApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShipHistoryViewController+CallApis.swift"; sourceTree = "<group>"; };
 		84AC220D20B3C55000EAF7F8 /* HomeShipViewController+CallApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeShipViewController+CallApis.swift"; sourceTree = "<group>"; };
 		84AC221020B3D0EA00EAF7F8 /* ShipHistoryTableViewCell+MethodApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShipHistoryTableViewCell+MethodApis.swift"; sourceTree = "<group>"; };
+		84AECBA020B465D700E921FB /* ShipperNotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipperNotificationViewController.swift; sourceTree = "<group>"; };
+		84AECBA220B4681400E921FB /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		84AF8B6A208AD25A003E3559 /* OrdersHistoryCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersHistoryCollectionCell.swift; sourceTree = "<group>"; };
 		84AF8B6C208AD2AD003E3559 /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
 		84B480A620A9D21700E35DA3 /* UIViewController+PresentAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+PresentAlert.swift"; sourceTree = "<group>"; };
@@ -182,6 +186,7 @@
 				842D18282078617B009FAE23 /* ConfirmationItem.swift */,
 				842D182E2078619B009FAE23 /* User.swift */,
 				84A0262820A5594A0090FC70 /* Price.swift */,
+				84AECBA220B4681400E921FB /* Notification.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -316,6 +321,7 @@
 		846C4E65204A2D8300451EEC /* Shipper */ = {
 			isa = PBXGroup;
 			children = (
+				84C1FBF320B4589600FBA4D2 /* ShipperNotificationViewController */,
 				8448A9F420B3159900C79ED7 /* ShipHistoryViewController */,
 				8448A9F320B3158F00C79ED7 /* HomeShipperViewController */,
 			);
@@ -383,6 +389,14 @@
 				84B901982060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift */,
 			);
 			name = OrderComfirmationController;
+			sourceTree = "<group>";
+		};
+		84C1FBF320B4589600FBA4D2 /* ShipperNotificationViewController */ = {
+			isa = PBXGroup;
+			children = (
+				84AECBA020B465D700E921FB /* ShipperNotificationViewController.swift */,
+			);
+			name = ShipperNotificationViewController;
 			sourceTree = "<group>";
 		};
 		84D9DA4420280CB900EA23C9 /* PopupEntryPhoneNumber */ = {
@@ -588,6 +602,7 @@
 				84580C13201B1ECE00961A63 /* AppDelegate.swift in Sources */,
 				84A0262920A5594A0090FC70 /* Price.swift in Sources */,
 				84D9DA432027F29E00EA23C9 /* PopupEntryPhoneNumber.swift in Sources */,
+				84AECBA320B4681400E921FB /* Notification.swift in Sources */,
 				84222919204A41C6005058FD /* HomeOrdererController+Actions.swift in Sources */,
 				848DC16F20B181BF00B93EAC /* UIImage+ResizeImage.swift in Sources */,
 				84A0262520A53CF50090FC70 /* EditOrderViewController+GMSAutoCompletePlaces.swift in Sources */,
@@ -625,6 +640,7 @@
 				8480DDFB2088968D00A8EA05 /* HistoryViewController+SetupViews.swift in Sources */,
 				844EE914204D32F700176512 /* RegisterController+setupViews.swift in Sources */,
 				842D182720786158009FAE23 /* Order.swift in Sources */,
+				84AECBA120B465D700E921FB /* ShipperNotificationViewController.swift in Sources */,
 				84DE89422096AAF900BD55A8 /* Define.swift in Sources */,
 				8408425C20B16CA800B52818 /* HomeShipperViewController.swift in Sources */,
 				84BA53DC2022084200A18BAF /* Authentication.swift in Sources */,

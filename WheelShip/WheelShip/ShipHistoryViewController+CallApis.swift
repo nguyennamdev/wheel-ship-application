@@ -12,16 +12,16 @@ extension ShipHistoryViewController {
     
     // MARK: Call apis
     public func callApiToGetListOrderSaved(){
-        callApiToGetListOrder(url: "https://wheel-ship.herokuapp.com/orders/order_saved_by_shipper")
+        callApiToGetListOrder(url: "https://wheel-ship.herokuapp.com/orders/shipper/order_saved_by_shipper")
     }
     
     
     public func callApiToGetListOrderAccepted(){
-        callApiToGetListOrder(url: "https://wheel-ship.herokuapp.com/orders/order_accepted_by_shipper")
+        callApiToGetListOrder(url: "https://wheel-ship.herokuapp.com/orders/shipper/order_accepted_by_shipper")
     }
     
     public func callApiToGetListOrderCompleted(){
-        callApiToGetListOrder(url: "https://wheel-ship.herokuapp.com/orders/list_order_completed")
+        callApiToGetListOrder(url: "https://wheel-ship.herokuapp.com/orders/shipper/list_order_completed")
     }
     
     private func callApiToGetListOrder(url:String){

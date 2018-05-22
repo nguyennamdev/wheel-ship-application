@@ -54,7 +54,7 @@ extension HomeShipperViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 335
+        return 380
     }
 }
 

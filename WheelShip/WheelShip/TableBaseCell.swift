@@ -27,6 +27,7 @@ class TableViewCell: UITableViewCell {
                 let priceFragileOrder = unitPrice.priceFragileOrder else { return }
             // Assign data for labels
             setValueStatusLabeL(order: order)
+            orderIdLabel.setAttitudeString(title: (Define.ORDER_ID, UIColor.red), content: (" \(order.orderId ?? "")", UIColor.black))
             stopTime.text = order.stopTime
             originAddressLabel.setAttitudeString(title: (Define.ORIGIN_ADDRESS, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: (" \(order.originAddress ?? "")", UIColor.black))
             destinationLabel.setAttitudeString(title: (Define.DESTINATION_ADDRESS,  #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: (" \(order.destinationAddress ?? "")", UIColor.black))
@@ -36,6 +37,7 @@ class TableViewCell: UITableViewCell {
             prepaymentLabel.setAttitudeString(title: (Define.PREPAYMENT, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(unitPrice.prepayment.formatedNumberWithUnderDots()) vnđ", UIColor.black))
             feeShipLabel.setAttitudeString(title: (Define.FEESHIP, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(unitPrice.feeShip.formatedNumberWithUnderDots()) vnđ", UIColor.black))
             priceOfOrderFragileLabel.setAttitudeString(title: (Define.PRICE_OF_ORDER_FRAGILE, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(priceFragileOrder.formatedNumberWithUnderDots()) vnđ", UIColor.black))
+            priceOfWeight.setAttitudeString(title: (Define.PRICE_OF_WEIHGT,#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1) ), content: ("\t\(unitPrice.priceOfWeight!.formatedNumberWithUnderDots())", UIColor.black))
             noteLabel.setAttitudeString(title: (Define.NOTE, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(order.note ?? "")", UIColor.black))
         }
     }
@@ -53,6 +55,7 @@ class TableViewCell: UITableViewCell {
     }
     
     func setupViews(){
+        setupOrderIdLabel()
         setupStopTimeLabel()
         setupSeparatorView()
         setupStatusLabel()
@@ -64,6 +67,7 @@ class TableViewCell: UITableViewCell {
         setupPrepaymentLabel()
         setupFeeShipLabel()
         setupPriceOrderFragileLabel()
+        setupPriceOfWeightLabeL()
         setupNoteLabel()
     }
     
@@ -78,16 +82,22 @@ class TableViewCell: UITableViewCell {
     }
     
     // MARK: setup views
+    func setupOrderIdLabel(){
+        self.addSubview(orderIdLabel)
+        orderIdLabel.anchorWithConstants(top: self.topAnchor, left: nil, bottom: nil, right: nil, topConstant: 4)
+        orderIdLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        orderIdLabel.heightAnchor.constraint(equalToConstant: 18).isActive = true
+    }
     
     func setupStopTimeLabel(){
         self.addSubview(stopTime)
-        stopTime.anchorWithConstants(top: self.topAnchor, left: nil, bottom: nil, right: self.rightAnchor, topConstant: 4, leftConstant: 0, bottomConstant: 0, rightConstant: 8)
+        stopTime.anchorWithConstants(top: self.orderIdLabel.bottomAnchor, left: nil, bottom: nil, right: self.rightAnchor, topConstant: 4, leftConstant: 0, bottomConstant: 0, rightConstant: 8)
         stopTime.heightAnchor.constraint(equalToConstant: 16).isActive = true
     }
     
     func setupStatusLabel(){
         self.addSubview(statusOrderLabel)
-        statusOrderLabel.anchorWithConstants(top: self.topAnchor, left: self.leftAnchor, bottom: nil, right: nil, topConstant: 4, leftConstant: 8, bottomConstant: 0, rightConstant: 0)
+        statusOrderLabel.anchorWithConstants(top: self.orderIdLabel.bottomAnchor, left: self.leftAnchor, bottom: nil, right: nil, topConstant: 4, leftConstant: 8, bottomConstant: 0, rightConstant: 0)
     }
     
     func setupSeparatorView(){
@@ -162,8 +172,16 @@ class TableViewCell: UITableViewCell {
         priceOfOrderFragileLabel.heightAnchor.constraint(equalToConstant: 18).isActive = true
     }
     
+    func setupPriceOfWeightLabeL(){
+        layoutImageView(topAnchor: priceOfOrderFragileLabel, imageName: "coin", to: priceOfWeightImage)
+        self.addSubview(priceOfWeight)
+        priceOfWeight.anchorWithConstants(top: nil, left: priceOfWeightImage.rightAnchor, bottom: nil, right: self.rightAnchor, topConstant: 0, leftConstant: 8, bottomConstant: 0, rightConstant: 8)
+        priceOfWeight.centerYAnchor.constraint(equalTo: priceOfWeightImage.centerYAnchor).isActive = true
+        priceOfWeight.heightAnchor.constraint(equalToConstant: 18).isActive = true
+    }
+    
     func setupNoteLabel(){
-        layoutImageView(topAnchor: priceOfOrderFragileLabel, imageName: "edit", to: noteImageView)
+        layoutImageView(topAnchor: priceOfWeight, imageName: "edit", to: noteImageView)
         self.addSubview(noteLabel)
         noteLabel.anchorWithConstants(top: nil, left: noteImageView.rightAnchor, bottom: nil, right: self.rightAnchor, topConstant: 0, leftConstant: 8, bottomConstant: 0, rightConstant: 8)
         noteLabel.centerYAnchor.constraint(equalTo: noteImageView.centerYAnchor).isActive = true
@@ -181,6 +199,12 @@ class TableViewCell: UITableViewCell {
     }
     
     // MARK: Views
+    
+    let orderIdLabel:UILabel = {
+        let label = UILabel()
+        return label
+    }()
+    
     let statusOrderLabel:UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
@@ -221,6 +245,7 @@ class TableViewCell: UITableViewCell {
     let feeShipLabel: UILabel = UILabel()
     let priceOfOrderFragileLabel: UILabel = UILabel()
     let noteLabel:UILabel = UILabel()
+    let priceOfWeight:UILabel = UILabel()
     
     let originImageView = UIImageView()
     let destinationImageView = UIImageView()
@@ -231,5 +256,6 @@ class TableViewCell: UITableViewCell {
     let noteImageView = UIImageView()
     let phoneReceiverImageView = UIImageView()
     let phoneOrdererImageView = UIImageView()
+    let priceOfWeightImage = UIImageView()
     
 }

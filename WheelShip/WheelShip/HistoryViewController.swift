@@ -73,11 +73,11 @@ class HistoryViewController: UIViewController {
     }
     
     private func loadOrderCompleteById(){
-        self.loadOrderById(urlString: "https://wheel-ship.herokuapp.com/orders/order_complete")
+        self.loadOrderById(urlString: "https://wheel-ship.herokuapp.com/orders/orderer/order_complete")
     }
     
     private func loadOrderWaitShipperById(){
-        self.loadOrderById(urlString: "https://wheel-ship.herokuapp.com/orders/order_by_user")
+        self.loadOrderById(urlString: "https://wheel-ship.herokuapp.com/orders/orderer/order_by_user")
     }
     
     // MARK: Views
@@ -152,7 +152,7 @@ extension HistoryViewController : OrdersHistoryDelegate {
     
     func deleteAOrderByOrderId(orderId: String) {
         let parameter:Parameters = ["orderId": orderId]
-        Alamofire.request("https://wheel-ship.herokuapp.com/orders/delete_order", method: .delete, parameters: parameter, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
+        Alamofire.request("https://wheel-ship.herokuapp.com/orders/orderer/delete_order", method: .delete, parameters: parameter, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
             if let value = response.result.value as? [String: Any] {
                 if let result = value["result"] as? Bool{
                     if result {

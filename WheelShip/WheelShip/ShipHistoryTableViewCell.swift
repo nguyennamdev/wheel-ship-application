@@ -92,7 +92,8 @@ class ShipHistoryViewCell: TableViewCell {
     private static func buttonForTitle(title:String, imageName:String) -> UIButton{
         let button = UIButton()
         button.setTitle(" \(title)", for: .normal)
-        button.setImage(UIImage(named: imageName)?.resizeImage(newSize: CGSize(width: 22, height: 22)), for: .normal)
+//        button.setImage(UIImage(named: imageName)?.resizeImage(newSize: CGSize(width: 22, height: 22)), for: .normal)
+        button.setImage(UIImage(named: imageName), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         button.setTitleColor(#colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1), for: .normal)
         button.setTitleColor(UIColor.red, for: .highlighted)
@@ -139,7 +140,7 @@ class ShipHistoryViewCell: TableViewCell {
             return
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        Alamofire.request("https://wheel-ship.herokuapp.com/orders/completed_ship_order", method: .put, parameters: ["orderId": orderId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+        Alamofire.request("https://wheel-ship.herokuapp.com/orders/shipper/completed_ship_order", method: .put, parameters: ["orderId": orderId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
              UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if let value = data.result.value as? [String: Any]{
                 if let result = value["result"] as? Bool{
