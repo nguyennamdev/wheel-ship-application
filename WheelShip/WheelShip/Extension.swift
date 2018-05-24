@@ -13,6 +13,7 @@ extension UserDefaults{
     enum UserDefaultKeys:String{
         case isLoggedIn
         case isUser
+        case numberOfNotification
     }
     
     func setIsLoggedIn(value:Bool){
@@ -35,6 +36,15 @@ extension UserDefaults{
         let decode = self.object(forKey: "user") as! Data
         let user = NSKeyedUnarchiver.unarchiveObject(with: decode) as! User
         return user
+    }
+    
+    func setNumberOfNotifitcationForShipper(number:Int){
+        set(number, forKey: UserDefaultKeys.numberOfNotification.rawValue)
+        synchronize()
+    }
+    
+    func getNumberOfNotification() -> Int{
+        return integer(forKey: UserDefaultKeys.numberOfNotification.rawValue)
     }
 
     
@@ -141,7 +151,8 @@ extension String{
 extension Formatter {
     static let withUnderDots: NumberFormatter = {
         let formatter = NumberFormatter()
-        formatter.groupingSeparator = "."
+        formatter.groupingSize = 3
+        formatter.groupingSeparator = ","
         formatter.numberStyle = .decimal
         return formatter
     }()

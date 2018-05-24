@@ -12,16 +12,16 @@ extension ShipHistoryViewController {
     
     // MARK: Call apis
     public func callApiToGetListOrderSaved(){
-        callApiToGetListOrder(url: "https://wheel-ship.herokuapp.com/orders/shipper/order_saved_by_shipper")
+        callApiToGetListOrder(url: "\(Define.URL)/orders/shipper/order_saved_by_shipper")
     }
     
     
     public func callApiToGetListOrderAccepted(){
-        callApiToGetListOrder(url: "https://wheel-ship.herokuapp.com/orders/shipper/order_accepted_by_shipper")
+        callApiToGetListOrder(url: "\(Define.URL)/orders/shipper/order_accepted_by_shipper")
     }
     
     public func callApiToGetListOrderCompleted(){
-        callApiToGetListOrder(url: "https://wheel-ship.herokuapp.com/orders/shipper/list_order_completed")
+        callApiToGetListOrder(url: "\(Define.URL)/orders/shipper/list_order_completed")
     }
     
     private func callApiToGetListOrder(url:String){
@@ -53,7 +53,7 @@ extension ShipHistoryViewController {
     
     public func callApiToUnsaveOrder(orderId:String, userId:String){
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        Alamofire.request("https://wheel-ship.herokuapp.com/users/unsave_order", method: .put, parameters: ["orderId": orderId, "uid": userId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+        Alamofire.request("\(Define.URL)/users/unsave_order", method: .put, parameters: ["orderId": orderId, "uid": userId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
             self.loadAgainData()
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
         }

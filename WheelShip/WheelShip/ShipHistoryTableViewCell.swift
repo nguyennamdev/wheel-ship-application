@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-class ShipHistoryViewCell: TableViewCell {
+class ShipHistoryViewCell: BaseTableViewCell {
     
     var userId:String?
     var shipperDelegate:ShipperDelegate?
@@ -140,7 +140,7 @@ class ShipHistoryViewCell: TableViewCell {
             return
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        Alamofire.request("https://wheel-ship.herokuapp.com/orders/shipper/completed_ship_order", method: .put, parameters: ["orderId": orderId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+        Alamofire.request("\(Define.URL)/orders/shipper/completed_ship_order", method: .put, parameters: ["orderId": orderId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
              UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if let value = data.result.value as? [String: Any]{
                 if let result = value["result"] as? Bool{

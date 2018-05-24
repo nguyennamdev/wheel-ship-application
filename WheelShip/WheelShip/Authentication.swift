@@ -15,7 +15,7 @@ class Authentication{
     // MARK: private functions
     
     private func makeRequest(method:String, value:[String:Any], path:String) -> URLRequest?{
-        let url = URL(string: "https://wheel-ship.herokuapp.com/users/\(path)")
+        let url = URL(string: "\(Define.URL)/users/\(path)")
         var request = URLRequest(url: url!)
         request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = method

@@ -75,7 +75,7 @@ class ChangePasswordViewController: UIViewController {
                 confirmPasswordTextField.textColor = UIColor.red
                 confirmPasswordTextField.isSecureTextEntry = false
             }else{
-                Alamofire.request("https://wheel-ship.herokuapp.com/users/update_password", method: .put, parameters: ["uid": uid, "password": newPasswordTextField.text!], encoding: URLEncoding.httpBody, headers: nil).responseJSON(completionHandler: { (data) in
+                Alamofire.request("\(Define.URL)/users/update_password", method: .put, parameters: ["uid": uid, "password": newPasswordTextField.text!], encoding: URLEncoding.httpBody, headers: nil).responseJSON(completionHandler: { (data) in
                     if let value = data.result.value as? [String: Any] {
                         if let result = value["result"] as? Bool {
                             if result {

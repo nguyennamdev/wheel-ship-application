@@ -59,7 +59,7 @@ extension PopupEntryPhoneNumber {
                           "phoneNumber":phoneNumber,
                           "isActive": isActive,
                           "isShipper": userType] as [String : Any]
-        Alamofire.request("https://wheel-ship.herokuapp.com/users/insert_new_user", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON { (data) in
+        Alamofire.request("\(Define.URL)/users/insert_new_user", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON { (data) in
             if let value = data.result.value as? [String: Any]{
                 if let result = value["result"] as? Bool {
                     if result{
@@ -77,7 +77,7 @@ extension PopupEntryPhoneNumber {
     }
     
     private func handleUpdatePhoneNumber(phoneNumber:String, userId:String){
-        Alamofire.request("https://wheel-ship.herokuapp.com/users/update_phone_number", method: .put, parameters: ["uid": userId, "phoneNumber": phoneNumber], encoding: URLEncoding.httpBody, headers: nil).responseJSON { (data) in
+        Alamofire.request("\(Define.URL)/users/update_phone_number", method: .put, parameters: ["uid": userId, "phoneNumber": phoneNumber], encoding: URLEncoding.httpBody, headers: nil).responseJSON { (data) in
             if let value = data.result.value as? [String: Any] {
                 if let result = value["result"] as? Bool {
                     if result {

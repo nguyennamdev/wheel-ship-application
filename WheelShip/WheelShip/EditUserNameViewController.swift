@@ -66,7 +66,7 @@ class EditUserNameViewController: UIViewController {
         }else{
             guard let userId = self.user?.uid,
                 let userName = self.userNameTextField.text  else { return }
-            Alamofire.request("https://wheel-ship.herokuapp.com/users/update_user_name", method: .put, parameters: ["uid": userId, "name": userName], encoding: URLEncoding.httpBody, headers: nil).responseJSON(completionHandler: { (data) in
+            Alamofire.request("\(Define.URL)/users/update_user_name", method: .put, parameters: ["uid": userId, "name": userName], encoding: URLEncoding.httpBody, headers: nil).responseJSON(completionHandler: { (data) in
                 if let value = data.result.value as? [String: Any] {
                     if let result = value["result"] as? Bool {
                         if result {

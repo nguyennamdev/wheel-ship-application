@@ -14,7 +14,7 @@ extension HomeShipperViewController {
     // MARK: Call Api
     public func loadOrdersFromApi(){
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        Alamofire.request("https://wheel-ship.herokuapp.com/orders/list_order", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+        Alamofire.request("\(Define.URL)/orders/shipper/list_order", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
             if let value = data.result.value as? NSDictionary {
                 if let orderDictionary = value.value(forKey: "data") as? [NSDictionary] {
                     self.arrOrder.removeAll()

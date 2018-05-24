@@ -56,7 +56,7 @@ class UserViewController: UIViewController , UITableViewDataSource , UITableView
     
     @objc private func handleLogoutUser(){
         // logout on server
-        Alamofire.request("https://wheel-ship.herokuapp.com/users/logout", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil)
+        Alamofire.request("\(Define.URL)/users/logout", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil)
         // save user didn't log in
         UserDefaults.standard.setIsLoggedIn(value: false)
         self.perform(#selector(showLoginViewController), with: nil, afterDelay: 0.01)

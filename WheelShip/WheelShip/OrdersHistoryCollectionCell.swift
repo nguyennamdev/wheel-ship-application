@@ -7,16 +7,17 @@
 //
 
 import UIKit
+import Alamofire
 
 class OrdersHistoryCollectionCell : BaseCell {
     
     // MARK: Properties
     var isShowingActions:Bool = false
     var orderHistoryDelegate:OrdersHistoryDelegate?
-    var oder:Order?{
+    var order:Order?{
         didSet{
             showingDetailContainer()
-            guard let order = self.oder else { return }
+            guard let order = self.order else { return }
             setBasicValue(order: order)
             setDetailValue(order: order)
             if order.status == OrderStage.hadShipper {
@@ -27,6 +28,7 @@ class OrdersHistoryCollectionCell : BaseCell {
             if order.shipperId == ""{
                 infoShipperLabel.attributedText = attitudeString((Define.SHIPPER, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" Chưa có người nhận", UIColor.white))
             }else{
+                loadProfileShipper(shipperId: order.shipperId!)
             }
         }
     }
@@ -41,10 +43,10 @@ class OrdersHistoryCollectionCell : BaseCell {
         return attritude
     }
     
-    
     override func setupViews() {
         setContainView()
         setupDateLabel()
+        setupOrderIdLabel()
         setupInfoShipperLabel()
         setupStateImage()
         setupOriginAddressLabel()
@@ -59,8 +61,25 @@ class OrdersHistoryCollectionCell : BaseCell {
     }
     
     // MARK: Private functions
+    private func loadProfileShipper(shipperId:String){
+        Alamofire.request("\(Define.URL)/users/profile_user", method: .get, parameters: ["userId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+            if let value = data.result.value as? NSDictionary{
+                if let result = value.value(forKey: "result") as? Bool{
+                    if result{
+                        DispatchQueue.main.async {
+                            let name = value.value(forKeyPath: "data.name") as! String
+                            let phone = value.value(forKeyPath: "data.phoneNumber") as! String
+                            self.infoShipperLabel.setAttitudeString(title: (Define.SHIPPER, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), content: (" \(name), \(phone)", UIColor.white))
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
     private func showingDetailContainer(){
-        if (self.oder?.isShowing)!{
+        if (self.order?.isShowing)!{
             downArrowView.image = #imageLiteral(resourceName: "up-arrow")
             detailContainer.isHidden = false
         }else{
@@ -76,13 +95,15 @@ class OrdersHistoryCollectionCell : BaseCell {
             let shipperId = order.shipperId,
             let originAddress = order.originAddress,
             let destinationAddress = order.destinationAddress,
-            let phoneReceiver = order.phoneReceiver
+            let phoneReceiver = order.phoneReceiver,
+            let orderId = order.orderId
             else { return }
-        dateLabel.text = date
-        infoShipperLabel.attributedText = attitudeString((Define.SHIPPER,#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(shipperId)", UIColor.white))
-        originLabel.attributedText = attitudeString((Define.ORIGIN_ADDRESS,#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(originAddress)", UIColor.white))
-        destinationLabel.attributedText = attitudeString((Define.DESTINATION_ADDRESS,#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(destinationAddress)", UIColor.white))
-        phoneReceiverLabel.attributedText = attitudeString((Define.PHONE_RECEIVER,#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(phoneReceiver)", UIColor.white))
+        dateLabel.text = date.caculatingDatePassedWithCurrentDate()
+        orderIdLabel.attributedText = attitudeString((Define.ORDER_ID, #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)), (" \(orderId)", UIColor.white))
+        infoShipperLabel.attributedText = attitudeString((Define.SHIPPER,#colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)), (" \(shipperId)", UIColor.white))
+        originLabel.attributedText = attitudeString((Define.ORIGIN_ADDRESS,#colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)), (" \(originAddress)", UIColor.white))
+        destinationLabel.attributedText = attitudeString((Define.DESTINATION_ADDRESS,#colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)), (" \(destinationAddress)", UIColor.white))
+        phoneReceiverLabel.attributedText = attitudeString((Define.PHONE_RECEIVER,#colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)), (" \(phoneReceiver)", UIColor.white))
     }
     
     
@@ -95,18 +116,18 @@ class OrdersHistoryCollectionCell : BaseCell {
         detailContainer.addArrangedSubview(priceOfOrderFragileLabel)
         detailContainer.addArrangedSubview(feeShipLabel)
         detailContainer.addArrangedSubview(overheadsLabel)
-        prepaymentLabel.attributedText = attitudeString((Define.PREPAYMENT, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(prepayment.formatedNumberWithUnderDots())", UIColor.white))
-        priceOfWeightLabel.attributedText = attitudeString((Define.PRICE_OF_WEIHGT, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(priceOfWeight.formatedNumberWithUnderDots())", UIColor.white))
-            priceOfOrderFragileLabel.attributedText = attitudeString((Define.PRICE_OF_ORDER_FRAGILE, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(priceOrderFragile.formatedNumberWithUnderDots())", UIColor.white))
-        feeShipLabel.attributedText = attitudeString((Define.FEESHIP, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(feeShip.formatedNumberWithUnderDots())", UIColor.white))
-        overheadsLabel.attributedText = attitudeString((Define.OVERHEADS, #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), (" \(overheads.formatedNumberWithUnderDots())", UIColor.white))
+        prepaymentLabel.attributedText = attitudeString((Define.PREPAYMENT, #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)), (" \(prepayment.formatedNumberWithUnderDots())", UIColor.white))
+        priceOfWeightLabel.attributedText = attitudeString((Define.PRICE_OF_WEIHGT, #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)), (" \(priceOfWeight.formatedNumberWithUnderDots())", UIColor.white))
+            priceOfOrderFragileLabel.attributedText = attitudeString((Define.PRICE_OF_ORDER_FRAGILE, #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)), (" \(priceOrderFragile.formatedNumberWithUnderDots())", UIColor.white))
+        feeShipLabel.attributedText = attitudeString((Define.FEESHIP, #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)), (" \(feeShip.formatedNumberWithUnderDots())", UIColor.white))
+        overheadsLabel.attributedText = attitudeString((Define.OVERHEADS, #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)), (" \(overheads.formatedNumberWithUnderDots())", UIColor.white))
     }
     
     // MARK: Actions
     
     @objc private func showActions(){
         if !isShowingActions {
-            // margin 8 value
+            // constant = 50 and margin 8
             self.rightConstraintContainerView?.constant = -58
             self.leftConstaintContainnerView?.constant = -58
             self.actionView.isHidden = false
@@ -130,13 +151,13 @@ class OrdersHistoryCollectionCell : BaseCell {
     }
     
     @objc private func deleteAOrder(){
-        if let orderId = self.oder?.orderId {
+        if let orderId = self.order?.orderId {
              orderHistoryDelegate?.deleteAOrderByOrderId(orderId: orderId)
         }
     }
     
     @objc private func editAOrder(){
-        if let orderId = self.oder?.orderId {
+        if let orderId = self.order?.orderId {
             orderHistoryDelegate?.editAOrderByOrderId(orderId: orderId)
         }
     }
@@ -161,9 +182,14 @@ class OrdersHistoryCollectionCell : BaseCell {
         dateLabel.anchorWithConstants(top: containerView.topAnchor, left: nil, bottom: nil, right: containerView.rightAnchor, topConstant: 4, leftConstant: 0, bottomConstant: 0, rightConstant: 8)
     }
     
+    private func setupOrderIdLabel(){
+        containerView.addSubview(orderIdLabel)
+        orderIdLabel.anchorWithConstants(top: dateLabel.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: contentView.rightAnchor, topConstant: 4, leftConstant: 8, bottomConstant: 0, rightConstant: 4)
+    }
+
     private func setupInfoShipperLabel(){
         containerView.addSubview(infoShipperLabel)
-        infoShipperLabel.anchorWithConstants(top: dateLabel.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, topConstant: 4, leftConstant: 8, bottomConstant: 0, rightConstant: 4)
+        infoShipperLabel.anchorWithConstants(top: orderIdLabel.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, topConstant: 4, leftConstant: 8, bottomConstant: 0, rightConstant: 4)
     }
     
     private func setupOriginAddressLabel(){
@@ -244,9 +270,14 @@ class OrdersHistoryCollectionCell : BaseCell {
         return layer
     }()
     
+    let orderIdLabel:UILabel = {
+        let label = UILabel()
+        return label
+    }()
+    
     let dateLabel:UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.gray
+        label.textColor = UIColor.white
         label.textAlignment = .right
         label.font = UIFont.systemFont(ofSize: 13)
         return label

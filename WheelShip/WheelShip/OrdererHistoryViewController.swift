@@ -9,18 +9,21 @@
 import UIKit
 import Alamofire
 
-class HistoryViewController: UIViewController {
+class OrdererHistoryViewController: UIViewController {
     
     let cellId = "cellId"
     var user:User?
     var arrOrder:[Order]?
+    var filteredOrder:[Order] = [Order]()
+    
+    var searchViewController: UISearchController = UISearchController(searchResultsController: nil)
     
     // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupViews()
-        self.navigationItem.title = "Lịch sử đặt hàng"
+        
         ordersCollectionView.backgroundColor = UIColor.clear
         self.ordersCollectionView.dataSource = self
         self.ordersCollectionView.delegate = self
@@ -37,15 +40,64 @@ class HistoryViewController: UIViewController {
         }
     }
     
-    // MARK: Private funtions
+    // MARK: Private instance methods
     private func setupViews(){
         view.addSubview(background)
         background.frame = view.frame
         setupStatusOrderSegment()
         setupOrdersCollectionView()
+        setupSearchViewController()
     }
     
-    private func loadOrderById(urlString: String){
+    private func setupSearchViewController(){
+        // setup scope to seach bar
+        searchViewController.searchBar.scopeButtonTitles = ["Mã vận chuyển", "Địa chỉ", "Phí"]
+        searchViewController.searchBar.delegate = self
+        searchViewController.searchBar.selectedScopeButtonIndex = 0
+        
+        // setup searchViewController
+        self.navigationItem.searchController = searchViewController
+        searchViewController.searchResultsUpdater = self
+        searchViewController.dimsBackgroundDuringPresentation = false
+        searchViewController.obscuresBackgroundDuringPresentation = false
+        searchViewController.searchBar.placeholder = "Tìm kiếm"
+    }
+    
+    private func searchBarTextIsEmpty() -> Bool{
+        // return true if search is empty or nil
+        return searchViewController.searchBar.text?.isEmpty ?? true
+    }
+    
+    private func isFiltering() -> Bool{
+        // return true when search bar is active and text is not null
+        return searchViewController.isActive && !searchBarTextIsEmpty()
+    }
+    
+    private func filterContentForSearchText(_ searchText:String, indexOfScopeSelected:Int){
+        filteredOrder = self.arrOrder!.filter({ (order) -> Bool in
+            switch indexOfScopeSelected{
+            case 0:
+                // filter by order id
+                return (order.orderId?.lowercased().contains(searchText.lowercased()))!
+            case 1:
+                // filter by origin address or destination address
+                return (order.originAddress?.lowercased().contains(searchText.lowercased()))! || (order.destinationAddress?.lowercased().contains(searchText.lowercased()))!
+            case 2:
+                let prepaymentString = String(order.unitPrice?.prepayment ?? 0)
+                let overheadsString = String(order.unitPrice?.overheads ?? 0)
+                let feeShipString = String(order.unitPrice?.feeShip ?? 0)
+                // filter by prepayment or overheads or feeship
+                return (prepaymentString.lowercased().contains(searchText.lowercased())) || overheadsString.lowercased().contains(searchText.lowercased()) || feeShipString.lowercased().contains(searchText.lowercased())
+            default:
+                return (order.orderId?.lowercased().contains(searchText.lowercased()))!
+            }
+        })
+        ordersCollectionView.reloadData()
+    }
+    
+    
+    
+    private func loadOrderByOrdererId(urlString: String){
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         guard let user = self.user else { return }
         Alamofire.request(urlString, method: .get, parameters: ["userId": user.uid!] , encoding: URLEncoding.default, headers: nil).responseJSON { (dataResponse) in
@@ -73,11 +125,11 @@ class HistoryViewController: UIViewController {
     }
     
     private func loadOrderCompleteById(){
-        self.loadOrderById(urlString: "https://wheel-ship.herokuapp.com/orders/orderer/order_complete")
+        self.loadOrderByOrdererId(urlString: "\(Define.URL)/orders/orderer/order_complete")
     }
     
     private func loadOrderWaitShipperById(){
-        self.loadOrderById(urlString: "https://wheel-ship.herokuapp.com/orders/orderer/order_by_user")
+        self.loadOrderByOrdererId(urlString: "\(Define.URL)/orders/orderer/order_by_user")
     }
     
     // MARK: Views
@@ -114,7 +166,7 @@ class HistoryViewController: UIViewController {
 }
 
 // MARK: CollectionView delegate and datasource
-extension HistoryViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+extension OrdererHistoryViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if (self.arrOrder?.count == 0){
@@ -122,41 +174,59 @@ extension HistoryViewController : UICollectionViewDelegate, UICollectionViewData
         }else{
             self.ordersCollectionView.restore()
         }
+        if isFiltering(){
+            return filteredOrder.count
+        }
         return arrOrder?.count ?? 0
     }
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? OrdersHistoryCollectionCell
-        cell?.oder = self.arrOrder?[indexPath.row]
-        cell?.orderHistoryDelegate = self 
+        cell?.orderHistoryDelegate = self
+        var order:Order
+        if isFiltering(){
+            order = filteredOrder[indexPath.row]
+        }else{
+            order = arrOrder![indexPath.row]
+        }
+        cell?.order = order
         return cell!
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if (self.arrOrder?[indexPath.row].isShowing)!{
-            return CGSize(width: view.bounds.width, height: 250)
+        let order:Order
+        if isFiltering(){
+            order = filteredOrder[indexPath.row]
         }else{
-            return CGSize(width: view.bounds.width, height: 150)
+            order = (arrOrder?[indexPath.row])!
         }
+        if order.isShowing{
+            return CGSize(width: view.bounds.width, height: 280)
+        }
+        return CGSize(width: view.bounds.width, height: 180)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.arrOrder?[indexPath.row].isShowing = !(self.arrOrder?[indexPath.row].isShowing)!
+        if isFiltering(){
+            self.filteredOrder[indexPath.row].isShowing = !filteredOrder[indexPath.row].isShowing
+        }else{
+            self.arrOrder?[indexPath.row].isShowing = !(self.arrOrder?[indexPath.row].isShowing)!
+        }
         self.ordersCollectionView.reloadData()
     }
     
 }
 
 // MARK: Implement OrdersHistoryDelegate
-extension HistoryViewController : OrdersHistoryDelegate {
+extension OrdererHistoryViewController : OrdersHistoryDelegate {
     
     func deleteAOrderByOrderId(orderId: String) {
         let parameter:Parameters = ["orderId": orderId]
-        Alamofire.request("https://wheel-ship.herokuapp.com/orders/orderer/delete_order", method: .delete, parameters: parameter, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
+        Alamofire.request("\(Define.URL)/orders/orderer/delete_order", method: .delete, parameters: parameter, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
             if let value = response.result.value as? [String: Any] {
                 if let result = value["result"] as? Bool{
                     if result {
-                       self.statusOrderSegment.selectedSegmentIndex == 0 ? self.loadOrderWaitShipperById() : self.loadOrderCompleteById()
+                        self.statusOrderSegment.selectedSegmentIndex == 0 ? self.loadOrderWaitShipperById() : self.loadOrderCompleteById()
                     }
                 }
             }
@@ -169,4 +239,23 @@ extension HistoryViewController : OrdersHistoryDelegate {
         self.navigationController?.pushViewController(editViewController, animated: true)
     }
 }
+
+// MARK: - UISearchResultUpdating Delegate
+extension OrdererHistoryViewController : UISearchResultsUpdating{
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        let selectedScope = searchController.searchBar.selectedScopeButtonIndex
+        filterContentForSearchText(searchController.searchBar.text!, indexOfScopeSelected: selectedScope)
+    }
+}
+
+// MARK: - UISearchBarDelegate
+extension OrdererHistoryViewController : UISearchBarDelegate{
+    
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        filterContentForSearchText(searchBar.text!, indexOfScopeSelected: selectedScope)
+    }
+    
+}
+
 

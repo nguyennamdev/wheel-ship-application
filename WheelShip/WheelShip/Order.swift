@@ -12,6 +12,9 @@ import CoreLocation
 class Order: NSObject {
     
     // MARK: Properties
+    public var unitPrice: UnitPrice?
+    public var notification: Notification?
+    
     public var orderId: String?
     public var userId: String?
     public var originAddress: String?
@@ -23,7 +26,7 @@ class Order: NSObject {
     public var note: String?
     public var phoneOrderer: String? = ""
     public var phoneReceiver: String?
-    public var unitPrice: UnitPrice?
+    
     public var startTime: String?
     public var stopTime: String?
     public var status: OrderStage?

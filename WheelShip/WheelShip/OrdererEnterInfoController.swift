@@ -79,7 +79,7 @@ class OrdererEnterInfoController : UIViewController {
     // MARK: Call apis
     
     private func callApiToGetPriceFragileOrder(){
-        Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_fragile_order", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
+        Alamofire.request("\(Define.URL)/prices/price_fragile_order", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
             if let result = response.result.value as? [String:Any]{
                 if let data = result["data"] as? [[String: Any]]{
                     let priceFragileOrder = data.first?["value"] as! Double
@@ -93,7 +93,7 @@ class OrdererEnterInfoController : UIViewController {
     }
     
     private func callApiToGetListPriceWeight(){
-        Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_weights", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
+        Alamofire.request("\(Define.URL)/prices/price_weights", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
             if let result = response.result.value as? [String: Any]{
                 if let data = result["data"] as? [[String: Any]]{
                     data.forEach({ (element) in
@@ -162,22 +162,15 @@ class OrdererEnterInfoController : UIViewController {
     
     
     private func updateStateBarButtonItem(){
-        if let feeShip =  self.unitPrice?.feeShip, let priceOfWeight = self.unitPrice?.priceOfWeight, let prepayment = self.unitPrice?.prepayment{
-            switch Double(0){
-            case feeShip,priceOfWeight,prepayment :
-                doneBarButtonItem.isEnabled = false
-            default:
-                guard let phoneNumber = phoneReceiverTextField.text, let note = noteTextField.text else { return }
-                switch "" {
-                case phoneNumber, note:
-                    doneBarButtonItem.isEnabled = false
-                default:
-                    doneBarButtonItem.isEnabled = true
-                }
-            }
+        guard let phoneNumber = phoneReceiverTextField.text, let note = noteTextField.text, let weight = weightLabel.text, let prepayment = prepaymentTextField.text else { return }
+        switch "" {
+        case phoneNumber, note, weight, prepayment:
+            doneBarButtonItem.isEnabled = false
+        default:
+            doneBarButtonItem.isEnabled = true
         }
-        
     }
+    
     
     // MARK: Public functions
     public func updateOverheadsLabel(){

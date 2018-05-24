@@ -35,8 +35,8 @@
 		846C4E67204A2E0100451EEC /* HomeOrdererController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846C4E66204A2E0100451EEC /* HomeOrdererController.swift */; };
 		847FDA38201ECC00003AF85E /* CustomTabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847FDA37201ECC00003AF85E /* CustomTabbarController.swift */; };
 		847FDA3D201ED252003AF85E /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847FDA3C201ED252003AF85E /* Extension.swift */; };
-		8480DDF92088936D00A8EA05 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8480DDF82088936D00A8EA05 /* HistoryViewController.swift */; };
-		8480DDFB2088968D00A8EA05 /* HistoryViewController+SetupViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8480DDFA2088968D00A8EA05 /* HistoryViewController+SetupViews.swift */; };
+		8480DDF92088936D00A8EA05 /* OrdererHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8480DDF82088936D00A8EA05 /* OrdererHistoryViewController.swift */; };
+		8480DDFB2088968D00A8EA05 /* OrdererHistoryViewController+SetupViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8480DDFA2088968D00A8EA05 /* OrdererHistoryViewController+SetupViews.swift */; };
 		848DC16F20B181BF00B93EAC /* UIImage+ResizeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DC16E20B181BF00B93EAC /* UIImage+ResizeImage.swift */; };
 		8498292820A1B795005ECA38 /* Asset.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8498292720A1B795005ECA38 /* Asset.xcassets */; };
 		84A0262520A53CF50090FC70 /* EditOrderViewController+GMSAutoCompletePlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A0262420A53CF50090FC70 /* EditOrderViewController+GMSAutoCompletePlaces.swift */; };
@@ -51,9 +51,18 @@
 		84AECBA320B4681400E921FB /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AECBA220B4681400E921FB /* Notification.swift */; };
 		84AF8B6B208AD25A003E3559 /* OrdersHistoryCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF8B6A208AD25A003E3559 /* OrdersHistoryCollectionCell.swift */; };
 		84AF8B6D208AD2AD003E3559 /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF8B6C208AD2AD003E3559 /* BaseCell.swift */; };
+		84B075C520B6A4EE00F60197 /* Formatter+formatISO8610.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B075C420B6A4EE00F60197 /* Formatter+formatISO8610.swift */; };
+		84B075C720B6A92C00F60197 /* String+CaculatingDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B075C620B6A92C00F60197 /* String+CaculatingDate.swift */; };
 		84B480A720A9D21700E35DA3 /* UIViewController+PresentAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B480A620A9D21700E35DA3 /* UIViewController+PresentAlert.swift */; };
 		84B5235320A099F100186F12 /* UICollectionView+setEmptyMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B5235220A099F100186F12 /* UICollectionView+setEmptyMessage.swift */; };
+		84B87D0C20B5079D000DF43B /* OrdererNotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B87D0B20B5079D000DF43B /* OrdererNotificationViewController.swift */; };
+		84B87D0E20B50B79000DF43B /* OrderNotificationViewController+CallApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B87D0D20B50B79000DF43B /* OrderNotificationViewController+CallApis.swift */; };
+		84B87D1120B51081000DF43B /* OrdererNotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B87D1020B51081000DF43B /* OrdererNotificationTableViewCell.swift */; };
+		84B87D1320B51F50000DF43B /* UIImageView+LoadFromUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B87D1220B51F50000DF43B /* UIImageView+LoadFromUrl.swift */; };
+		84B87D1520B5232A000DF43B /* OrdererNotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B87D1420B5232A000DF43B /* OrdererNotificationDelegate.swift */; };
+		84B87D1820B57325000DF43B /* ShipperNotificationTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B87D1720B57324000DF43B /* ShipperNotificationTableCell.swift */; };
 		84B8BAB6205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B8BAB5205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift */; };
+		84B8CD8120B5AF4400A52847 /* ShipperNotificationViewController+CallApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B8CD8020B5AF4400A52847 /* ShipperNotificationViewController+CallApis.swift */; };
 		84B901992060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B901982060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift */; };
 		84B94EF120B30E26007DACA5 /* ShipperDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B94EF020B30E26007DACA5 /* ShipperDelegate.swift */; };
 		84BA53DC2022084200A18BAF /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BA53DB2022084200A18BAF /* Authentication.swift */; };
@@ -102,8 +111,8 @@
 		846C4E66204A2E0100451EEC /* HomeOrdererController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeOrdererController.swift; sourceTree = "<group>"; };
 		847FDA37201ECC00003AF85E /* CustomTabbarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabbarController.swift; sourceTree = "<group>"; };
 		847FDA3C201ED252003AF85E /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
-		8480DDF82088936D00A8EA05 /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
-		8480DDFA2088968D00A8EA05 /* HistoryViewController+SetupViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryViewController+SetupViews.swift"; sourceTree = "<group>"; };
+		8480DDF82088936D00A8EA05 /* OrdererHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdererHistoryViewController.swift; sourceTree = "<group>"; };
+		8480DDFA2088968D00A8EA05 /* OrdererHistoryViewController+SetupViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrdererHistoryViewController+SetupViews.swift"; sourceTree = "<group>"; };
 		848DC16E20B181BF00B93EAC /* UIImage+ResizeImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+ResizeImage.swift"; sourceTree = "<group>"; };
 		8498292720A1B795005ECA38 /* Asset.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Asset.xcassets; sourceTree = "<group>"; };
 		84A0262420A53CF50090FC70 /* EditOrderViewController+GMSAutoCompletePlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditOrderViewController+GMSAutoCompletePlaces.swift"; sourceTree = "<group>"; };
@@ -118,9 +127,18 @@
 		84AECBA220B4681400E921FB /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		84AF8B6A208AD25A003E3559 /* OrdersHistoryCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersHistoryCollectionCell.swift; sourceTree = "<group>"; };
 		84AF8B6C208AD2AD003E3559 /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
+		84B075C420B6A4EE00F60197 /* Formatter+formatISO8610.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Formatter+formatISO8610.swift"; sourceTree = "<group>"; };
+		84B075C620B6A92C00F60197 /* String+CaculatingDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+CaculatingDate.swift"; sourceTree = "<group>"; };
 		84B480A620A9D21700E35DA3 /* UIViewController+PresentAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+PresentAlert.swift"; sourceTree = "<group>"; };
 		84B5235220A099F100186F12 /* UICollectionView+setEmptyMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+setEmptyMessage.swift"; sourceTree = "<group>"; };
+		84B87D0B20B5079D000DF43B /* OrdererNotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdererNotificationViewController.swift; sourceTree = "<group>"; };
+		84B87D0D20B50B79000DF43B /* OrderNotificationViewController+CallApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrderNotificationViewController+CallApis.swift"; sourceTree = "<group>"; };
+		84B87D1020B51081000DF43B /* OrdererNotificationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdererNotificationTableViewCell.swift; sourceTree = "<group>"; };
+		84B87D1220B51F50000DF43B /* UIImageView+LoadFromUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+LoadFromUrl.swift"; sourceTree = "<group>"; };
+		84B87D1420B5232A000DF43B /* OrdererNotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdererNotificationDelegate.swift; sourceTree = "<group>"; };
+		84B87D1720B57324000DF43B /* ShipperNotificationTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipperNotificationTableCell.swift; sourceTree = "<group>"; };
 		84B8BAB5205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrdererEnterInfoController+Actions.swift"; sourceTree = "<group>"; };
+		84B8CD8020B5AF4400A52847 /* ShipperNotificationViewController+CallApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShipperNotificationViewController+CallApis.swift"; sourceTree = "<group>"; };
 		84B901982060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderComfirmationCollectionViewController.swift; sourceTree = "<group>"; };
 		84B94EF020B30E26007DACA5 /* ShipperDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipperDelegate.swift; sourceTree = "<group>"; };
 		84BA53DB2022084200A18BAF /* Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
@@ -178,7 +196,7 @@
 			name = HomeOrdererController;
 			sourceTree = "<group>";
 		};
-		842D1825207860F4009FAE23 /* Model */ = {
+		842D1825207860F4009FAE23 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				842D182C20786193009FAE23 /* UnitPrice.swift */,
@@ -188,7 +206,7 @@
 				84A0262820A5594A0090FC70 /* Price.swift */,
 				84AECBA220B4681400E921FB /* Notification.swift */,
 			);
-			name = Model;
+			name = Models;
 			sourceTree = "<group>";
 		};
 		8448A9F320B3158F00C79ED7 /* HomeShipperViewController */ = {
@@ -250,10 +268,10 @@
 			children = (
 				84DB4BE920A1F087002A49E2 /* Delegates */,
 				84DE89402096AABA00BD55A8 /* Common */,
-				842D1825207860F4009FAE23 /* Model */,
+				842D1825207860F4009FAE23 /* Models */,
 				84580C2B201B267700961A63 /* Views */,
 				84AF8B69208AD221003E3559 /* Cells */,
-				84580C27201B200500961A63 /* Controllers */,
+				84580C27201B200500961A63 /* ViewControllers */,
 				84FB41712062973600FCA753 /* RestApiManager */,
 				847FDA3B201ED232003AF85E /* Extensions */,
 				84580C28201B22CE00961A63 /* Helper */,
@@ -266,7 +284,7 @@
 			path = WheelShip;
 			sourceTree = "<group>";
 		};
-		84580C27201B200500961A63 /* Controllers */ = {
+		84580C27201B200500961A63 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				84E49E4F20AE94D200D2114A /* CustomTabbarViewController */,
@@ -278,7 +296,7 @@
 				84AA1D6420AA79590093BE74 /* User */,
 				846C4E63204A2D6D00451EEC /* Orderer */,
 			);
-			name = Controllers;
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 		84580C28201B22CE00961A63 /* Helper */ = {
@@ -309,6 +327,7 @@
 		846C4E63204A2D6D00451EEC /* Orderer */ = {
 			isa = PBXGroup;
 			children = (
+				84B87D0A20B50771000DF43B /* OrdererNotificationViewController */,
 				84EC3EB020A2E7B0002FA46D /* EditOrderViewController */,
 				8480DDF72088911900A8EA05 /* HistoryViewController */,
 				84B901972060AD85003DD2C2 /* OrderComfirmationController */,
@@ -336,6 +355,9 @@
 				8423220B20A4498B00DA5227 /* UILabel+AttritudeText.swift */,
 				84B480A620A9D21700E35DA3 /* UIViewController+PresentAlert.swift */,
 				848DC16E20B181BF00B93EAC /* UIImage+ResizeImage.swift */,
+				84B87D1220B51F50000DF43B /* UIImageView+LoadFromUrl.swift */,
+				84B075C420B6A4EE00F60197 /* Formatter+formatISO8610.swift */,
+				84B075C620B6A92C00F60197 /* String+CaculatingDate.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -343,8 +365,8 @@
 		8480DDF72088911900A8EA05 /* HistoryViewController */ = {
 			isa = PBXGroup;
 			children = (
-				8480DDF82088936D00A8EA05 /* HistoryViewController.swift */,
-				8480DDFA2088968D00A8EA05 /* HistoryViewController+SetupViews.swift */,
+				8480DDF82088936D00A8EA05 /* OrdererHistoryViewController.swift */,
+				8480DDFA2088968D00A8EA05 /* OrdererHistoryViewController+SetupViews.swift */,
 			);
 			name = HistoryViewController;
 			sourceTree = "<group>";
@@ -378,9 +400,36 @@
 				84AF8B6A208AD25A003E3559 /* OrdersHistoryCollectionCell.swift */,
 				84AA1D6720AA79CA0093BE74 /* UserTableViewCell.swift */,
 				8408425D20B16F8D00B52818 /* HomeShipperViewCell.swift */,
+				84B87D1620B57306000DF43B /* ShipperNotificationTableCell */,
+				84B87D0F20B51059000DF43B /* OrdererNotificationTableCell */,
 				84AC220F20B3D0C200EAF7F8 /* ShipHistoryTableCell */,
 			);
 			name = Cells;
+			sourceTree = "<group>";
+		};
+		84B87D0A20B50771000DF43B /* OrdererNotificationViewController */ = {
+			isa = PBXGroup;
+			children = (
+				84B87D0B20B5079D000DF43B /* OrdererNotificationViewController.swift */,
+				84B87D0D20B50B79000DF43B /* OrderNotificationViewController+CallApis.swift */,
+			);
+			name = OrdererNotificationViewController;
+			sourceTree = "<group>";
+		};
+		84B87D0F20B51059000DF43B /* OrdererNotificationTableCell */ = {
+			isa = PBXGroup;
+			children = (
+				84B87D1020B51081000DF43B /* OrdererNotificationTableViewCell.swift */,
+			);
+			name = OrdererNotificationTableCell;
+			sourceTree = "<group>";
+		};
+		84B87D1620B57306000DF43B /* ShipperNotificationTableCell */ = {
+			isa = PBXGroup;
+			children = (
+				84B87D1720B57324000DF43B /* ShipperNotificationTableCell.swift */,
+			);
+			name = ShipperNotificationTableCell;
 			sourceTree = "<group>";
 		};
 		84B901972060AD85003DD2C2 /* OrderComfirmationController */ = {
@@ -395,6 +444,7 @@
 			isa = PBXGroup;
 			children = (
 				84AECBA020B465D700E921FB /* ShipperNotificationViewController.swift */,
+				84B8CD8020B5AF4400A52847 /* ShipperNotificationViewController+CallApis.swift */,
 			);
 			name = ShipperNotificationViewController;
 			sourceTree = "<group>";
@@ -414,6 +464,7 @@
 			children = (
 				84DB4BEA20A1F0B1002A49E2 /* OrdersHistoryDelegate.swift */,
 				84B94EF020B30E26007DACA5 /* ShipperDelegate.swift */,
+				84B87D1420B5232A000DF43B /* OrdererNotificationDelegate.swift */,
 			);
 			name = Delegates;
 			sourceTree = "<group>";
@@ -594,6 +645,7 @@
 			files = (
 				84580C15201B1ECE00961A63 /* LoginViewController.swift in Sources */,
 				84B94EF120B30E26007DACA5 /* ShipperDelegate.swift in Sources */,
+				84B87D1820B57325000DF43B /* ShipperNotificationTableCell.swift in Sources */,
 				8448A9FA20B31DDA00C79ED7 /* ShipHistoryTableViewCell.swift in Sources */,
 				842D182D20786194009FAE23 /* UnitPrice.swift in Sources */,
 				8416057020565AD1006B6E1B /* OrdererEnterInfoController.swift in Sources */,
@@ -605,6 +657,7 @@
 				84AECBA320B4681400E921FB /* Notification.swift in Sources */,
 				84222919204A41C6005058FD /* HomeOrdererController+Actions.swift in Sources */,
 				848DC16F20B181BF00B93EAC /* UIImage+ResizeImage.swift in Sources */,
+				84B87D1320B51F50000DF43B /* UIImageView+LoadFromUrl.swift in Sources */,
 				84A0262520A53CF50090FC70 /* EditOrderViewController+GMSAutoCompletePlaces.swift in Sources */,
 				8467F26E2060F3CC0023D5F1 /* OrderComfirmationCell.swift in Sources */,
 				84B5235320A099F100186F12 /* UICollectionView+setEmptyMessage.swift in Sources */,
@@ -613,19 +666,23 @@
 				84BB854620A3E67600BD5334 /* EditOrderViewController.swift in Sources */,
 				84B8BAB6205B60BE00B4F71A /* OrdererEnterInfoController+Actions.swift in Sources */,
 				84CB857320AD29EE005E97C4 /* EditUserNameViewController.swift in Sources */,
+				84B87D0E20B50B79000DF43B /* OrderNotificationViewController+CallApis.swift in Sources */,
 				842D18292078617B009FAE23 /* ConfirmationItem.swift in Sources */,
 				8416057220565E47006B6E1B /* OdererEnterInfoController+setupViews.swift in Sources */,
 				8448A9F620B3162F00C79ED7 /* ShipHistoryViewController.swift in Sources */,
 				84AF8B6D208AD2AD003E3559 /* BaseCell.swift in Sources */,
 				84B480A720A9D21700E35DA3 /* UIViewController+PresentAlert.swift in Sources */,
+				84B87D1120B51081000DF43B /* OrdererNotificationTableViewCell.swift in Sources */,
 				84D9DA4620280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift in Sources */,
 				8408425E20B16F8D00B52818 /* HomeShipperViewCell.swift in Sources */,
 				844EE917204D335200176512 /* LoginController+setupViews.swift in Sources */,
 				843B7834204D304000A5514F /* HomeOrdererComtroller+setupViews.swift in Sources */,
 				84DB4BEB20A1F0B1002A49E2 /* OrdersHistoryDelegate.swift in Sources */,
 				844EE919204D583900176512 /* PopupEntryPhongNumber+setupViews.swift in Sources */,
+				84B8CD8120B5AF4400A52847 /* ShipperNotificationViewController+CallApis.swift in Sources */,
 				84CB857A20AD6ECF005E97C4 /* ChangePasswordViewController.swift in Sources */,
-				8480DDF92088936D00A8EA05 /* HistoryViewController.swift in Sources */,
+				8480DDF92088936D00A8EA05 /* OrdererHistoryViewController.swift in Sources */,
+				84B075C720B6A92C00F60197 /* String+CaculatingDate.swift in Sources */,
 				84B901992060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift in Sources */,
 				84AC220E20B3C55000EAF7F8 /* HomeShipViewController+CallApis.swift in Sources */,
 				84AF8B6B208AD25A003E3559 /* OrdersHistoryCollectionCell.swift in Sources */,
@@ -636,15 +693,18 @@
 				847FDA38201ECC00003AF85E /* CustomTabbarController.swift in Sources */,
 				84AC221120B3D0EA00EAF7F8 /* ShipHistoryTableViewCell+MethodApis.swift in Sources */,
 				8440FBDC2028950300B256EE /* Enumerations.swift in Sources */,
+				84B075C520B6A4EE00F60197 /* Formatter+formatISO8610.swift in Sources */,
 				8423220C20A4498B00DA5227 /* UILabel+AttritudeText.swift in Sources */,
-				8480DDFB2088968D00A8EA05 /* HistoryViewController+SetupViews.swift in Sources */,
+				8480DDFB2088968D00A8EA05 /* OrdererHistoryViewController+SetupViews.swift in Sources */,
 				844EE914204D32F700176512 /* RegisterController+setupViews.swift in Sources */,
 				842D182720786158009FAE23 /* Order.swift in Sources */,
+				84B87D1520B5232A000DF43B /* OrdererNotificationDelegate.swift in Sources */,
 				84AECBA120B465D700E921FB /* ShipperNotificationViewController.swift in Sources */,
 				84DE89422096AAF900BD55A8 /* Define.swift in Sources */,
 				8408425C20B16CA800B52818 /* HomeShipperViewController.swift in Sources */,
 				84BA53DC2022084200A18BAF /* Authentication.swift in Sources */,
 				84AA1D6620AA797A0093BE74 /* UserViewController.swift in Sources */,
+				84B87D0C20B5079D000DF43B /* OrdererNotificationViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

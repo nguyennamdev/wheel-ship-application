@@ -83,7 +83,7 @@ class HomeOrdererController:UIViewController {
 
     // MARK: Private functions
     private func callApiToGetPriceDistance(){
-        Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_distance", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
+        Alamofire.request("\(Define.URL)/prices/price_distance", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
             if let result = response.result.value as? [String:Any]{
                 if let data = result["data"] as? [[String: Any]]{
                    let price = Price()

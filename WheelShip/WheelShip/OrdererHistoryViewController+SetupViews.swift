@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension HistoryViewController{
+extension OrdererHistoryViewController{
     
     func setupStatusOrderSegment(){
         view.addSubview(statusOrderSegment)

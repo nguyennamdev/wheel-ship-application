@@ -131,7 +131,7 @@ class EditOrderViewController: UIViewController {
         guard let orderId = self.orderIdToEdit else {
             return
         }
-        Alamofire.request("https://wheel-ship.herokuapp.com/orders/orderer/order_by_orderId", method: .get
+        Alamofire.request("\(Define.URL)/orders/orderer/order_by_orderId", method: .get
             , parameters: ["orderId": orderId], encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
                 if let value = response.result.value as? NSDictionary{
                     if let data = value.value(forKey: "data") as? NSDictionary{
@@ -167,7 +167,7 @@ class EditOrderViewController: UIViewController {
     }
     
     private func callApiToGetListPriceWeight(){
-        Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_weights", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
+        Alamofire.request("\(Define.URL)/prices/price_weights", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
             if let result = response.result.value as? [String: Any]{
                 if let data = result["data"] as? [[String: Any]]{
                     data.forEach({ (element) in
@@ -182,7 +182,7 @@ class EditOrderViewController: UIViewController {
     }
     
     private func callApiToGetPriceFragileOrder(){
-        Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_fragile_order", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
+        Alamofire.request("\(Define.URL)/prices/price_fragile_order", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
             if let result = response.result.value as? [String:Any]{
                 if let data = result["data"] as? [[String: Any]]{
                     let priceFragileOrder = data.first?["value"] as! Double
@@ -193,7 +193,7 @@ class EditOrderViewController: UIViewController {
     }
     
     private func callApiToGetPriceDistance(){
-        Alamofire.request("https://wheel-ship.herokuapp.com/prices/price_distance", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
+        Alamofire.request("\(Define.URL)/prices/price_distance", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
             if let result = response.result.value as? [String:Any]{
                 if let data = result["data"] as? [[String: Any]]{
                     let price = Price()
@@ -351,7 +351,7 @@ class EditOrderViewController: UIViewController {
         }
         // unenable updateBarButton until update complete
         updateBarButtonItem?.isEnabled = false
-        Alamofire.request("https://wheel-ship.herokuapp.com/orders/orderer/update_order", method: .put, parameters: parameter, encoding: URLEncoding.httpBody, headers: nil).responseJSON { (data) in
+        Alamofire.request("\(Define.URL)/orders/orderer/update_order", method: .put, parameters: parameter, encoding: URLEncoding.httpBody, headers: nil).responseJSON { (data) in
             if let data = data.result.value as? [String: Any]{
                 if let result = data["result"] as? Bool{
                     if result{

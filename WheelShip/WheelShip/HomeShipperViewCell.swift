@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-class HomeShipperViewCell: TableViewCell {
+class HomeShipperViewCell: BaseTableViewCell {
     
     var isSave:Bool? = false{
         didSet{
@@ -50,7 +50,7 @@ class HomeShipperViewCell: TableViewCell {
                 return
         }
          UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        Alamofire.request("https://wheel-ship.herokuapp.com/orders/shipper/accept_order", method: .put, parameters: ["orderId": orderId, "shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+        Alamofire.request("\(Define.URL)/orders/shipper/accept_order", method: .put, parameters: ["orderId": orderId, "shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
              UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if let value = data.result.value as? [String: Any]{
                 if let result = value["result"] as? String {
@@ -87,7 +87,7 @@ class HomeShipperViewCell: TableViewCell {
             let orderId = self.order?.orderId
             else { return }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        Alamofire.request("https://wheel-ship.herokuapp.com/users/save_order", method: .put, parameters:[ "uid": userId, "orderId": orderId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+        Alamofire.request("\(Define.URL)/users/save_order", method: .put, parameters:[ "uid": userId, "orderId": orderId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
             if let value = data.result.value as? [String: Any]{
                 if let result = value["result"] as? Bool{
                     if result{

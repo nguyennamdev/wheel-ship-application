@@ -13,14 +13,16 @@ class ShipHistoryViewController : UIViewController{
     var user:User?
     let cellId = "cellId"
     var arrOrder:[Order] = [Order]()
-
+    var filteredOrders = [Order]()
+    let searchViewController = UISearchController(searchResultsController: nil)
+    
     // MARK: Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Thư viện"
         view.backgroundColor  = UIColor.white
         setupViews()
+        initSearchViewController()
         
     }
     
@@ -35,7 +37,6 @@ class ShipHistoryViewController : UIViewController{
         default:
             break
         }
-        
     }
     
     func loadAgainData(){
@@ -57,7 +58,52 @@ class ShipHistoryViewController : UIViewController{
         loadAgainData()
     }
     
+    // MARK: - Private instance methods
+    func searchBarIsEmpty() -> Bool {
+        // return true if the text is empty or nil
+        return searchViewController.searchBar.text?.isEmpty ?? true
+    }
+    
+    func filterContentForSearchText(_ searchText:String, indexScopeSelected:Int){
+        filteredOrders = arrOrder.filter({ (order:Order) -> Bool in
+            switch indexScopeSelected{
+            case 0:
+                return (order.orderId?.lowercased().contains(searchText.lowercased()))!
+            case 1:
+                return (order.originAddress?.lowercased().contains(searchText.lowercased()))! || (order.destinationAddress?.lowercased().contains(searchText))!
+            case 2:
+                let prepaymentString = String(order.unitPrice?.prepayment ?? 0)
+                let overheadsString = String(order.unitPrice?.overheads ?? 0)
+                let feeShipString = String(order.unitPrice?.feeShip ?? 0)
+                return (prepaymentString.lowercased().contains(searchText.lowercased())) || overheadsString.lowercased().contains(searchText.lowercased()) || feeShipString.lowercased().contains(searchText.lowercased())
+            case 3:
+                let distanceString = String(order.distance ?? 0)
+                return distanceString.lowercased().contains(searchText.lowercased())
+            default:
+                return (order.orderId?.lowercased().contains(searchText.lowercased()))!
+            }
+        })
+        ordersTableView.reloadData()
+    }
+    
+    func isFiltering() -> Bool{
+        return searchViewController.isActive && !searchBarIsEmpty()
+    }
+    
     // MARK: setup views
+    private func initSearchViewController(){
+        // setup the scope bar
+        searchViewController.searchBar.scopeButtonTitles = ["Mã đơn hàng", "Địa chỉ", "Phí", "Khoảng cách"]
+        searchViewController.searchBar.delegate = self
+        searchViewController.searchBar.selectedScopeButtonIndex = 0
+        // setup search viewcontroller
+        searchViewController.searchResultsUpdater = self
+        searchViewController.obscuresBackgroundDuringPresentation = false
+        searchViewController.searchBar.placeholder = "Tìm kiếm"
+        self.navigationItem.searchController = searchViewController
+    }
+    
+    
     private func setupViews(){
         setupOrderStatusSegment()
         setupOrdersTableView()
@@ -96,6 +142,9 @@ class ShipHistoryViewController : UIViewController{
 extension ShipHistoryViewController : UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isFiltering(){
+            return filteredOrders.count
+        }
         if (self.arrOrder.count == 0){
             self.ordersTableView.setEmptyMessage("Không có đơn hàng để hiển thị :(")
         }else{
@@ -108,10 +157,19 @@ extension ShipHistoryViewController : UITableViewDataSource, UITableViewDelegate
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as? ShipHistoryViewCell
         cell?.userId = self.user?.uid
         cell?.shipperDelegate = self
-        cell?.order = self.arrOrder[indexPath.row]
-        cell?.isEnabledCancelButton = self.arrOrder[indexPath.row].status
-        cell?.isCompletedOrder = self.arrOrder[indexPath.row].isCompleted
-        
+    
+        let order:Order
+        if isFiltering(){
+            order = filteredOrders[indexPath.row]
+        }else{
+            order = arrOrder[indexPath.row]
+        }
+        cell?.order = order
+        // if status = had shipper, cell will disenable cancel button
+        cell?.isEnabledCancelButton = order.status
+        // if order completed, cell will remove stack buttons
+        cell?.isCompletedOrder = order.isCompleted
+        // show buttons need in cell
         if orderStatusSegment.selectedSegmentIndex == 0 {
             cell?.isHadAcceptButton = true
         }else{
@@ -122,9 +180,9 @@ extension ShipHistoryViewController : UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.arrOrder[indexPath.row].isCompleted! {
-            return 340
+            return 360
         }
-        return 380
+        return 400
     }
     
 }
@@ -167,6 +225,34 @@ extension ShipHistoryViewController : ShipperDelegate {
             alert.addAction(cancelAction)
             present(alert, animated: true, completion: nil)
         }
+    }
+    
+}
+
+// MARK: - UISearchResultsUpdating Delegate
+extension ShipHistoryViewController : UISearchResultsUpdating{
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        let scopeSelected = searchBar.selectedScopeButtonIndex
+        filterContentForSearchText(searchBar.text!, indexScopeSelected: scopeSelected)
+    }
+
+}
+
+// MARK: UISearchBarDelegate
+extension ShipHistoryViewController : UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        self.filterContentForSearchText(searchBar.text!, indexScopeSelected: selectedScope)
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.orderStatusSegment.isHidden = true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        self.orderStatusSegment.isHidden = false
     }
     
 }

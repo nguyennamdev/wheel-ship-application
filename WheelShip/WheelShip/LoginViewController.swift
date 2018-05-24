@@ -19,13 +19,13 @@ class LoginViewController: UIViewController {
         // setup views
         setupGradientView()
         setupLogoLabel()
+        setupActivityIndicatorView()
         setupEmailTextField()
         setupPasswordTextField()
         setupLogginButton()
         setupLabel()
         setupRegisterButton()
         setupQuestionLabel()
-        
         emailTextField.delegate = self
         passwordTextField.delegate = self
         
@@ -38,8 +38,12 @@ class LoginViewController: UIViewController {
     
     // MARK: Private func
     private func callApiToLogin(email: String, password: String){
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        self.activityIndicatorView.startAnimating()
         let parameter = ["logEmail": email, "logPassword": password] as Parameters
-        Alamofire.request("http://localhost:3000/users/login", method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: nil).responseJSON(completionHandler: { (data) in
+        Alamofire.request("\(Define.URL)/users/login", method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: nil).responseJSON(completionHandler: { (data) in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            self.activityIndicatorView.stopAnimating()
             if let value = data.result.value as? NSDictionary {
                 if let result = value.value(forKey: "result") as? Bool{
                     if result{
@@ -83,7 +87,7 @@ class LoginViewController: UIViewController {
         let label = UILabel()
         label.text = "Wheel Ship"
         label.textColor = UIColor.white
-        label.font = UIFont(name: "Noteworthy", size:52)
+        label.font = UIFont(name: "Noteworthy", size:58)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -143,6 +147,13 @@ class LoginViewController: UIViewController {
         label.textColor = UIColor.white
         label.textAlignment = .center
         return label
+    }()
+    
+    let activityIndicatorView:UIActivityIndicatorView = {
+        let activity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+        activity.stopAnimating()
+        activity.translatesAutoresizingMaskIntoConstraints = false
+        return activity
     }()
     
     let questionLabel:UILabel = {

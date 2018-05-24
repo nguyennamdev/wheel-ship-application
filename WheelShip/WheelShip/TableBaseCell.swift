@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TableViewCell: UITableViewCell {
+class BaseTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -23,22 +23,11 @@ class TableViewCell: UITableViewCell {
     var order:Order?{
         didSet{
             guard let order = self.order,
-                let unitPrice = order.unitPrice,
-                let priceFragileOrder = unitPrice.priceFragileOrder else { return }
+                let unitPrice = order.unitPrice else { return }
             // Assign data for labels
             setValueStatusLabeL(order: order)
-            orderIdLabel.setAttitudeString(title: (Define.ORDER_ID, UIColor.red), content: (" \(order.orderId ?? "")", UIColor.black))
-            stopTime.text = order.stopTime
-            originAddressLabel.setAttitudeString(title: (Define.ORIGIN_ADDRESS, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: (" \(order.originAddress ?? "")", UIColor.black))
-            destinationLabel.setAttitudeString(title: (Define.DESTINATION_ADDRESS,  #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: (" \(order.destinationAddress ?? "")", UIColor.black))
-            phoneOrdererLabel.setAttitudeString(title: (Define.PHONE_ORDERER, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(order.phoneOrderer ?? "")", UIColor.black))
-            phoneReceiverLabel.setAttitudeString(title: (Define.PHONE_RECEIVER, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(order.phoneReceiver ?? "")", UIColor.black))
-            weightLabel.setAttitudeString(title: (Define.WEIGHT_STRING, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(order.weight ?? "")", UIColor.black))
-            prepaymentLabel.setAttitudeString(title: (Define.PREPAYMENT, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(unitPrice.prepayment.formatedNumberWithUnderDots()) vnđ", UIColor.black))
-            feeShipLabel.setAttitudeString(title: (Define.FEESHIP, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(unitPrice.feeShip.formatedNumberWithUnderDots()) vnđ", UIColor.black))
-            priceOfOrderFragileLabel.setAttitudeString(title: (Define.PRICE_OF_ORDER_FRAGILE, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(priceFragileOrder.formatedNumberWithUnderDots()) vnđ", UIColor.black))
-            priceOfWeight.setAttitudeString(title: (Define.PRICE_OF_WEIHGT,#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1) ), content: ("\t\(unitPrice.priceOfWeight!.formatedNumberWithUnderDots())", UIColor.black))
-            noteLabel.setAttitudeString(title: (Define.NOTE, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(order.note ?? "")", UIColor.black))
+            setupBasicInforOrder(order: order)
+            setupDetailInfoOrder(order: order, unitPrice: unitPrice)
         }
     }
     
@@ -54,13 +43,37 @@ class TableViewCell: UITableViewCell {
         }
     }
     
+    func setupBasicInforOrder(order:Order){
+        if let startTime = order.startTime {
+            startTimeLabel.text = startTime.caculatingDatePassedWithCurrentDate()
+        }
+        orderIdLabel.setAttitudeString(title: (Define.ORDER_ID, UIColor.red), content: (" \(order.orderId ?? "")", UIColor.black))
+
+        originAddressLabel.setAttitudeString(title: (Define.ORIGIN_ADDRESS, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: (" \(order.originAddress ?? "")", UIColor.black))
+        destinationAddressLabel.setAttitudeString(title: (Define.DESTINATION_ADDRESS,  #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: (" \(order.destinationAddress ?? "")", UIColor.black))
+        let distaceKM:Double = order.distance! / 1000
+        distanceLabel.setAttitudeString(title: (Define.DISTANCE_STRING, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\(distaceKM.formatedNumberWithUnderDots())km", UIColor.black))
+        phoneOrdererLabel.setAttitudeString(title: (Define.PHONE_ORDERER, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(order.phoneOrderer ?? "")", UIColor.black))
+        phoneReceiverLabel.setAttitudeString(title: (Define.PHONE_RECEIVER, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(order.phoneReceiver ?? "")", UIColor.black))
+    }
+    
+    func setupDetailInfoOrder(order:Order, unitPrice:UnitPrice){
+        weightLabel.setAttitudeString(title: (Define.WEIGHT_STRING, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(order.weight ?? "")", UIColor.black))
+        prepaymentLabel.setAttitudeString(title: (Define.PREPAYMENT, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(unitPrice.prepayment.formatedNumberWithUnderDots()) vnđ", UIColor.black))
+        feeShipLabel.setAttitudeString(title: (Define.FEESHIP,#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(unitPrice.feeShip.formatedNumberWithUnderDots()) vnđ", UIColor.black))
+        priceOfOrderFragileLabel.setAttitudeString(title: (Define.PRICE_OF_ORDER_FRAGILE,#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(unitPrice.priceFragileOrder!.formatedNumberWithUnderDots()) vnđ", UIColor.black))
+        priceOfWeight.setAttitudeString(title: (Define.PRICE_OF_WEIHGT,#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(unitPrice.priceOfWeight!.formatedNumberWithUnderDots())", UIColor.black))
+        noteLabel.setAttitudeString(title: (Define.NOTE, #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), content: ("\t\(order.note ?? "")", UIColor.black))
+    }
+    
     func setupViews(){
         setupOrderIdLabel()
-        setupStopTimeLabel()
+        setupStartTimeLabel()
         setupSeparatorView()
         setupStatusLabel()
         setupOriginAddressLabel()
         setupDestinationLabel()
+        setupDistanceLabel()
         setupPhoneOrdererLabel()
         setupPhoneReceiverLabel()
         setupWeightLabel()
@@ -89,10 +102,10 @@ class TableViewCell: UITableViewCell {
         orderIdLabel.heightAnchor.constraint(equalToConstant: 18).isActive = true
     }
     
-    func setupStopTimeLabel(){
-        self.addSubview(stopTime)
-        stopTime.anchorWithConstants(top: self.orderIdLabel.bottomAnchor, left: nil, bottom: nil, right: self.rightAnchor, topConstant: 4, leftConstant: 0, bottomConstant: 0, rightConstant: 8)
-        stopTime.heightAnchor.constraint(equalToConstant: 16).isActive = true
+    func setupStartTimeLabel(){
+        self.addSubview(startTimeLabel)
+        startTimeLabel.anchorWithConstants(top: self.orderIdLabel.bottomAnchor, left: nil, bottom: nil, right: self.rightAnchor, topConstant: 4, leftConstant: 0, bottomConstant: 0, rightConstant: 8)
+        startTimeLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
     }
     
     func setupStatusLabel(){
@@ -107,7 +120,7 @@ class TableViewCell: UITableViewCell {
     }
     
     func setupOriginAddressLabel(){
-        layoutImageView(topAnchor: stopTime, imageName: "placeholder", to: originImageView)
+        layoutImageView(topAnchor: startTimeLabel, imageName: "placeholder", to: originImageView)
         self.addSubview(originAddressLabel)
         originAddressLabel.translatesAutoresizingMaskIntoConstraints = false
         originAddressLabel.centerYAnchor.constraint(equalTo: originImageView.centerYAnchor).isActive = true
@@ -118,14 +131,22 @@ class TableViewCell: UITableViewCell {
     
     func setupDestinationLabel(){
         layoutImageView(topAnchor: originAddressLabel, imageName: "placeholder2", to: destinationImageView)
-        self.addSubview(destinationLabel)
-        destinationLabel.anchorWithConstants(top: nil, left: destinationImageView.rightAnchor, bottom: nil, right: self.rightAnchor, topConstant: 0, leftConstant: 8, bottomConstant: 0, rightConstant: 8)
-        destinationLabel.centerYAnchor.constraint(equalTo: destinationImageView.centerYAnchor).isActive = true
-        destinationLabel.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        self.addSubview(destinationAddressLabel)
+        destinationAddressLabel.anchorWithConstants(top: nil, left: destinationImageView.rightAnchor, bottom: nil, right: self.rightAnchor, topConstant: 0, leftConstant: 8, bottomConstant: 0, rightConstant: 8)
+        destinationAddressLabel.centerYAnchor.constraint(equalTo: destinationImageView.centerYAnchor).isActive = true
+        destinationAddressLabel.heightAnchor.constraint(equalToConstant: 32).isActive = true
+    }
+    
+    func setupDistanceLabel(){
+        layoutImageView(topAnchor: destinationAddressLabel, imageName: "distance", to: distanceImageView)
+        self.addSubview(distanceLabel)
+        distanceLabel.anchorWithConstants(top: nil, left: distanceImageView.rightAnchor, bottom: nil, right: self.rightAnchor, topConstant: 0, leftConstant: 8, bottomConstant: 0, rightConstant: 8)
+        distanceLabel.centerYAnchor.constraint(equalTo: distanceImageView.centerYAnchor).isActive = true
+        distanceLabel.heightAnchor.constraint(equalToConstant: 18).isActive = true
     }
     
     func setupPhoneOrdererLabel(){
-        layoutImageView(topAnchor: destinationLabel, imageName: "telephone", to: phoneOrdererImageView)
+        layoutImageView(topAnchor: distanceLabel, imageName: "telephone", to: phoneOrdererImageView)
         self.addSubview(phoneOrdererLabel)
         phoneOrdererLabel.anchorWithConstants(top: nil, left: phoneOrdererImageView.rightAnchor, bottom: nil, right: self.rightAnchor, topConstant: 0, leftConstant: 8, bottomConstant: 0, rightConstant: 8)
         phoneOrdererLabel.centerYAnchor.constraint(equalTo: phoneOrdererImageView.centerYAnchor).isActive = true
@@ -212,7 +233,7 @@ class TableViewCell: UITableViewCell {
         return label
     }()
     
-    let stopTime:UILabel = {
+    let startTimeLabel:UILabel = {
         let label = UILabel()
         label.textColor = UIColor.gray
         label.font = UIFont.systemFont(ofSize: 13)
@@ -231,13 +252,14 @@ class TableViewCell: UITableViewCell {
         return label
     }()
     
-    
-    let destinationLabel:UILabel = {
+    let destinationAddressLabel:UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         return label
     }()
     
+    
+    let distanceLabel:UILabel = UILabel()
     let phoneOrdererLabel:UILabel = UILabel()
     let phoneReceiverLabel:UILabel = UILabel()
     let weightLabel: UILabel = UILabel()
@@ -249,6 +271,8 @@ class TableViewCell: UITableViewCell {
     
     let originImageView = UIImageView()
     let destinationImageView = UIImageView()
+    let distanceImageView = UIImageView()
+    
     let weightImageView = UIImageView()
     let prepaymentImageView = UIImageView()
     let feeShipImageView = UIImageView()

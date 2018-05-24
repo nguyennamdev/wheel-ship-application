@@ -20,14 +20,22 @@ extension LoginViewController {
     func setupLogoLabel(){
         view.addSubview(logoLabel)
         logoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        logoLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3).isActive = true
-        logoLabel.topAnchor.constraint(equalTo: view.topAnchor, constant:12).isActive = true
+        logoLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3, constant:-40).isActive = true
+        logoLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:12).isActive = true
+    }
+    
+    func setupActivityIndicatorView(){
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.topAnchor.constraint(equalTo: logoLabel.bottomAnchor).isActive = true
+        activityIndicatorView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        activityIndicatorView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        activityIndicatorView.widthAnchor.constraint(equalToConstant: 40).isActive = true
     }
     
     func setupEmailTextField(){
         view.addSubview(emailTextField)
         // x,y,w,h
-        emailTextField.topAnchor.constraint(equalTo: logoLabel.bottomAnchor, constant: 12).isActive = true
+        emailTextField.topAnchor.constraint(equalTo: activityIndicatorView.bottomAnchor, constant: 12).isActive = true
         emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         emailTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
         emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24).isActive = true
@@ -64,4 +72,6 @@ extension LoginViewController {
         questionLabel.bottomAnchor.constraint(equalTo: registerButton.topAnchor).isActive = true
         questionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
+    
+    
 }
