@@ -12,30 +12,36 @@ import Alamofire
 class CustomTabbarController: UITabBarController {
     
     var user:User?
+    var reachability:Reachability = Reachability.instance
+    var timer:Timer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.white
         self.tabBar.tintColor = #colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1)
-
+        
+        if !reachability.currentReachbilityStatus(){
+            present(reachability.showAlertToSettingInternet(), animated: true, completion: nil)
+        }
+    
         // if user is not logged in
         if isLoggedIn() == false{
             perform(#selector(showLoginController), with: nil, afterDelay: 0.01)
         }else{
             self.user = UserDefaults.standard.getUser()
-       
+           
             if self.user?.userType == TypeOfUser.isOrderer {
                 loadViewControllersForOrderer(user: self.user!)
             }else{
                 loadViewControllersForShipper(user: self.user!)
             }
         }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-    
     }
     
    // MARK: Call apis
@@ -62,6 +68,8 @@ class CustomTabbarController: UITabBarController {
                             response(numberOfNotifications)
                         }
                     }
+                }else{
+                    response(0)
                 }
             }
         }
@@ -92,15 +100,16 @@ class CustomTabbarController: UITabBarController {
                             setupTabbarItem(item: userViewController, title: "Cá nhân", image: #imageLiteral(resourceName: "user_tabbar")) ]
         
         // get number of notifications
-        getNumberOfNotificationForOrderer(ordererId: user.uid!) { (numberOrNotification) in
-            let number = numberOrNotification
-            if number == 0 {
-                ordererNotificationViewController.tabBarItem.badgeValue = nil
-            }else{
-                ordererNotificationViewController.tabBarItem.badgeValue = "\(numberOrNotification)"
+        timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block: { (timer) in
+            self.getNumberOfNotificationForOrderer(ordererId: user.uid!) { (numberOrNotification) in
+                let number = numberOrNotification
+                if number == 0 {
+                    ordererNotificationViewController.tabBarItem.badgeValue = nil
+                }else{
+                    ordererNotificationViewController.tabBarItem.badgeValue = "\(numberOrNotification)"
+                }
             }
-        }
-        
+        })
     }
     
     public func loadViewControllersForShipper(user:User){
@@ -129,16 +138,18 @@ class CustomTabbarController: UITabBarController {
                                  setupTabbarItem(item: userViewController, title: "Cá nhân", image: #imageLiteral(resourceName: "user_tabbar"))]
         
         // get number of notifications
-        getNumberOfNotificationForShipper(shipperId: user.uid!) { (numberOfNotification) in
-            let numberSaved = UserDefaults.standard.getNumberOfNotification()
-            if numberOfNotification > numberSaved{
-                let numberWillShow = numberOfNotification - numberSaved // get number will show when minus 2 number these
-                shipperNotificationViewController.tabBarItem.badgeValue = "\(numberWillShow)"
-            }else{
-                shipperNotificationViewController.tabBarItem.badgeValue = nil
+        timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block: { (timer) in
+            self.getNumberOfNotificationForShipper(shipperId: user.uid!) { (numberOfNotification) in
+                let numberSaved = UserDefaults.standard.getNumberOfNotification()
+                if numberOfNotification > numberSaved{
+                    let numberWillShow = numberOfNotification - numberSaved // get number will show when minus 2 number these
+                    shipperNotificationViewController.tabBarItem.badgeValue = "\(numberWillShow)"
+                }else{
+                    shipperNotificationViewController.tabBarItem.badgeValue = nil
+                }
+                UserDefaults.standard.setNumberOfNotifitcationForShipper(number: numberOfNotification)
             }
-            UserDefaults.standard.setNumberOfNotifitcationForShipper(number: numberOfNotification)
-        }
+        })
     }
     
     

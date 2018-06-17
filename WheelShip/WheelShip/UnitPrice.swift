@@ -15,7 +15,6 @@ class UnitPrice: NSObject {
     public var feeShip: Double = 0
     public var priceOfWeight:Double?
     public var priceFragileOrder:Double? = 0
-    
     public var priceOfDistance:Price?
 
     public var overheads:Double {

@@ -12,7 +12,7 @@ import UIKit
 extension ShipHistoryViewCell {
     
     func acceptOrder(orderId:String, shipperId:String){
-        Alamofire.request("\(Define.URL)/shipper/orders/accept_order", method: .put, parameters: ["orderId": orderId, "shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+        Alamofire.request("\(Define.URL)/orders/shipper/accept_order", method: .put, parameters: ["orderId": orderId, "shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
             if let value = data.result.value as? [String: Any]{
                 if let result = value["result"] as? String {
                     // if result is wait response, it will do not allow get this order
@@ -31,7 +31,7 @@ extension ShipHistoryViewCell {
     }
     
     func cancelOrder(orderId:String, shipperId:String){
-        Alamofire.request("\(Define.URL)/shipper/orders/cancel_order", method: .put, parameters: ["orderId": orderId, "shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
+        Alamofire.request("\(Define.URL)/orders/shipper/cancel_order", method: .put, parameters: ["orderId": orderId, "shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
             if let value = data.result.value as? [String: Any]{
                 if let result = value["result"] as? String{
                     if result == "DontAllow"{

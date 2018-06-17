@@ -15,6 +15,7 @@ class ShipHistoryViewController : UIViewController{
     var arrOrder:[Order] = [Order]()
     var filteredOrders = [Order]()
     let searchViewController = UISearchController(searchResultsController: nil)
+    let reachbility = Reachability.instance
     
     // MARK: Life cycle
     
@@ -23,23 +24,15 @@ class ShipHistoryViewController : UIViewController{
         view.backgroundColor  = UIColor.white
         setupViews()
         initSearchViewController()
-        
+        ordersTableView.refreshControl = tableRefreshControl
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        switch orderStatusSegment.selectedSegmentIndex {
-        case 0:
-            callApiToGetListOrderSaved()
-        case 1:
-            callApiToGetListOrderAccepted()
-        default:
-            break
-        }
+        loadHistoryOrders()
     }
     
-    func loadAgainData(){
+    func loadHistoryOrders(){
         switch orderStatusSegment.selectedSegmentIndex {
         case 0:
             callApiToGetListOrderSaved()
@@ -55,8 +48,13 @@ class ShipHistoryViewController : UIViewController{
     
     // MARK: Actions
     @objc func orderStatusSegmentValueChanged(sender:UISegmentedControl){
-        loadAgainData()
+        loadHistoryOrders()
     }
+    
+    @objc private func handleReloadHistoryOrderOfShipper(){
+        loadHistoryOrders()
+    }
+    
     
     // MARK: - Private instance methods
     func searchBarIsEmpty() -> Bool {
@@ -136,6 +134,13 @@ class ShipHistoryViewController : UIViewController{
         return tableView
     }()
     
+    lazy var tableRefreshControl:UIRefreshControl = {
+        let rf = UIRefreshControl()
+        rf.tintColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        rf.addTarget(self, action: #selector(handleReloadHistoryOrderOfShipper), for: .valueChanged)
+        return rf
+    }()
+    
 }
 
 // MARK: Implement UITableViewDataSource and UITableViewDelegate
@@ -180,9 +185,9 @@ extension ShipHistoryViewController : UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.arrOrder[indexPath.row].isCompleted! {
-            return 360
+            return 370
         }
-        return 400
+        return 410
     }
     
 }
@@ -196,7 +201,7 @@ extension ShipHistoryViewController : ShipperDelegate {
     
     func presentResponseResult(title: String, message: String) {
         self.presentAlertWithTitleAndMessage(title: title, message: message)
-        loadAgainData()
+        loadHistoryOrders()
     }
     
     func shipperCall(phoneOrderer: String, phoneReceiver: String) {

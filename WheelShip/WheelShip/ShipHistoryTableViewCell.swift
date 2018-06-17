@@ -28,9 +28,9 @@ class ShipHistoryViewCell: BaseTableViewCell {
     var isHadAcceptButton:Bool? = false{
         didSet{
             if isHadAcceptButton!{
-                customButtonsWithHaveAcceptButton()
+                customStackButtonsWithHaveAcceptButton()
             }else{
-                customButtonsWithoutAcceptButton()
+                customStackButtonsWithoutAcceptButton()
             }
         }
     }
@@ -56,10 +56,10 @@ class ShipHistoryViewCell: BaseTableViewCell {
     
     // MARK: Private funcs
     
-    private func customButtonsWithHaveAcceptButton(){
+    private func customStackButtonsWithHaveAcceptButton(){
         acceptOrderButton.isHidden = false
-        cancelOrderButton.isHidden = true
         unsaveOrderButton.isHidden = false
+        cancelOrderButton.isHidden = true
         completeOrderButton.isHidden = true
         // remove sub view don't display
         buttonsStackView.removeArrangedSubview(cancelOrderButton)
@@ -70,7 +70,7 @@ class ShipHistoryViewCell: BaseTableViewCell {
         buttonsStackView.addArrangedSubview(unsaveOrderButton)
     }
     
-    private func customButtonsWithoutAcceptButton(){
+    private func customStackButtonsWithoutAcceptButton(){
         acceptOrderButton.isHidden = true
         cancelOrderButton.isHidden = false
         unsaveOrderButton.isHidden = true
@@ -81,9 +81,12 @@ class ShipHistoryViewCell: BaseTableViewCell {
         if let enable = self.isEnabledCancelButton{
             if enable != OrderStage.hadShipper {
                 completeOrderButton.isHidden = true
+                cancelOrderButton.isEnabled = true
                 buttonsStackView.addArrangedSubview(cancelOrderButton)
             }else{
+                cancelOrderButton.isHidden = true
                 completeOrderButton.isHidden = false
+                completeOrderButton.isEnabled = true
                 buttonsStackView.addArrangedSubview(completeOrderButton)
             }
         }
@@ -92,7 +95,6 @@ class ShipHistoryViewCell: BaseTableViewCell {
     private static func buttonForTitle(title:String, imageName:String) -> UIButton{
         let button = UIButton()
         button.setTitle(" \(title)", for: .normal)
-//        button.setImage(UIImage(named: imageName)?.resizeImage(newSize: CGSize(width: 22, height: 22)), for: .normal)
         button.setImage(UIImage(named: imageName), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         button.setTitleColor(#colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1), for: .normal)

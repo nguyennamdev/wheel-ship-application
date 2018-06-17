@@ -29,8 +29,8 @@ class Define: NSObject {
     static let STATUS_HAD_SHIPPER       = "Đơn hàng của bạn"
     static let ORDER_ID                 = "Mã vận chuyển "
     static let DISTANCE_STRING          = "Khoảng cách       "
-    static let URL =  "http://localhost:3000"
-//    static let URL = "https://wheel-ship.herokuapp.com"
+//    static let URL =  "http://localhost:3000"
+    static let URL = "https://wheel-ship.herokuapp.com"
     
     static let SHIPPER_REQUEST_STRING = "Đã yêu cầu bạn cho phép vận chuyển đơn hàng"
     static let SHIPPER_GET_RESPONSE_STRING = "Đã cho đồng ý cho bạn vận chuyển đơn hàng"

@@ -12,7 +12,7 @@ import Alamofire
 extension HomeShipperViewController {
     
     // MARK: Call Api
-    public func loadOrdersFromApi(){
+    @objc public func loadOrdersFromApi(){
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         Alamofire.request("\(Define.URL)/orders/shipper/list_order", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
             if let value = data.result.value as? NSDictionary {
@@ -25,6 +25,7 @@ extension HomeShipperViewController {
                         self.arrOrder.append(order)
                     }
                     UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    self.tableRefreshControl.endRefreshing()
                     self.tableView.reloadData()
                 }
             }

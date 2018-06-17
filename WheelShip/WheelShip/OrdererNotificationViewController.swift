@@ -13,23 +13,51 @@ class OrdererNotificationViewController : UITableViewController {
     let cellId:String = "cellId"
     var user:User?
     var arrOrder:[Order] = [Order]()
+    let reachbility = Reachability.instance
+    var timer:Timer!
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Thông báo"
         
+        self.tableView.refreshControl = self.tableRefreshControl
         self.tableView.register(OrdererNotificationTableViewCell.self, forCellReuseIdentifier: cellId)
+        
+        timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(handleReloadNotification), userInfo: nil, repeats: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if !reachbility.currentReachbilityStatus(){
+            present(reachbility.showAlertToSettingInternet(), animated: true, completion: nil)
+        }
+        loadNotifications()
+    }
+    
+    // MARK: Actions
+    @objc private func handleReloadNotification(){
+        loadNotifications()
+    }
+    
+    // MARK: Private instance methods
+    private func loadNotifications(){
         callApiToGetRequestsFromShipper()
         if let urerId = self.user?.uid {
             getNumberOfNotificationForOrderer(ordererId: urerId) { (number) in
-                number == 0 ? (self.tabBarItem.badgeValue = "") : (self.tabBarItem.badgeValue = "\(number)")
+                number == 0 ? (self.tabBarItem.badgeValue = nil) : (self.tabBarItem.badgeValue = "\(number)")
             }
         }
     }
+    
+    // MARK: Views
+    lazy var tableRefreshControl: UIRefreshControl = {
+        let rf = UIRefreshControl()
+        rf.tintColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+        rf.addTarget(self, action: #selector(handleReloadNotification), for: .valueChanged)
+        return rf
+    }()
     
 }
 

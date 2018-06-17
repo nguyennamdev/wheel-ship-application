@@ -13,27 +13,43 @@ class ShipperNotificationViewController: UITableViewController{
     let cellId = "cellId"
     var user:User?
     var arrOrder:[Order] = [Order]()
-    
     let searchViewController = UISearchController(searchResultsController: nil)
+    let reachbility = Reachability.instance
     
+    var timer:Timer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        self.tableView.refreshControl = tableRefreshControl
         self.tableView.register(ShipperNotificationTableViewCell.self, forCellReuseIdentifier: cellId)
         self.navigationItem.title = "Thông báo"
+        
+        timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(handleReloadNotifications), userInfo: nil, repeats: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        self.getListOrderAgreed()
-        handleShowNumberOfNotification()
+        if reachbility.currentReachbilityStatus(){
+            self.getListOrderAgreed()
+            handleShowNumberOfNotification()
+        }else{
+            present(reachbility.showAlertToSettingInternet(), animated: true, completion: {
+                if self.reachbility.currentReachbilityStatus(){
+                    self.getListOrderAgreed()
+                    self.handleShowNumberOfNotification()
+                }
+            })
+        }
     }
     
+    // MARK: Actions
+    @objc private func handleReloadNotifications(){
+        self.getListOrderAgreed()
+        self.handleShowNumberOfNotification()
+    }
 
-    
-  
+    // MARK: Private instance methods
     
     private func handleShowNumberOfNotification(){
         // reset number of notification
@@ -53,6 +69,14 @@ class ShipperNotificationViewController: UITableViewController{
         }
     }
     
+    // MARK: Views
+    lazy var tableRefreshControl:UIRefreshControl = {
+        let rf = UIRefreshControl()
+        rf.tintColor = #colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)
+        rf.addTarget(self, action: #selector(handleReloadNotifications), for: .valueChanged)
+        return rf
+    }()
+
 }
 
 // MARK: Implement UITableDataSource and UITableDelegate

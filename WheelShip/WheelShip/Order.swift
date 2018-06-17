@@ -26,7 +26,6 @@ class Order: NSObject {
     public var note: String?
     public var phoneOrderer: String? = ""
     public var phoneReceiver: String?
-    
     public var startTime: String?
     public var stopTime: String?
     public var status: OrderStage?

@@ -15,21 +15,34 @@ class HomeShipperViewController : UITableViewController {
     let cellId = "cellId"
     var arrOrder:[Order] = [Order]()
     var filteredOrders = [Order]()
-    
     let searchViewController = UISearchController(searchResultsController: nil)
+    let reachbility = Reachability.instance
+    
+    var timer:Timer = Timer()
+    
     
     // MARK: life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tableView.refreshControl = tableRefreshControl
         self.tableView.register(HomeShipperViewCell.self, forCellReuseIdentifier: cellId)
         tableView.backgroundColor = UIColor.white
         initSearchViewController()
         
+        self.timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(loadOrdersFromApi), userInfo: nil, repeats: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.loadOrdersFromApi()
+        if !reachbility.currentReachbilityStatus(){
+            present(reachbility.showAlertToSettingInternet(), animated: true, completion: {
+                if self.reachbility.currentReachbilityStatus(){
+                    self.loadOrdersFromApi()
+                }
+            })
+        }else{
+            self.loadOrdersFromApi()
+        }
     }
     
     // MARK: setup views
@@ -76,6 +89,21 @@ class HomeShipperViewController : UITableViewController {
     func isFiltering() -> Bool{
         return searchViewController.isActive && !searchBarIsEmpty()
     }
+    
+    // MARK: Views
+    lazy var tableRefreshControl:UIRefreshControl = {
+        let rf = UIRefreshControl()
+        rf.tintColor = #colorLiteral(red: 0.5725490451, green: 0, blue: 0.2313725501, alpha: 1)
+        rf.addTarget(self, action: #selector(handleReloadOrder), for: .valueChanged)
+        return rf
+    }()
+    
+    // MARK: Actions
+    @objc func handleReloadOrder(){
+        self.loadOrdersFromApi()
+    }
+
+    
 }
 
 
@@ -116,7 +144,7 @@ extension HomeShipperViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 400
+        return 410
     }
 }
 

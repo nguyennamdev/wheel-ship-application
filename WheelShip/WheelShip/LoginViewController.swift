@@ -12,6 +12,7 @@ import Alamofire
 class LoginViewController: UIViewController {
  
     var user:User?
+    let reachbility = Reachability.instance
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -194,7 +195,15 @@ extension LoginViewController {
         }else{
             if emailTextField.checkTextIsEmail(){
               // invoke func call api to login
-              callApiToLogin(email: emailTextField.text!, password: passwordTextField.text!)
+                if !self.reachbility.currentReachbilityStatus(){
+                    present(reachbility.showAlertToSettingInternet(), animated: true, completion: {
+                        if self.reachbility.currentReachbilityStatus(){
+                            self.callApiToLogin(email: self.emailTextField.text!, password: self.passwordTextField.text!)
+                        }
+                    })
+                }else{
+                    callApiToLogin(email: emailTextField.text!, password: passwordTextField.text!)
+                }
             }else{
                 emailTextField.text = "Email sai định dạng"
                 emailTextField.textColor = UIColor.red

@@ -12,16 +12,30 @@ extension ShipHistoryViewController {
     
     // MARK: Call apis
     public func callApiToGetListOrderSaved(){
-        callApiToGetListOrder(url: "\(Define.URL)/orders/shipper/order_saved_by_shipper")
+        if !reachbility.currentReachbilityStatus(){
+            present(reachbility.showAlertToSettingInternet(), animated: true, completion: nil)
+        }else{
+            callApiToGetListOrder(url: "\(Define.URL)/orders/shipper/order_saved_by_shipper")
+        }
+       
     }
     
     
     public func callApiToGetListOrderAccepted(){
-        callApiToGetListOrder(url: "\(Define.URL)/orders/shipper/order_accepted_by_shipper")
+        if !reachbility.currentReachbilityStatus(){
+            present(reachbility.showAlertToSettingInternet(), animated: true, completion: nil)
+        }else{
+            callApiToGetListOrder(url: "\(Define.URL)/orders/shipper/order_accepted_by_shipper")
+        }
+        
     }
     
     public func callApiToGetListOrderCompleted(){
-        callApiToGetListOrder(url: "\(Define.URL)/orders/shipper/list_order_completed")
+        if !reachbility.currentReachbilityStatus(){
+            present(reachbility.showAlertToSettingInternet(), animated: true, completion: nil)
+        }else{
+            callApiToGetListOrder(url: "\(Define.URL)/orders/shipper/list_order_completed")
+        }
     }
     
     private func callApiToGetListOrder(url:String){
@@ -40,7 +54,9 @@ extension ShipHistoryViewController {
                                     self.arrOrder.append(order)
                                 }
                                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                                self.tableRefreshControl.endRefreshing()
                                 self.ordersTableView.reloadData()
+                                
                             }
                         }
                     }
@@ -54,7 +70,7 @@ extension ShipHistoryViewController {
     public func callApiToUnsaveOrder(orderId:String, userId:String){
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         Alamofire.request("\(Define.URL)/users/unsave_order", method: .put, parameters: ["orderId": orderId, "uid": userId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
-            self.loadAgainData()
+            self.loadHistoryOrders()
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
         }
     }

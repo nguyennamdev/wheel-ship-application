@@ -33,6 +33,7 @@ extension OrdererNotificationViewController{
                                 self.arrOrder.append(order)
                             }
                             self.tableView.reloadData()
+                            self.tableRefreshControl.endRefreshing()
                         }
                     }
                 }
@@ -51,6 +52,8 @@ extension OrdererNotificationViewController{
                                 response(numberOfNotifications)
                             }
                         }
+                    }else{
+                        response(0)
                     }
                 }
             }
@@ -63,10 +66,7 @@ extension OrdererNotificationViewController{
     
     func ordererDisAgreeShipperToShip(orderId:String, shiperId:String){
         actionOrdererToShip(urlString: "\(Define.URL)/orders/orderer/disagree_to_ship", orderId: orderId, shipperId: shiperId)
-       
     }
-    
-    
     
     private func actionOrdererToShip(urlString:String, orderId:String, shipperId:String){
         Alamofire.request(urlString, method: .put, parameters: ["orderId": orderId, "shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in

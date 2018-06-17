@@ -80,6 +80,8 @@ class OrderConfirmationController : UICollectionViewController {
                          "oriLongtitude": oriLongtitude,
                          "desLatitude": desLattitude,
                          "desLongtitude": desLongtitude,
+                         "startTime": Formatter.iso8610.string(from: Date()),
+                         "stopTime": Formatter.iso8610.string(from: Date()),
                          "distance": distance,
                          "isFragile": isFragile,
                          "note": note,

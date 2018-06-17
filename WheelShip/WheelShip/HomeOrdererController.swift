@@ -45,6 +45,8 @@ class HomeOrdererController:UIViewController {
             order?.userId = self.user?.uid;
         }
     }
+    
+    let reachbility = Reachability.instance
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +72,11 @@ class HomeOrdererController:UIViewController {
         autocompleteViewController?.delegate = self
         // init unit price
         unitPrice = UnitPrice()
-        callApiToGetPriceDistance()
+        if !reachbility.currentReachbilityStatus(){
+            present(reachbility.showAlertToSettingInternet(), animated: true, completion: nil)
+        }
+    
+//        callApiToGetPriceDistance()
         
         updateStateBarButton()
     }
@@ -80,22 +86,20 @@ class HomeOrdererController:UIViewController {
         let backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem = backBarButtonItem
     }
-
-    // MARK: Private functions
-    private func callApiToGetPriceDistance(){
-        Alamofire.request("\(Define.URL)/prices/price_distance", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
-            if let result = response.result.value as? [String:Any]{
-                if let data = result["data"] as? [[String: Any]]{
-                   let price = Price()
-                   price.setValueWithKey(value: data.first!)
-                   self.unitPrice?.priceOfDistance = price
-                }
-            }
-        }
-    }
-    
-   
-    
+//
+//    // MARK: Private functions
+//    private func callApiToGetPriceDistance(){
+//        Alamofire.request("\(Define.URL)/prices/price_distance", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
+//            if let result = response.result.value as? [String:Any]{
+//                if let data = result["data"] as? [[String: Any]]{
+//                   let price = Price()
+//                   price.setValueWithKey(value: data.first!)
+//                   self.unitPrice?.priceOfDistance = price
+//                }
+//            }
+//        }
+//    }
+//    
     private func updateStateBarButton(){
         guard let fromAddress = originAddressTextField.text ,
             let toAddress = destinationAddressTextField.text else { return }

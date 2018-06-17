@@ -11,7 +11,6 @@ import UIKit
 class PopupEntryPhoneNumber:UIViewController {
     
     var user:User?
-    var auth = Authentication.instance // make instance of Auth RestApiManager
     var userToEdit:User?{
         didSet{
             guard let phoneNumber = userToEdit?.phoneNumber else {
@@ -20,7 +19,7 @@ class PopupEntryPhoneNumber:UIViewController {
             self.phoneNumberTextField.text = phoneNumber
         }
     }
-    
+    let reachbility = Reachability.instance
     var addNewAccount: ((Bool) -> Void)?
     
     override func viewDidLoad() {

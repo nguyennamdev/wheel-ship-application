@@ -26,6 +26,8 @@ class OrdererEnterInfoController : UIViewController {
     }
     var order:Order?
     var arrWeightPrice:[Price] = [Price]()
+    var arrPriceDistance:[Price] = [Price]()
+    let reachbility = Reachability.instance
     
     
     override func viewDidLoad() {
@@ -51,8 +53,15 @@ class OrdererEnterInfoController : UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if !reachbility.currentReachbilityStatus(){
+            present(reachbility.showAlertToSettingInternet(), animated: true, completion: nil)
+        }
+        
         callApiToGetPriceFragileOrder()
-        handleDistanceMatrix()
+        callApiToGetListPriceDistance { (prices) in
+            self.arrPriceDistance = prices
+            self.handleDistanceMatrix(priceDistances: self.arrPriceDistance)
+        }
         callApiToGetListPriceWeight()
     }
     
@@ -61,7 +70,6 @@ class OrdererEnterInfoController : UIViewController {
         let backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem = backBarButtonItem
     }
-    
     
     // MARK: Private functions
     private func setupViews(){
@@ -76,7 +84,7 @@ class OrdererEnterInfoController : UIViewController {
         setupDistanceLabel()
     }
     
-    // MARK: Call apis
+    // MARK: Methods all apis
     
     private func callApiToGetPriceFragileOrder(){
         Alamofire.request("\(Define.URL)/prices/price_fragile_order", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
@@ -107,7 +115,23 @@ class OrdererEnterInfoController : UIViewController {
         }
     }
     
-    private func handleDistanceMatrix(){
+    private func callApiToGetListPriceDistance(completeHandle: @escaping ([Price]) -> Void){
+        Alamofire.request("\(Define.URL)/prices/price_distance", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON{ (response) in
+            if let result = response.result.value as? [String: Any]{
+                if let data = result["data"] as? [[String: Any]]{
+                    var prices = [Price]()
+                    data.forEach({ (element) in
+                        let price = Price()
+                        price.setValueWithKey(value: element)
+                        prices.append(price)
+                    })
+                    completeHandle(prices)
+                }
+            }
+        }
+    }
+    
+    private func handleDistanceMatrix(priceDistances:[Price]){
         guard let origin = order?.originLocation, let destination = order?.destinationLocation else { return }
         let origins = "\(origin.coordinate.latitude),\(origin.coordinate.longitude)"
         let destinations = "\(destination.coordinate.latitude),\(destination.coordinate.longitude)"
@@ -118,13 +142,9 @@ class OrdererEnterInfoController : UIViewController {
                 let result = self.parseDistanceJson(json: json)
                 let distanceText = result.text
                 let distanceValue = result.value
-                guard let priceDistance = self.unitPrice?.priceOfDistance?.value else { return }
-                self.unitPrice?.feeShip = Double(priceDistance * (distanceValue / 1000))
                 self.order?.distance = distanceValue
-                if let feeShip = self.unitPrice?.feeShip {
-                    self.distanceLabel.setAttitudeString(title: ("\t Khoảng cách: ", UIColor.gray), content: (distanceText + " = \(feeShip.formatedNumberWithUnderDots()) vnđ", UIColor.black))
-                    self.updateOverheadsLabel()
-                }
+                // handle solve fee ship with distance text and distance value
+                self.handleSolveFeeShip(distance: (distanceText, distanceValue))
             }
         }
     }
@@ -158,6 +178,30 @@ class OrdererEnterInfoController : UIViewController {
             }
         }
         return (result!, distanceValue!)
+    }
+    
+    // MARK: Private instance methods
+    private func handleSolveFeeShip(distance:(String, Double)){
+        guard let priceDistanceLessThan10KM = self.arrPriceDistance.first?.value,
+            let priceDistanceGreatThan10KM = self.arrPriceDistance.last?.value
+        else {
+            return
+        }
+        // convert to km
+        let distanceKM = distance.1 / 1000
+        var price:Double
+        if distanceKM < 2 {
+            price = 8000
+        }else if distanceKM < 10 && distanceKM > 2{
+            price = priceDistanceLessThan10KM
+        }else{
+            price = priceDistanceGreatThan10KM
+        }
+        self.unitPrice?.feeShip = price * distanceKM
+        if let feeShip = self.unitPrice?.feeShip {
+            self.distanceLabel.setAttitudeString(title: ("\t Khoảng cách: ", UIColor.gray), content: (distance.0 + " = \(feeShip.formatedNumberWithUnderDots()) vnđ", UIColor.black))
+            self.updateOverheadsLabel()
+        }
     }
     
     

@@ -37,7 +37,7 @@ class UserViewController: UIViewController , UITableViewDataSource , UITableView
         self.navigationItem.title = "Thông tin cá nhân"
         
         // make button logout
-        let logoutBarButtonItem = UIBarButtonItem(title: "Logout", style: UIBarButtonItemStyle.plain, target: self, action: #selector(handleLogoutUser))
+        let logoutBarButtonItem = UIBarButtonItem(title: "Đăng xuất", style: UIBarButtonItemStyle.plain, target: self, action: #selector(handleLogoutUser))
         self.navigationItem.leftBarButtonItem = logoutBarButtonItem
         
         setupViews()

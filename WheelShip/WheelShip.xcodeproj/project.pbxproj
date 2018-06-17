@@ -65,7 +65,6 @@
 		84B8CD8120B5AF4400A52847 /* ShipperNotificationViewController+CallApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B8CD8020B5AF4400A52847 /* ShipperNotificationViewController+CallApis.swift */; };
 		84B901992060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B901982060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift */; };
 		84B94EF120B30E26007DACA5 /* ShipperDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B94EF020B30E26007DACA5 /* ShipperDelegate.swift */; };
-		84BA53DC2022084200A18BAF /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BA53DB2022084200A18BAF /* Authentication.swift */; };
 		84BB854620A3E67600BD5334 /* EditOrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BB854420A3E67600BD5334 /* EditOrderViewController.swift */; };
 		84BB854720A3E67600BD5334 /* EditOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BB854520A3E67600BD5334 /* EditOrderViewController.xib */; };
 		84CB857320AD29EE005E97C4 /* EditUserNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB857220AD29EE005E97C4 /* EditUserNameViewController.swift */; };
@@ -76,6 +75,8 @@
 		84D9DA4620280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9DA4520280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift */; };
 		84DB4BEB20A1F0B1002A49E2 /* OrdersHistoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4BEA20A1F0B1002A49E2 /* OrdersHistoryDelegate.swift */; };
 		84DE89422096AAF900BD55A8 /* Define.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DE89412096AAF900BD55A8 /* Define.swift */; };
+		84ED5EB420B7F00800E0DECC /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ED5EB320B7F00800E0DECC /* Reachability.swift */; };
+		84ED5EB620B8148100E0DECC /* OrdererHistoryViewController+CallAPIs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ED5EB520B8148100E0DECC /* OrdererHistoryViewController+CallAPIs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -141,7 +142,6 @@
 		84B8CD8020B5AF4400A52847 /* ShipperNotificationViewController+CallApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShipperNotificationViewController+CallApis.swift"; sourceTree = "<group>"; };
 		84B901982060AE33003DD2C2 /* OrderComfirmationCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderComfirmationCollectionViewController.swift; sourceTree = "<group>"; };
 		84B94EF020B30E26007DACA5 /* ShipperDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipperDelegate.swift; sourceTree = "<group>"; };
-		84BA53DB2022084200A18BAF /* Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
 		84BB854420A3E67600BD5334 /* EditOrderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditOrderViewController.swift; sourceTree = "<group>"; };
 		84BB854520A3E67600BD5334 /* EditOrderViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditOrderViewController.xib; sourceTree = "<group>"; };
 		84CB857220AD29EE005E97C4 /* EditUserNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserNameViewController.swift; sourceTree = "<group>"; };
@@ -152,6 +152,8 @@
 		84D9DA4520280CED00EA23C9 /* PopupEntryPhoneNumber+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopupEntryPhoneNumber+Actions.swift"; sourceTree = "<group>"; };
 		84DB4BEA20A1F0B1002A49E2 /* OrdersHistoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersHistoryDelegate.swift; sourceTree = "<group>"; };
 		84DE89412096AAF900BD55A8 /* Define.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Define.swift; sourceTree = "<group>"; };
+		84ED5EB320B7F00800E0DECC /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		84ED5EB520B8148100E0DECC /* OrdererHistoryViewController+CallAPIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrdererHistoryViewController+CallAPIs.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +207,7 @@
 				842D182E2078619B009FAE23 /* User.swift */,
 				84A0262820A5594A0090FC70 /* Price.swift */,
 				84AECBA220B4681400E921FB /* Notification.swift */,
+				84ED5EB320B7F00800E0DECC /* Reachability.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -272,7 +275,6 @@
 				84580C2B201B267700961A63 /* Views */,
 				84AF8B69208AD221003E3559 /* Cells */,
 				84580C27201B200500961A63 /* ViewControllers */,
-				84FB41712062973600FCA753 /* RestApiManager */,
 				847FDA3B201ED232003AF85E /* Extensions */,
 				84580C28201B22CE00961A63 /* Helper */,
 				84580C12201B1ECE00961A63 /* AppDelegate.swift */,
@@ -288,7 +290,6 @@
 			isa = PBXGroup;
 			children = (
 				84E49E4F20AE94D200D2114A /* CustomTabbarViewController */,
-				847FDA37201ECC00003AF85E /* CustomTabbarController.swift */,
 				846C4E65204A2D8300451EEC /* Shipper */,
 				844EE915204D333D00176512 /* LoginController */,
 				844EE912204D32DE00176512 /* RegisterController */,
@@ -367,6 +368,7 @@
 			children = (
 				8480DDF82088936D00A8EA05 /* OrdererHistoryViewController.swift */,
 				8480DDFA2088968D00A8EA05 /* OrdererHistoryViewController+SetupViews.swift */,
+				84ED5EB520B8148100E0DECC /* OrdererHistoryViewController+CallAPIs.swift */,
 			);
 			name = HistoryViewController;
 			sourceTree = "<group>";
@@ -480,6 +482,7 @@
 		84E49E4F20AE94D200D2114A /* CustomTabbarViewController */ = {
 			isa = PBXGroup;
 			children = (
+				847FDA37201ECC00003AF85E /* CustomTabbarController.swift */,
 			);
 			name = CustomTabbarViewController;
 			sourceTree = "<group>";
@@ -492,14 +495,6 @@
 				84BB854520A3E67600BD5334 /* EditOrderViewController.xib */,
 			);
 			name = EditOrderViewController;
-			sourceTree = "<group>";
-		};
-		84FB41712062973600FCA753 /* RestApiManager */ = {
-			isa = PBXGroup;
-			children = (
-				84BA53DB2022084200A18BAF /* Authentication.swift */,
-			);
-			name = RestApiManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -607,10 +602,12 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-WheelShip/Pods-WheelShip-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Canvas/Canvas.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Canvas.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -659,6 +656,8 @@
 				848DC16F20B181BF00B93EAC /* UIImage+ResizeImage.swift in Sources */,
 				84B87D1320B51F50000DF43B /* UIImageView+LoadFromUrl.swift in Sources */,
 				84A0262520A53CF50090FC70 /* EditOrderViewController+GMSAutoCompletePlaces.swift in Sources */,
+				84ED5EB620B8148100E0DECC /* OrdererHistoryViewController+CallAPIs.swift in Sources */,
+				84ED5EB420B7F00800E0DECC /* Reachability.swift in Sources */,
 				8467F26E2060F3CC0023D5F1 /* OrderComfirmationCell.swift in Sources */,
 				84B5235320A099F100186F12 /* UICollectionView+setEmptyMessage.swift in Sources */,
 				847FDA3D201ED252003AF85E /* Extension.swift in Sources */,
@@ -702,7 +701,6 @@
 				84AECBA120B465D700E921FB /* ShipperNotificationViewController.swift in Sources */,
 				84DE89422096AAF900BD55A8 /* Define.swift in Sources */,
 				8408425C20B16CA800B52818 /* HomeShipperViewController.swift in Sources */,
-				84BA53DC2022084200A18BAF /* Authentication.swift in Sources */,
 				84AA1D6620AA797A0093BE74 /* UserViewController.swift in Sources */,
 				84B87D0C20B5079D000DF43B /* OrdererNotificationViewController.swift in Sources */,
 			);

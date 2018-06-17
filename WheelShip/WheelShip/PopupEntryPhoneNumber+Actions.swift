@@ -25,11 +25,27 @@ extension PopupEntryPhoneNumber {
             // check user edit information or create new a user
             if userToEdit != nil {
                 if let userId = self.userToEdit?.uid {
-                    handleUpdatePhoneNumber(phoneNumber: phoneNumber, userId: userId)
+                    if !reachbility.currentReachbilityStatus(){
+                        present(reachbility.showAlertToSettingInternet(), animated: true, completion: {
+                            if self.reachbility.currentReachbilityStatus() {
+                                self.handleUpdatePhoneNumber(phoneNumber: phoneNumber, userId: userId)
+                            }
+                        })
+                    }else{
+                        handleUpdatePhoneNumber(phoneNumber: phoneNumber, userId: userId)
+                    }
                 }
             }else{
                 // to create new user
-                handleAddNewUser()
+                if !reachbility.currentReachbilityStatus(){
+                    present(reachbility.showAlertToSettingInternet(), animated: true, completion: {
+                        if self.reachbility.currentReachbilityStatus() {
+                            self.handleAddNewUser()
+                        }
+                    })
+                }else{
+                     handleAddNewUser()
+                }
             }
         }else{
             phoneNumberTextField.text = "Số điện thoại sai định dạng"

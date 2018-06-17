@@ -15,7 +15,7 @@ class OrdererHistoryViewController: UIViewController {
     var user:User?
     var arrOrder:[Order]?
     var filteredOrder:[Order] = [Order]()
-    
+    let reachbility = Reachability.instance
     var searchViewController: UISearchController = UISearchController(searchResultsController: nil)
     
     // MARK: Life cycle
@@ -23,16 +23,29 @@ class OrdererHistoryViewController: UIViewController {
         super.viewDidLoad()
         
         setupViews()
+    
         
         ordersCollectionView.backgroundColor = UIColor.clear
         self.ordersCollectionView.dataSource = self
         self.ordersCollectionView.delegate = self
         // register collection view
         ordersCollectionView.register(OrdersHistoryCollectionCell.self, forCellWithReuseIdentifier: cellId)
+        ordersCollectionView.refreshControl = refreshControl
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if !reachbility.currentReachbilityStatus(){
+            self.present(reachbility.showAlertToSettingInternet(), animated: true, completion: nil)
+        }
+        loadOrders()
+    }
+    
+    
+    
+    // MARK: Private instance methods
+    private func loadOrders(){
         if self.statusOrderSegment.selectedSegmentIndex == 0{
             self.loadOrderWaitShipperById()
         }else{
@@ -40,7 +53,6 @@ class OrdererHistoryViewController: UIViewController {
         }
     }
     
-    // MARK: Private instance methods
     private func setupViews(){
         view.addSubview(background)
         background.frame = view.frame
@@ -48,6 +60,8 @@ class OrdererHistoryViewController: UIViewController {
         setupOrdersCollectionView()
         setupSearchViewController()
     }
+    
+    // MARK: setup searchViewController
     
     private func setupSearchViewController(){
         // setup scope to seach bar
@@ -96,42 +110,6 @@ class OrdererHistoryViewController: UIViewController {
     }
     
     
-    
-    private func loadOrderByOrdererId(urlString: String){
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        guard let user = self.user else { return }
-        Alamofire.request(urlString, method: .get, parameters: ["userId": user.uid!] , encoding: URLEncoding.default, headers: nil).responseJSON { (dataResponse) in
-            if let resultValue = dataResponse.result.value as? NSDictionary{
-                // check size of data response
-                if let size = resultValue.value(forKey: "size") as? Int{
-                    if size > 0 {
-                        if let data = resultValue.value(forKey: "data") as? [NSDictionary]{
-                            self.arrOrder = [Order]()
-                            for element in data{
-                                let order = Order()
-                                order.setValueByNSDictionary(dictionary: element)
-                                self.arrOrder?.append(order);
-                            }
-                            self.ordersCollectionView.reloadData()
-                        }
-                    }else{
-                        self.arrOrder = [Order]()
-                        self.ordersCollectionView.reloadData()
-                    }
-                }
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            }
-        }
-    }
-    
-    private func loadOrderCompleteById(){
-        self.loadOrderByOrdererId(urlString: "\(Define.URL)/orders/orderer/order_complete")
-    }
-    
-    private func loadOrderWaitShipperById(){
-        self.loadOrderByOrdererId(urlString: "\(Define.URL)/orders/orderer/order_by_user")
-    }
-    
     // MARK: Views
     let background:GradientView = {
         let gv = GradientView()
@@ -154,13 +132,20 @@ class OrdererHistoryViewController: UIViewController {
         return collectionView
     }()
     
+    lazy var refreshControl:UIRefreshControl = {
+        let rf = UIRefreshControl()
+        rf.tintColor = UIColor.white
+        rf.addTarget(self, action: #selector(handleRefreshOrderHistory), for: .valueChanged)
+        return rf
+    }()
+    
     // MARK: Actions
     @objc func statusOrderSegmentValueChanged(sender: UISegmentedControl){
-        if sender.selectedSegmentIndex == 0{
-            self.loadOrderWaitShipperById()
-        }else{
-            self.loadOrderCompleteById()
-        }
+        loadOrders()
+    }
+    
+    @objc func handleRefreshOrderHistory(){
+        loadOrders()
     }
     
 }

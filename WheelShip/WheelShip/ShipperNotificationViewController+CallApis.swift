@@ -14,7 +14,7 @@ extension ShipperNotificationViewController {
     public func getListOrderAgreed(){
         if let shipperId = self.user?.uid {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
-            Alamofire.request("\(Define.URL)/orders/shipper/list_oder_agreed", method: .get, parameters: ["shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON(completionHandler: { (data) in
+            Alamofire.request("\(Define.URL)/orders/shipper/list_order_agreed", method: .get, parameters: ["shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON(completionHandler: { (data) in
                 if let value = data.result.value as? NSDictionary {
                     UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     if let result = value.value(forKey: "result") as? Bool {
@@ -33,6 +33,7 @@ extension ShipperNotificationViewController {
                                     self.arrOrder.append(order)
                                 }
                                 self.tableView.reloadData()
+                                self.tableRefreshControl.endRefreshing()
                             }
                         }
                     }
@@ -44,10 +45,16 @@ extension ShipperNotificationViewController {
     func getNumberNotification(shipperId:String, response: @escaping (Int) -> Void){
         Alamofire.request("\(Define.URL)/orders/shipper/count_order_responsed", method: .get, parameters: ["shipperId": shipperId], encoding: URLEncoding.default, headers: nil).responseJSON { (data) in
             if let value = data.result.value as? NSDictionary{
-                if let resultData = value.value(forKey: "data") as? [[String: Any]]{
-                    if let firstData = resultData.first{
-                        if let numberOfNotifications = firstData["size"] as? Int {
-                            response(numberOfNotifications)
+                if let size = value.value(forKey: "size") as? Int{
+                    if size == 0 {
+                        response(0)
+                    }else{
+                        if let numberOfNotifications = value.value(forKey: "data") as? [[String : Any]]{
+                            if let firstData = numberOfNotifications.first{
+                                if let number = firstData["size"] as? Int{
+                                    response(number)
+                                }
+                            }
                         }
                     }
                 }

@@ -57,6 +57,7 @@ class EditOrderViewController: UIViewController {
     var order:Order = Order()
     var autocompleteViewController:GMSAutocompleteViewController?
     var arrWeightPrice:[Price] = [Price]()
+    let reachility = Reachability.instance
     
     // MARK: Life cycle
     
@@ -91,8 +92,15 @@ class EditOrderViewController: UIViewController {
         // init auto complete place
         autocompleteViewController = GMSAutocompleteViewController()
         autocompleteViewController?.delegate = self
+    
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        
+        if !reachility.currentReachbilityStatus(){
+            self.present(reachility.showAlertToSettingInternet(), animated: true, completion: nil)
+        }
         
     }
     // MARK: Public functions
@@ -307,7 +315,7 @@ class EditOrderViewController: UIViewController {
     }
     
     private func initParameters() -> Parameters?{
-        // wrap data
+        // unwrap data
         guard let orderId = self.order.orderId,
             let originAddress = self.order.originAddress,
             let destinationAddress = self.order.destinationAddress,
@@ -349,22 +357,31 @@ class EditOrderViewController: UIViewController {
         guard let parameter = initParameters() else {
             return
         }
-        // unenable updateBarButton until update complete
+//        print(parameter)
+        // disnable updateBarButton until update complete
         updateBarButtonItem?.isEnabled = false
         Alamofire.request("\(Define.URL)/orders/orderer/update_order", method: .put, parameters: parameter, encoding: URLEncoding.httpBody, headers: nil).responseJSON { (data) in
             if let data = data.result.value as? [String: Any]{
                 if let result = data["result"] as? Bool{
                     if result{
-                        self.presentAlertWithTitleAndMessage(title: "Sửa đơn hàng", message: "Bạn đã sửa đơn hàng thành công")
+                        self.showAlert(title: "Sửa đơn hàng", message: "Bạn đã sửa đơn hàng thành công")
                     }else{
                         let message = data["message"] as? String
-                        self.presentAlertWithTitleAndMessage(title: "Lỗi", message: message!)
+                        self.showAlert(title: "Lỗi!", message: message!)
                     }
                     self.updateBarButtonItem?.isEnabled = true
                 }
             }
         }
-        
+    }
+    
+    private func showAlert(title:String, message:String){
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "OK", style: .cancel) { (action) in
+            self.navigationController?.popViewController(animated: true)
+        }
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
     }
 }
 

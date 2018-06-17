@@ -7,6 +7,11 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Noteworthy.ttc">
+            <string>Noteworthy-Bold</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
@@ -19,12 +24,45 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lauchscreen" translatesAutoresizingMaskIntoConstraints="NO" id="Qjz-8E-HJi">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wheel Ship" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q6H-or-Sn2">
+                                <rect key="frame" x="12" y="200.5" width="351" height="86.5"/>
+                                <fontDescription key="fontDescription" name="Noteworthy-Bold" family="Noteworthy" pointSize="54"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="delivery" translatesAutoresizingMaskIntoConstraints="NO" id="ub3-VL-aKX">
+                                <rect key="frame" x="87" y="333" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="Snu-fk-lng"/>
+                                    <constraint firstAttribute="width" constant="200" id="nm6-jN-MZh"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="Q6H-or-Sn2" firstAttribute="centerY" secondItem="Qjz-8E-HJi" secondAttribute="centerY" constant="-100" id="58N-8L-QMi"/>
+                            <constraint firstAttribute="bottom" secondItem="Qjz-8E-HJi" secondAttribute="bottom" id="70v-1m-7XT"/>
+                            <constraint firstItem="Q6H-or-Sn2" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="12" id="98f-vl-IvD"/>
+                            <constraint firstItem="ub3-VL-aKX" firstAttribute="centerX" secondItem="Qjz-8E-HJi" secondAttribute="centerX" id="AIG-qL-XHm"/>
+                            <constraint firstAttribute="trailing" secondItem="Q6H-or-Sn2" secondAttribute="trailing" constant="12" id="IfJ-J5-Cdp"/>
+                            <constraint firstItem="Qjz-8E-HJi" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" id="P5h-CI-eTg"/>
+                            <constraint firstItem="ub3-VL-aKX" firstAttribute="top" secondItem="Q6H-or-Sn2" secondAttribute="bottom" constant="46" id="RRz-4a-XP2"/>
+                            <constraint firstAttribute="trailing" secondItem="Qjz-8E-HJi" secondAttribute="trailing" id="c2Y-cQ-jqt"/>
+                            <constraint firstItem="Qjz-8E-HJi" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="vJl-Aw-PnD"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-796" y="385"/>
+            <point key="canvasLocation" x="-1060" y="384.55772113943033"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="delivery" width="128" height="128"/>
+        <image name="lauchscreen" width="269" height="480"/>
+    </resources>
 </document>
